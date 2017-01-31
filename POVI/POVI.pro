@@ -24,14 +24,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES +=  gui/sources/main.cpp\
-            gui/sources/mainwindow.cpp\
-            databaseconnection/sources/databaseconnection.cpp
+SOURCES +=  gui/main.cpp\
+            gui/mainwindow.cpp\
+            databaseconnection/sources/databaseconnection.cpp \
+    gui/logintab.cpp \
+    gui/waiting.cpp
 
-HEADERS +=  gui/headers/mainwindow.h\
-            databaseconnection/headers/databaseconnection.h
+HEADERS +=  gui/mainwindow.h\
+            databaseconnection/headers/databaseconnection.h \
+    gui/logintab.h \
+    gui/waiting.h
 
-FORMS   +=  gui/forms/mainwindow.ui
+FORMS   +=  gui/mainwindow.ui \
+    gui/logintab.ui \
+    gui/waiting.ui
 
-INCLUDEPATH +=  gui/headers\
+INCLUDEPATH +=  gui\
                 databaseconnection/headers
+
+RESOURCES += \
+    resource.qrc \
+    gui/resource.qrc

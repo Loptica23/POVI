@@ -1,5 +1,4 @@
-#ifndef DATABASECONNECTION_H
-#define DATABASECONNECTION_H
+#pragma once;
 
 #include <QtSql/QSqlDatabase>
 #include <string>
@@ -28,5 +27,3 @@ private:
     QString userName;
     QString pwd;        //ovo mora da bude secure string
 };
-
-#endif // DATABASECONNECTION_H
