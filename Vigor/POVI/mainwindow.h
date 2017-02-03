@@ -3,7 +3,7 @@
 #include <QMainWindow>
 #include <memory>
 
-enum class State{Izlogovan, Komercijala, Dizajner, Cekanje};
+enum class State{Izlogovan, Komercijala, Dizajner, Cekanje, Administrator};
 
 namespace Ui {
 class MainWindow;
@@ -11,6 +11,7 @@ class MainWindow;
 class DBConnection;
 class LoginTab;
 class Waiting;
+class AdminView;
 
 class MainWindow : public QMainWindow
 {
@@ -28,6 +29,7 @@ private:
     std::shared_ptr<DBConnection> m_dbConnection;
     State m_state;
 
-    LoginTab* m_LoginTab;       //ne znam koliko je pametno ovako
-    Waiting* m_WaitingTab;
+    std::shared_ptr<LoginTab>   m_LoginTab;
+    std::shared_ptr<Waiting>    m_WaitingTab;
+    std::shared_ptr<AdminView>  m_AdminView;
 };

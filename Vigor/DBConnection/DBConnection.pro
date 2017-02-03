@@ -30,7 +30,7 @@ HEADERS += dbconnection.h\
         dbconnection_global.h \
     dbconnectionimpl.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+#unix {
+#    target.path = /usr/lib
+#    INSTALLS += target
+#}

@@ -1,8 +1,10 @@
 #pragma once
+#include <memory>
 #include "dbconnection.h"
 
 class QString;
 class QSqlDatabase;
+//class DBConnection;
 
 class DBConnectionImpl: public DBConnection
 {
@@ -14,7 +16,9 @@ public:
 
     virtual bool conectToDb();
     virtual bool logIn(QString username, QString pwd);
+    virtual std::shared_ptr<QSqlQuery> getEmployees();
+
 
 private:
-    QSqlDatabase m_db;
+    std::shared_ptr<QSqlDatabase> m_db;
 };

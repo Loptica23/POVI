@@ -1,4 +1,7 @@
 TEMPLATE = subdirs
 
-SUBDIRS += POVI\
-    DBConnection
+SUBDIRS += DBConnection\
+           POVI
+
+CONFIG += ordered
+

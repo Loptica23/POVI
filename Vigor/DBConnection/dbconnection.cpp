@@ -1,10 +1,10 @@
 #include <QString>
 #include "dbconnection.h"
-//#include "dbconnectionimpl.h"
+#include "dbconnectionimpl.h"
 
-std::shared_ptr<DBConnection> DBConnectioncreateDBConnection()
+std::shared_ptr<DBConnection> DBConnection::create()
 {
-    std::shared_ptr<DBConnection> instance = new DBConnectionImpl();
+    DBConnectionPtr instance(new DBConnectionImpl());
     return instance;
 }
 

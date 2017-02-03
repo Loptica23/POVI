@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/gui/resources">
-        <file>gui/resource/img/vigor-300x291.png</file>
-    </qresource>
-</RCC>

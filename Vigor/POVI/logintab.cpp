@@ -3,8 +3,8 @@
 #include "mainwindow.h"
 #include "dbconnection.h"
 
-LoginTab::LoginTab(QWidget *parent, std::shared_ptr<DBConnection> db, MainWindow* mainWindow) :
-    QWidget(parent),
+LoginTab::LoginTab(MainWindow* mainWindow, std::shared_ptr<DBConnection> db) :
+    QWidget(mainWindow),
     ui(new Ui::LoginTab),
     m_dbConnection(db),
     m_mainWindow(mainWindow)
@@ -24,7 +24,7 @@ void LoginTab::on_login_clicked()
     auto pwd = ui->pwd->text();
     if (m_dbConnection->logIn(username, pwd))
     {
-        m_mainWindow->changeState(State::Cekanje);
+        m_mainWindow->changeState(State::Administrator);
     }
     else
     {

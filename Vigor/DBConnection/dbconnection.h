@@ -4,16 +4,21 @@
 #include <memory>
 
 class Qstring;
+class DBConnection;
+class QSqlQuery;
+
+typedef std::shared_ptr<DBConnection> DBConnectionPtr;
 
 class DBCONNECTIONSHARED_EXPORT DBConnection
 {
 public:
-    static std::shared_ptr<DBConnection> createDBConnection();
+    static DBConnectionPtr create();
 
     virtual ~DBConnection();
 
     virtual bool conectToDb() = 0;
     virtual bool logIn(QString username, QString pwd) = 0;
+    virtual std::shared_ptr<QSqlQuery> getEmployees() = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);
@@ -32,4 +37,6 @@ protected:
     QString m_userName;
     QString m_pwd;
 };
+
+
 

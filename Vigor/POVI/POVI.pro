@@ -24,22 +24,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-SOURCES +=  gui/main.cpp\
-            gui/mainwindow.cpp\
-    gui/logintab.cpp \
-    gui/waiting.cpp
+SOURCES +=  main.cpp\
+            mainwindow.cpp\
+    logintab.cpp \
+    waiting.cpp \
+    adminview.cpp \
+    empoyersview.cpp
 
-HEADERS +=  gui/mainwindow.h\
-    gui/logintab.h \
-    gui/waiting.h
+HEADERS +=  mainwindow.h\
+    logintab.h \
+    waiting.h \
+    adminview.h \
+    empoyersview.h
 
-FORMS   +=  gui/mainwindow.ui \
-    gui/logintab.ui \
-    gui/waiting.ui
+FORMS   +=  mainwindow.ui \
+    logintab.ui \
+    waiting.ui \
+    adminview.ui \
+    empoyersview.ui
 
-INCLUDEPATH +=  gui\
-                ../DBConnection
+RESOURCES += resource.qrc
 
-RESOURCES += \
-    resource.qrc \
-    gui/resource.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../DBConnection/release/ -lDBConnection
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../DBConnection/debug/ -lDBConnection
+else:unix: LIBS += -L$$OUT_PWD/../DBConnection/ -lDBConnection
+
+INCLUDEPATH += $$PWD/../DBConnection
+DEPENDPATH += $$PWD/../DBConnection

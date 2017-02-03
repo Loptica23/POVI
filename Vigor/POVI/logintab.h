@@ -17,7 +17,7 @@ class LoginTab : public QWidget
     Q_OBJECT
 
 public:
-    LoginTab(QWidget *parent, std::shared_ptr<DBConnection> db, MainWindow* mainWindow); //ispravi konstruktor
+    LoginTab(MainWindow *mainWindow, std::shared_ptr<DBConnection> db);
     ~LoginTab();
 
 private slots:

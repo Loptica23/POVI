@@ -4,17 +4,22 @@
 #include "logintab.h"
 #include "waiting.h"
 #include "dbconnection.h"
+#include "adminview.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_state(State::Izlogovan),
-    ui(new Ui::MainWindow),
-    m_LoginTab(new LoginTab(this, m_dbConnection, this)),
-    m_WaitingTab(new Waiting(this))
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->ViewLayout->addWidget(m_LoginTab);
-    ui->ViewLayout->addWidget(m_WaitingTab);
+    m_dbConnection = DBConnection::create();
+    m_LoginTab.reset(new LoginTab(this, m_dbConnection));
+    m_WaitingTab.reset(new Waiting(this));
+    m_AdminView.reset(new AdminView(this, m_dbConnection));
+    ui->ViewLayout->addWidget(m_LoginTab.get());
+    ui->ViewLayout->addWidget(m_WaitingTab.get());
+    ui->ViewLayout->addWidget(m_AdminView.get());
+    changeState(State::Izlogovan);
     connecttodb();
 }
 
@@ -46,18 +51,26 @@ void MainWindow::changeState(State state)
     {
     case State::Izlogovan:
         m_LoginTab->setHidden(false);
+        m_AdminView->setHidden(true);
         break;
     case State::Cekanje:
         m_LoginTab->setHidden(true);
+        m_AdminView->setHidden(true);
         break;
     case State::Dizajner:
         m_LoginTab->setHidden(true);
+        m_AdminView->setHidden(true);
         break;
     case State::Komercijala:
         m_LoginTab->setHidden(true);
+        m_AdminView->setHidden(true);
+        break;
+    case State::Administrator:
+        m_LoginTab->setHidden(true);
+        m_AdminView->setHidden(false);
         break;
     default:
         break;
     }
-
+    m_state = state;
 }
