@@ -14,8 +14,8 @@
    <string>Vigor System</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/gui/resources/gui/resource/img/vigor-300x291.png</normaloff>:/gui/resources/gui/resource/img/vigor-300x291.png</iconset>
+   <iconset resource="resource.qrc">
+    <normaloff>:/resources/resource/img/vigor-300x291.png</normaloff>:/resources/resource/img/vigor-300x291.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -54,7 +54,9 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
  <slots>
   <slot>milos()</slot>

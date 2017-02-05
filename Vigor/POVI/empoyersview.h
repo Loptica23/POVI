@@ -20,6 +20,8 @@ public:
 private slots:
     void on_Refresh_clicked();
 
+    void on_CreateEmployee_clicked();
+
 protected:
      void paintEvent(QPaintEvent *event);
 

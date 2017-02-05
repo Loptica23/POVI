@@ -17,7 +17,7 @@ DBConnectionImpl::~DBConnectionImpl()
 
 const QString DBConnectionImpl::getLastError() const
 {
-    return "Za sada vracam ovaj string!";
+    return m_lastError;
 }
 
 bool DBConnectionImpl::conectToDb()
@@ -58,8 +58,7 @@ bool DBConnectionImpl::logIn(QString username, QString pwd)
 
 std::shared_ptr<QSqlQuery> DBConnectionImpl::getEmployees()
 {
-    bool result = false;
-    std::shared_ptr<QSqlQuery> query(new QSqlQuery("select * from radnik"));
+    std::shared_ptr<QSqlQuery> query(new QSqlQuery("select * from radnik")); //ovaj query ti se dva puta izvrsava!!
     if(query->exec())
     {
         return query;
@@ -69,4 +68,17 @@ std::shared_ptr<QSqlQuery> DBConnectionImpl::getEmployees()
         qDebug() << "nije uspeo query!";
     }
     return nullptr;
+}
+
+bool DBConnectionImpl::createNewEmployee(QString name, QString secName, QString username, QString pos)
+{
+    QString stm = "insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija) values ('%1', '%2', '5555', '%3', '%4')";
+    QSqlQuery query;
+    query.prepare(stm.arg(name, secName, username, pos));
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
 }

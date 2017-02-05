@@ -19,6 +19,7 @@ public:
     virtual bool conectToDb() = 0;
     virtual bool logIn(QString username, QString pwd) = 0;
     virtual std::shared_ptr<QSqlQuery> getEmployees() = 0;
+    virtual bool createNewEmployee(QString name, QString secName, QString username, QString pos) = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);

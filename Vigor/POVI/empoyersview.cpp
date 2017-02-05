@@ -2,6 +2,7 @@
 #include "empoyersview.h"
 #include "ui_empoyersview.h"
 #include "dbconnection.h"
+#include "dialogforcreatingnewemployee.h"
 
 EmpoyersView::EmpoyersView(QWidget *parent, std::shared_ptr<DBConnection> db) :
     QWidget(parent),
@@ -23,7 +24,6 @@ void EmpoyersView::paintEvent(QPaintEvent *event)
 
 void EmpoyersView::on_Refresh_clicked()
 {
-    ui->tableWidget->clear();
     ui->tableWidget->setRowCount(0);
     auto emp = m_db->getEmployees();
     if (!emp)
@@ -47,5 +47,15 @@ void EmpoyersView::on_Refresh_clicked()
             auto *item = new QTableWidgetItem(emp->value("KorisnickoIme").toString());
             ui->tableWidget->setItem(i, 2,item);
         }
+        {
+            auto *item = new QTableWidgetItem(emp->value("Pozicija").toString());
+            ui->tableWidget->setItem(i, 3,item);
+        }
     }
+}
+
+void EmpoyersView::on_CreateEmployee_clicked()
+{
+    auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db);
+    creatingNewEmployeeDialog->show();
 }

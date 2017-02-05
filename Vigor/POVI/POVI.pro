@@ -29,19 +29,22 @@ SOURCES +=  main.cpp\
     logintab.cpp \
     waiting.cpp \
     adminview.cpp \
-    empoyersview.cpp
+    empoyersview.cpp \
+    dialogforcreatingnewemployee.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
     waiting.h \
     adminview.h \
-    empoyersview.h
+    empoyersview.h \
+    dialogforcreatingnewemployee.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
     waiting.ui \
     adminview.ui \
-    empoyersview.ui
+    empoyersview.ui \
+    dialogforcreatingnewemployee.ui
 
 RESOURCES += resource.qrc
 
