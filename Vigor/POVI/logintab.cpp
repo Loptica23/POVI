@@ -25,6 +25,7 @@ void LoginTab::on_login_clicked()
     if (m_dbConnection->logIn(username, pwd))
     {
         m_mainWindow->changeState(State::Administrator);
+        qDebug() << "User loged in!";
     }
     else
     {

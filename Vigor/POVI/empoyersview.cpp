@@ -1,4 +1,7 @@
-#include "QSqlQuery"
+#include <algorithm>
+#include <vector>
+#include <QSqlQuery>
+#include <QDebug>
 #include "empoyersview.h"
 #include "ui_empoyersview.h"
 #include "dbconnection.h"
@@ -19,43 +22,78 @@ EmpoyersView::~EmpoyersView()
 
 void EmpoyersView::paintEvent(QPaintEvent *event)
 {
-    on_Refresh_clicked();
+
 }
 
 void EmpoyersView::on_Refresh_clicked()
 {
+    m_buttons.clear();
     ui->tableWidget->setRowCount(0);
-    auto emp = m_db->getEmployees();
-    if (!emp)
+    auto employees = m_db->getEmployees();
+    qDebug() << "user refreshing employees view!";
+    if (!employees || employees->empty())
     {
         //prikazi neku gresku
         return;
     }
+    m_employees = employees;
     auto i = 0;
-    while (emp->next())
+    for (auto iter = employees->begin(); iter != employees->end(); ++i, ++iter)
     {
         ui->tableWidget->insertRow(i);
         {
-            auto *item = new QTableWidgetItem(emp->value("Ime").toString());
+            auto *item = new QTableWidgetItem((*iter)->getFirstName());
             ui->tableWidget->setItem(i, 0,item);
         }
         {
-            auto *item = new QTableWidgetItem(emp->value("Prezime").toString());
+            auto *item = new QTableWidgetItem((*iter)->getSecondName());
             ui->tableWidget->setItem(i, 1,item);
         }
         {
-            auto *item = new QTableWidgetItem(emp->value("KorisnickoIme").toString());
+            auto *item = new QTableWidgetItem((*iter)->getUserName());
             ui->tableWidget->setItem(i, 2,item);
         }
         {
-            auto *item = new QTableWidgetItem(emp->value("Pozicija").toString());
+            auto *item = new QTableWidgetItem((*iter)->getWorkPositionQString());
             ui->tableWidget->setItem(i, 3,item);
         }
+        {
+            if ((*iter)->getActivation())
+            {
+                auto *item = new QTableWidgetItem("da");
+                ui->tableWidget->setItem(i, 4,item);
+            }
+            else
+            {
+                auto *item = new QTableWidgetItem("ne");
+                ui->tableWidget->setItem(i, 4,item);
+            }
+        }
+        {
+            QPushButton* btn_edit = new QPushButton();
+            btn_edit->setText("Izmeni");
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 5), btn_edit);
+            m_buttons.push_back(btn_edit);
+            connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+        }
     }
+
 }
 
 void EmpoyersView::on_CreateEmployee_clicked()
 {
     auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db);
     creatingNewEmployeeDialog->show();
+}
+
+void EmpoyersView::edit()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_buttons.begin(), m_buttons.end(), buttonSender) != m_buttons.end())
+    {
+        auto index = std::find(m_buttons.begin(), m_buttons.end(), buttonSender) - m_buttons.begin();
+        qDebug() << index;
+        auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db, m_employees->at(index));
+        creatingNewEmployeeDialog->show();
+    }
 }

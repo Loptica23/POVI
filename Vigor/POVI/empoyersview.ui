@@ -36,6 +36,16 @@
        <string>Pozicija</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Pristup Sistemu</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Izmeni</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

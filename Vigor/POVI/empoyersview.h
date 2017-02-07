@@ -2,8 +2,10 @@
 
 #include <QWidget>
 #include<memory>
+#include "dbconnection.h"
 
 class DBConnection;
+class QPushButton;
 
 namespace Ui {
 class EmpoyersView;
@@ -19,8 +21,8 @@ public:
 
 private slots:
     void on_Refresh_clicked();
-
     void on_CreateEmployee_clicked();
+    void edit();
 
 protected:
      void paintEvent(QPaintEvent *event);
@@ -28,4 +30,6 @@ protected:
 private:
     Ui::EmpoyersView *ui;
     std::shared_ptr<DBConnection> m_db;
+    std::vector<QPushButton*> m_buttons;
+    EmployeePtrVtr m_employees;
 };

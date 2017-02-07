@@ -2,12 +2,19 @@
 
 #include "dbconnection_global.h"
 #include <memory>
+#include <vector>
+#include <QString>
 
-class Qstring;
+class QString;
 class DBConnection;
+class Employee;
 class QSqlQuery;
 
 typedef std::shared_ptr<DBConnection> DBConnectionPtr;
+
+typedef std::shared_ptr<Employee> EmployeePtr;
+typedef std::vector<EmployeePtr> EmployeeVtr;
+typedef std::shared_ptr<EmployeeVtr> EmployeePtrVtr;
 
 class DBCONNECTIONSHARED_EXPORT DBConnection
 {
@@ -18,8 +25,9 @@ public:
 
     virtual bool conectToDb() = 0;
     virtual bool logIn(QString username, QString pwd) = 0;
-    virtual std::shared_ptr<QSqlQuery> getEmployees() = 0;
-    virtual bool createNewEmployee(QString name, QString secName, QString username, QString pos) = 0;
+    virtual EmployeePtrVtr getEmployees() = 0;
+    virtual bool createNewEmployee(EmployeePtr employee) = 0;
+    virtual bool updateEmployee(EmployeePtr employee) = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);
@@ -39,5 +47,58 @@ protected:
     QString m_pwd;
 };
 
+class DBCONNECTIONSHARED_EXPORT Employee
+{
+public:
+    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje};
+    Employee(unsigned id);
+    virtual ~Employee();
 
+    //seters
+    void setFirstName(const QString& firstName);
+    void setSecondName(const QString& secondName);
+    void setUserName(const QString& userName);
+    void setWorkPosition(const WorkPosition& workPosition);
+    void setWorkPosition(const QString& workPosition);
+    void setWorkPosition(const unsigned workPosition);
+    void setActivation(bool activation);
+
+    //geters
+    const QString& getFirstName() const;
+    const QString& getSecondName() const;
+    const QString& getUserName() const;
+    const WorkPosition& getWorkPosition() const;
+    const QString getWorkPositionQString() const;
+    const unsigned getWorkPositionQInt() const;
+    bool getActivation() const;
+    QString getActivationString() const;
+    QString getActivationSqlString() const;
+
+    //statemants
+    QString statemantForCreatingThisUser() const;
+    QString statemantForUpdatingThisUser() const;
+
+    bool isModified() const;
+    void resetChangeTracking();
+
+    static EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
+
+private:
+    unsigned m_id;
+
+    QString m_FirstName;
+    bool m_FirstNameChanged;
+
+    QString m_SecondName;
+    bool m_SecondNameChanged;
+
+    QString m_UserName;
+    bool m_UserNameChanged;
+
+    WorkPosition m_WorkPosition;
+    bool m_WorkPositionChanged;
+
+    bool m_Activation;
+    bool m_ActivationChanged;
+};
 

@@ -42,7 +42,7 @@ bool DBConnectionImpl::logIn(QString username, QString pwd)
     {
         while (query.next())
         {
-            if (username == query.value("KorisnickoIme").toString() && pwd == query.value("Sifra").toString())
+            if (username == query.value("KorisnickoIme").toString() && pwd == query.value("Sifra").toString() && query.value("PristupSistemu") == true)
             {
                 result = true;
                 break;
@@ -56,25 +56,39 @@ bool DBConnectionImpl::logIn(QString username, QString pwd)
     return result;
 }
 
-std::shared_ptr<QSqlQuery> DBConnectionImpl::getEmployees()
+EmployeePtrVtr DBConnectionImpl::getEmployees()
 {
-    std::shared_ptr<QSqlQuery> query(new QSqlQuery("select * from radnik")); //ovaj query ti se dva puta izvrsava!!
-    if(query->exec())
+    EmployeePtrVtr employees;
+    QSqlQuery query;
+    query.prepare("select * from radnik");
+    if(query.exec())
     {
-        return query;
+        employees = Employee::createEmployeesFromQuery(query);
     }
     else
     {
         qDebug() << "nije uspeo query!";
     }
-    return nullptr;
+    return employees;
 }
 
-bool DBConnectionImpl::createNewEmployee(QString name, QString secName, QString username, QString pos)
+bool DBConnectionImpl::createNewEmployee(EmployeePtr employee)
 {
-    QString stm = "insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija) values ('%1', '%2', '5555', '%3', '%4')";
     QSqlQuery query;
-    query.prepare(stm.arg(name, secName, username, pos));
+    query.prepare(employee->statemantForCreatingThisUser());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateEmployee(EmployeePtr employee)
+{
+    QSqlQuery query;
+    query.prepare(employee->statemantForUpdatingThisUser());
+    qDebug() << employee->statemantForUpdatingThisUser();
     if (!query.exec())
     {
         m_lastError = query.lastError().text();

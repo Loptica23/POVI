@@ -4,6 +4,7 @@
 
 class QString;
 class QSqlDatabase;
+class QSqlQuery;
 //class DBConnection;
 
 class DBConnectionImpl: public DBConnection
@@ -16,9 +17,12 @@ public:
 
     virtual bool conectToDb();
     virtual bool logIn(QString username, QString pwd);
-    virtual std::shared_ptr<QSqlQuery> getEmployees();
-    virtual bool createNewEmployee(QString name, QString secName, QString username, QString pos);
+    virtual EmployeePtrVtr getEmployees();              //bilo bi dobro da moze da se dohvati i kao neki predictive search
+    virtual bool createNewEmployee(EmployeePtr employee);
+    virtual bool updateEmployee(EmployeePtr employee);
 
+protected:
+    EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
 
 private:
     std::shared_ptr<QSqlDatabase> m_db;

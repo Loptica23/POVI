@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>403</width>
-    <height>417</height>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>DialogForCreatingNewEmployee</string>
+   <string>Employee</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
@@ -98,6 +98,31 @@
           <item>
            <property name="text">
             <string>Magacioner</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Pristup Sistemu</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="PristupSistemu">
+          <item>
+           <property name="text">
+            <string>Da</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Ne</string>
            </property>
           </item>
          </widget>
