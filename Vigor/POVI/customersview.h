@@ -28,6 +28,8 @@ private:
     Ui::CustomersView *ui;
     std::shared_ptr<DBConnection> m_db;
     CustomerPtrVtr m_customers;
-    std::vector<QPushButton*> m_buttons;
+    std::vector<QPushButton*> m_editButtons;            //u ovim vektorima ima curenja memorije.. ako ih stavim da su shared onda imam problem sa utvrdjivanjem koje je dugme pritisnuto
+    std::vector<QPushButton*> m_newOrderButtons;
+    std::vector<QPushButton*> m_viewOrdersButtons;
 };
 

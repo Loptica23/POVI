@@ -20,7 +20,7 @@ Customer::~Customer()
 
 }
 
-QString Customer::getName() const
+const QString& Customer::getName() const
 {
     return m_name;
 }
@@ -36,8 +36,7 @@ void Customer::setName(QString & name)
 
 QString Customer::statemantForCreating() const
 {
-    QString stm = "insert into klijent (Ime) values ('%1')";
-    stm.arg(getName());
+    QString stm = "insert into klijent (Ime) values (' "  + getName() +"')";
     return stm;
 }
 

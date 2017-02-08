@@ -21,7 +21,7 @@ public:
     virtual ~Customer();
 
     //gethers
-    QString getName() const;
+    const QString& getName() const;
 
     //seters
     void setName(QString & name);

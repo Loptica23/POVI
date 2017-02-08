@@ -4,6 +4,7 @@
 #include "ui_customersview.h"
 #include "customersview.h"
 #include "dbconnection.h"
+#include "customersdialog.h"
 
 
 CustomersView::CustomersView(QWidget *parent, std::shared_ptr<DBConnection> db):
@@ -22,14 +23,15 @@ CustomersView::~CustomersView()
 
 void CustomersView::on_AddNewCustomer_clicked()
 {
-//    auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db);
-//    creatingNewEmployeeDialog->show();
+    auto customerDialog = new CustomersDialog(this, m_db);
+    customerDialog->show();
 }
 
 
 
 void CustomersView::on_Refresh_clicked()
 {
+    m_editButtons.clear();
     ui->tableWidget->setRowCount(0);
     auto customers = m_db->getCustomers();
     qDebug() << "user refreshing customers view!";
@@ -50,22 +52,22 @@ void CustomersView::on_Refresh_clicked()
             QPushButton* btn_edit = new QPushButton();
             btn_edit->setText("Izmeni");
             ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 1), btn_edit);
-            m_buttons.push_back(btn_edit);
+            m_editButtons.push_back(btn_edit);
             connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
         }
         {
             QPushButton* btn_createOrder = new QPushButton();
             btn_createOrder->setText("Nova Porudzbina");
             ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_createOrder);
-            m_buttons.push_back(btn_createOrder);
-            connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
+            //m_buttons.push_back(btn_createOrder);
+            //connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
         }
         {
             QPushButton* btn_viewOrder = new QPushButton();
             btn_viewOrder->setText("Pregled Porudzbina");
             ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_viewOrder);
-            m_buttons.push_back(btn_viewOrder);
-            connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
+            //m_buttons.push_back(btn_viewOrder);
+            //connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
         }
     }
     ui->tableWidget->resizeColumnsToContents();
@@ -73,5 +75,12 @@ void CustomersView::on_Refresh_clicked()
 
 void CustomersView::edit()
 {
-    //implrementirati ovo, neophodno je napraviti novi prozor koji se otvara
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) != m_editButtons.end())
+    {
+        auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
+        qDebug() << index;
+        auto customerDialog = new CustomersDialog(this, m_db, m_customers->at(index));
+        customerDialog->show();
+    }
 }

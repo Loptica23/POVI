@@ -12,6 +12,7 @@ DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBCo
     m_create(false)
 {
     ui->setupUi(this);
+
     ui->FirstName->setText(m_employee->getFirstName());
     ui->SecondName->setText(m_employee->getSecondName());
     ui->UserName->setText(m_employee->getUserName());
@@ -20,6 +21,7 @@ DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBCo
         ui->PristupSistemu->setCurrentIndex(0);
     else
         ui->PristupSistemu->setCurrentIndex(1);
+
     employee->resetChangeTracking();
 }
 
@@ -64,8 +66,8 @@ void DialogForCreatingNewEmployee::createUser()
     employee->setFirstName(ui->FirstName->text());
     employee->setSecondName(ui->SecondName->text());
     employee->setUserName(ui->UserName->text());
-    bool result = m_db->createNewEmployee(employee);
-    if (!result)
+
+    if (!m_db->createNewEmployee(employee))
     {
         QString error = m_db->getLastError();
         QMessageBox messageBox;
