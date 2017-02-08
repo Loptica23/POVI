@@ -88,7 +88,6 @@ bool DBConnectionImpl::updateEmployee(EmployeePtr employee)
 {
     QSqlQuery query;
     query.prepare(employee->statemantForUpdatingThisUser());
-    qDebug() << employee->statemantForUpdatingThisUser();
     if (!query.exec())
     {
         m_lastError = query.lastError().text();
@@ -96,3 +95,44 @@ bool DBConnectionImpl::updateEmployee(EmployeePtr employee)
     }
     return true;
 }
+
+CustomerPtrVtr DBConnectionImpl::getCustomers()
+{
+    CustomerPtrVtr customers;
+    QSqlQuery query;
+    query.prepare("select * from klijent");
+    if(query.exec())
+    {
+        customers = Customer::createCustomersFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return customers;
+}
+
+bool DBConnectionImpl::createNewCustomer(CustomerPtr customer)
+{
+    QSqlQuery query;
+    query.prepare(customer->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateCustomer(CustomerPtr customer)
+{
+    QSqlQuery query;
+    query.prepare(customer->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+

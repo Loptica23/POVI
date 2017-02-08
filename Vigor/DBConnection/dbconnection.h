@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <QString>
+#include "customer.h"
 
 class QString;
 class DBConnection;
@@ -25,9 +26,14 @@ public:
 
     virtual bool conectToDb() = 0;
     virtual bool logIn(QString username, QString pwd) = 0;
+
     virtual EmployeePtrVtr getEmployees() = 0;
     virtual bool createNewEmployee(EmployeePtr employee) = 0;
     virtual bool updateEmployee(EmployeePtr employee) = 0;
+
+    virtual CustomerPtrVtr getCustomers() = 0;
+    virtual bool createNewCustomer(CustomerPtr customer) = 0;
+    virtual bool updateCustomer(CustomerPtr customer) = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);

@@ -13,6 +13,7 @@ EmpoyersView::EmpoyersView(QWidget *parent, std::shared_ptr<DBConnection> db) :
     m_db(db)
 {
     ui->setupUi(this);
+    ui->tableWidget->resizeColumnsToContents();
 }
 
 EmpoyersView::~EmpoyersView()
@@ -33,7 +34,6 @@ void EmpoyersView::on_Refresh_clicked()
     qDebug() << "user refreshing employees view!";
     if (!employees || employees->empty())
     {
-        //prikazi neku gresku
         return;
     }
     m_employees = employees;
@@ -44,18 +44,22 @@ void EmpoyersView::on_Refresh_clicked()
         {
             auto *item = new QTableWidgetItem((*iter)->getFirstName());
             ui->tableWidget->setItem(i, 0,item);
+            ui->tableWidget->resizeRowToContents(0);
         }
         {
             auto *item = new QTableWidgetItem((*iter)->getSecondName());
             ui->tableWidget->setItem(i, 1,item);
+            ui->tableWidget->resizeRowToContents(1);
         }
         {
             auto *item = new QTableWidgetItem((*iter)->getUserName());
             ui->tableWidget->setItem(i, 2,item);
+            ui->tableWidget->resizeRowToContents(2);
         }
         {
             auto *item = new QTableWidgetItem((*iter)->getWorkPositionQString());
             ui->tableWidget->setItem(i, 3,item);
+            ui->tableWidget->resizeRowToContents(3);
         }
         {
             if ((*iter)->getActivation())
@@ -77,7 +81,7 @@ void EmpoyersView::on_Refresh_clicked()
             connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
         }
     }
-
+    ui->tableWidget->resizeColumnsToContents();
 }
 
 void EmpoyersView::on_CreateEmployee_clicked()

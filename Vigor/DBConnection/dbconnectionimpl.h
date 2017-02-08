@@ -17,9 +17,14 @@ public:
 
     virtual bool conectToDb();
     virtual bool logIn(QString username, QString pwd);
+
     virtual EmployeePtrVtr getEmployees();              //bilo bi dobro da moze da se dohvati i kao neki predictive search
     virtual bool createNewEmployee(EmployeePtr employee);
     virtual bool updateEmployee(EmployeePtr employee);
+
+    virtual CustomerPtrVtr getCustomers();          //neki search bi trebalo da postoji
+    virtual bool createNewCustomer(CustomerPtr customer);
+    virtual bool updateCustomer(CustomerPtr customer);
 
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
