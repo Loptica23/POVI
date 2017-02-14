@@ -25,7 +25,12 @@ const QString& Customer::getName() const
     return m_name;
 }
 
-void Customer::setName(QString & name)
+unsigned Customer::getId() const
+{
+    return m_id;
+}
+
+void Customer::setName(const QString &name)
 {
     if (m_name != name)
     {

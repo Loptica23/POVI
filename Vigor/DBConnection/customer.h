@@ -22,9 +22,10 @@ public:
 
     //gethers
     const QString& getName() const;
+    unsigned getId() const;
 
     //seters
-    void setName(QString & name);
+    void setName(const QString & name);
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;

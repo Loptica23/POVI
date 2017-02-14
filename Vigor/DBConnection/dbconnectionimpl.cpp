@@ -136,3 +136,61 @@ bool DBConnectionImpl::updateCustomer(CustomerPtr customer)
     return true;
 }
 
+OrderPtrVtr DBConnectionImpl::getOrders()
+{
+    OrderPtrVtr orders;
+    QSqlQuery query;
+    query.prepare("select * from narudzbina");
+    if(query.exec())
+    {
+        orders = Order::createOrdersFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return orders;
+}
+
+OrderPtrVtr DBConnectionImpl::getOrders(CustomerPtr customer)
+{
+    OrderPtrVtr orders;
+    QSqlQuery query;
+    QString stm = "select * from narudzbina where idKlijent = " + QString::number(customer->getId());
+    qDebug() << stm;
+    query.prepare(stm);
+    if(query.exec())
+    {
+        orders = Order::createOrdersFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return orders;
+}
+
+bool DBConnectionImpl::createNewOrder(OrderPtr order)
+{
+    QSqlQuery query;
+    query.prepare(order->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateOrder(OrderPtr order)
+{
+    QSqlQuery query;
+    query.prepare(order->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+

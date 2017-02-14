@@ -2,8 +2,7 @@
 
 #include <QMainWindow>
 #include <memory>
-
-enum class State{Izlogovan, Komercijala, Dizajner, Cekanje, Administrator};
+#include <stack>
 
 namespace Ui {
 class MainWindow;
@@ -18,10 +17,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum class State{Izlogovan, Komercijala, Dizajner, Cekanje, Administrator};
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void changeState(State state);
 
+    void forward(std::shared_ptr<QWidget> widget);
+    void back();
+
+    static MainWindow* getMainWindow();
 private:
     void connecttodb();
 
@@ -30,6 +35,9 @@ private:
     State m_state;
 
     std::shared_ptr<LoginTab>   m_LoginTab;
-    std::shared_ptr<Waiting>    m_WaitingTab;
-    std::shared_ptr<AdminView>  m_AdminView;
+    std::shared_ptr<QWidget>    m_defaultScreen;
+
+    std::stack<std::shared_ptr<QWidget>> screenStack;
+
+    static MainWindow* mainWindow;
 };

@@ -26,6 +26,11 @@ public:
     virtual bool createNewCustomer(CustomerPtr customer);
     virtual bool updateCustomer(CustomerPtr customer);
 
+    virtual OrderPtrVtr getOrders();
+    virtual OrderPtrVtr getOrders(CustomerPtr customer);
+    virtual bool createNewOrder(OrderPtr order);
+    virtual bool updateOrder(OrderPtr order);
+
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
 

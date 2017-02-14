@@ -24,7 +24,7 @@ void LoginTab::on_login_clicked()
     auto pwd = ui->pwd->text();
     if (m_dbConnection->logIn(username, pwd))
     {
-        m_mainWindow->changeState(State::Administrator);
+        m_mainWindow->changeState(MainWindow::State::Administrator);
         qDebug() << "User loged in!";
     }
     else

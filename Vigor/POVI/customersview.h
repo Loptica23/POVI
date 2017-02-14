@@ -23,6 +23,8 @@ private slots:
     void on_AddNewCustomer_clicked();
     void on_Refresh_clicked();
     void edit();
+    void showOrdersForCustomer();
+    void createOrderForCustomer();
 
 private:
     Ui::CustomersView *ui;

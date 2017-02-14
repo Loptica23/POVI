@@ -5,6 +5,9 @@
 #include "customersview.h"
 #include "dbconnection.h"
 #include "customersdialog.h"
+#include "mainwindow.h"
+#include "ordersview.h"
+#include "orderdialog.h"
 
 
 CustomersView::CustomersView(QWidget *parent, std::shared_ptr<DBConnection> db):
@@ -31,7 +34,8 @@ void CustomersView::on_AddNewCustomer_clicked()
 
 void CustomersView::on_Refresh_clicked()
 {
-    m_editButtons.clear();
+    m_editButtons.clear(); //*****************************************************ovde moras da dodas sve vektore dugmica
+    m_viewOrdersButtons.clear();
     ui->tableWidget->setRowCount(0);
     auto customers = m_db->getCustomers();
     qDebug() << "user refreshing customers view!";
@@ -59,15 +63,15 @@ void CustomersView::on_Refresh_clicked()
             QPushButton* btn_createOrder = new QPushButton();
             btn_createOrder->setText("Nova Porudzbina");
             ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_createOrder);
-            //m_buttons.push_back(btn_createOrder);
-            //connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
+            m_newOrderButtons.push_back(btn_createOrder);
+            connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(createOrderForCustomer()));  // ne sme da stoji edit!!
         }
         {
             QPushButton* btn_viewOrder = new QPushButton();
             btn_viewOrder->setText("Pregled Porudzbina");
             ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_viewOrder);
-            //m_buttons.push_back(btn_viewOrder);
-            //connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(edit()));  // ne sme da stoji edit!!
+            m_viewOrdersButtons.push_back(btn_viewOrder);
+            connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(showOrdersForCustomer()));
         }
     }
     ui->tableWidget->resizeColumnsToContents();
@@ -82,5 +86,32 @@ void CustomersView::edit()
         qDebug() << index;
         auto customerDialog = new CustomersDialog(this, m_db, m_customers->at(index));
         customerDialog->show();
+    }
+}
+
+void CustomersView::showOrdersForCustomer()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_viewOrdersButtons.begin(), m_viewOrdersButtons.end(), buttonSender) != m_viewOrdersButtons.end())
+    {
+        auto index = std::find(m_viewOrdersButtons.begin(), m_viewOrdersButtons.end(), buttonSender) - m_viewOrdersButtons.begin();
+        qDebug() << index;
+        auto mainWindow = MainWindow::getMainWindow();
+        std::shared_ptr<QWidget> orderView(new OrdersView(mainWindow, m_db, m_customers->at(index)));
+        mainWindow->forward(orderView);
+    }
+
+}
+
+void CustomersView::createOrderForCustomer()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_newOrderButtons.begin(), m_newOrderButtons.end(), buttonSender) != m_newOrderButtons.end())
+    {
+        auto index = std::find(m_newOrderButtons.begin(), m_newOrderButtons.end(), buttonSender) - m_newOrderButtons.begin();
+        qDebug() << index;
+        auto orderdialog = new OrderDialog(this, m_db, m_customers->at(index));
+        qDebug() << m_customers->at(index)->getId();
+        orderdialog->show();
     }
 }

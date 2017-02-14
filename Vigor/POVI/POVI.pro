@@ -32,7 +32,9 @@ SOURCES +=  main.cpp\
     empoyersview.cpp \
     dialogforcreatingnewemployee.cpp \
     customersview.cpp \
-    customersdialog.cpp
+    customersdialog.cpp \
+    ordersview.cpp \
+    orderdialog.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -41,7 +43,9 @@ HEADERS +=  mainwindow.h\
     empoyersview.h \
     dialogforcreatingnewemployee.h \
     customersview.h \
-    customersdialog.h
+    customersdialog.h \
+    ordersview.h \
+    orderdialog.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -50,7 +54,9 @@ FORMS   +=  mainwindow.ui \
     empoyersview.ui \
     dialogforcreatingnewemployee.ui \
     customersview.ui \
-    customersdialog.ui
+    customersdialog.ui \
+    ordersview.ui \
+    orderdialog.ui
 
 RESOURCES += resource.qrc
 

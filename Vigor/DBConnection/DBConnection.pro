@@ -26,12 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += dbconnection.cpp \
     dbconnectionimpl.cpp \
     employee.cpp \
-    customer.cpp
+    customer.cpp \
+    order.cpp
 
 HEADERS += dbconnection.h\
         dbconnection_global.h \
     dbconnectionimpl.h \
-    customer.h
+    customer.h \
+    order.h
 
 #unix {
 #    target.path = /usr/lib

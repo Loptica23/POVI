@@ -94,6 +94,7 @@ void Employee::setWorkPosition(const QString &workPosition)
 
 void Employee::setWorkPosition(const unsigned workPosition)
 {
+    qDebug() << "setovana radna pozicija preko inta";
     switch(workPosition)
     {
     case 0:
@@ -236,9 +237,14 @@ EmployeePtrVtr Employee::createEmployeesFromQuery(QSqlQuery& query)
 
 QString Employee::statemantForCreatingThisUser() const
 {
-    QString stm = "insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('%1', '%2', '5555', '%3', '%4', %5)";
-    QString activ;
-    stm.arg(getFirstName(), getSecondName(), getUserName(), getWorkPositionQString(), activ);
+    QString stm = "insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('" +
+            getFirstName() + "', '" +
+            getSecondName() + "', '" +
+            "5555" + "', '" +
+            getUserName() + "', '" +
+            getWorkPositionQString() + "', " +
+            getActivationSqlString() + ")";
+    qDebug() << stm;
     return stm;
 }
 
@@ -248,7 +254,6 @@ QString Employee::statemantForUpdatingThisUser() const
     if (isModified())
     {
         stm = "update radnik set ";
-        std::vector<QString> vectorOfStrings;
         if (m_FirstNameChanged)
         {
             stm += "Ime = \"" + getFirstName() + "\" , ";

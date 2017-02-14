@@ -6,6 +6,13 @@
 #include "dbconnection.h"
 #include "adminview.h"
 
+MainWindow* MainWindow::mainWindow;
+
+MainWindow* MainWindow::getMainWindow()
+{
+    return mainWindow;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_state(State::Izlogovan),
@@ -14,13 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     m_dbConnection = DBConnection::create();
     m_LoginTab.reset(new LoginTab(this, m_dbConnection));
-    m_WaitingTab.reset(new Waiting(this));
-    m_AdminView.reset(new AdminView(this, m_dbConnection));
     ui->ViewLayout->addWidget(m_LoginTab.get());
-    ui->ViewLayout->addWidget(m_WaitingTab.get());
-    ui->ViewLayout->addWidget(m_AdminView.get());
     changeState(State::Izlogovan);
     connecttodb();
+    mainWindow = this;
 }
 
 MainWindow::~MainWindow()
@@ -51,26 +55,44 @@ void MainWindow::changeState(State state)
     {
     case State::Izlogovan:
         m_LoginTab->setHidden(false);
-        m_AdminView->setHidden(true);
         break;
     case State::Cekanje:
         m_LoginTab->setHidden(true);
-        m_AdminView->setHidden(true);
         break;
     case State::Dizajner:
         m_LoginTab->setHidden(true);
-        m_AdminView->setHidden(true);
         break;
     case State::Komercijala:
         m_LoginTab->setHidden(true);
-        m_AdminView->setHidden(true);
         break;
     case State::Administrator:
+        m_defaultScreen.reset(new AdminView(this, m_dbConnection));
+        screenStack.push(m_defaultScreen);
+        ui->ViewLayout->addWidget(m_defaultScreen.get());
         m_LoginTab->setHidden(true);
-        m_AdminView->setHidden(false);
+        m_defaultScreen->setHidden(false);
+        this->showMaximized();
         break;
     default:
         break;
     }
     m_state = state;
+}
+
+void MainWindow::forward(std::shared_ptr<QWidget> widget)
+{
+    qDebug() << "forward";
+    ui->ViewLayout->addWidget(widget.get());
+    screenStack.top()->setHidden(true);
+    widget->setHidden(false);
+    screenStack.push(widget);
+}
+
+void MainWindow::back()
+{
+    //proveris da li se doslo do main windowa i ako se pokusava skidanje njega onda ispisi gresku
+    qDebug() << "back";
+    screenStack.top()->setHidden(true);
+    screenStack.pop();
+    screenStack.top()->setHidden(false);
 }
