@@ -36,6 +36,7 @@ void CustomersView::on_Refresh_clicked()
 {
     m_editButtons.clear(); //*****************************************************ovde moras da dodas sve vektore dugmica
     m_viewOrdersButtons.clear();
+    m_newOrderButtons.clear();
     ui->tableWidget->setRowCount(0);
     auto customers = m_db->getCustomers();
     qDebug() << "user refreshing customers view!";

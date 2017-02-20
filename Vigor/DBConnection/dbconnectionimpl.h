@@ -31,6 +31,11 @@ public:
     virtual bool createNewOrder(OrderPtr order);
     virtual bool updateOrder(OrderPtr order);
 
+    virtual CommandPtrVtr getCommands();
+    virtual CommandPtrVtr getCommands(OrderPtr order);
+    virtual bool createNewCommand(CommandPtr command);
+    virtual bool updateCommand(CommandPtr command);
+
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
 

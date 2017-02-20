@@ -88,6 +88,11 @@ QString Order::getTimeLimit() const
     return m_timeLimit;
 }
 
+unsigned Order::getID() const
+{
+    return m_id;
+}
+
 void Order::setPrice(double price)
 {
     if (m_price != price)

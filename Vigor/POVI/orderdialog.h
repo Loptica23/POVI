@@ -15,7 +15,7 @@ class OrderDialog : public QDialog
 
 public:
     OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer);
-    OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order);
+    OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, bool edit);
     ~OrderDialog();
 
 private slots:

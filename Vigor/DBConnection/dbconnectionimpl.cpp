@@ -194,3 +194,45 @@ bool DBConnectionImpl::updateOrder(OrderPtr order)
     return true;
 }
 
+CommandPtrVtr DBConnectionImpl::getCommands()
+{
+    CommandPtrVtr commands;
+    QSqlQuery query;
+    query.prepare("select * from nalog");
+    if(query.exec())
+    {
+        commands = Command::createCommandsFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!!";
+    }
+    return commands;
+}
+
+CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
+{
+    CommandPtrVtr commands;
+    QSqlQuery query;
+    query.prepare("select * from nalog where idNarudzbina = " + QString::number(order->getID()));
+    if(query.exec())
+    {
+        commands = Command::createCommandsFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return commands;
+}
+
+bool DBConnectionImpl::createNewCommand(CommandPtr command)
+{
+    return false;
+}
+
+bool DBConnectionImpl::updateCommand(CommandPtr command)
+{
+    return false;
+}
+

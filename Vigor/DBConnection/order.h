@@ -30,6 +30,7 @@ public:
     unsigned getStateInt() const;
     QString getStateQString() const;
     QString getTimeLimit() const;
+    unsigned getID() const;
 
     //seters
     void setPrice(double price);

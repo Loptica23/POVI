@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QDate>
+#include <QPushButton>
 
 OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer) :
     QDialog(parent),
@@ -14,7 +15,7 @@ OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, Cust
     ui->setupUi(this);
 }
 
-OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
+OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, bool edit) :
     QDialog(parent),
     ui(new Ui::OrderDialog),
     m_db(db),
@@ -30,6 +31,11 @@ OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, Orde
     QString str = order->getTimeLimit().left(10);
     QDate date = QDate::fromString(str, "yyyy-MM-dd");
     ui->calendarWidget->setSelectedDate(date);
+
+    if (!edit)
+    {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    }
 }
 
 OrderDialog::~OrderDialog()

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OrdersView</class>
- <widget class="QWidget" name="OrdersView">
+ <class>CommandsView</class>
+ <widget class="QWidget" name="CommandsView">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>786</width>
-    <height>569</height>
+    <width>994</width>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Pregled porudzbina:</string>
+      <string>Pregled naloga za porudzbinu: </string>
      </property>
     </widget>
    </item>
@@ -25,22 +25,7 @@
     <widget class="QTableWidget" name="tableWidget">
      <column>
       <property name="text">
-       <string>Naslov</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Rok</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Cena</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Stanje</string>
+       <string>Broj naloga</string>
       </property>
      </column>
      <column>
@@ -48,29 +33,14 @@
        <string>Detalji</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>Izmeni</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Dodaj nalog za porudzbinu</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Pregled naloga za porudzbinu</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="NewCommand">
        <property name="text">
-        <string>Kreiraj novu porudzbinu</string>
+        <string>Napravi nalog</string>
        </property>
       </widget>
      </item>

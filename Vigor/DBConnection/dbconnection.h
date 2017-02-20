@@ -6,6 +6,7 @@
 #include <QString>
 #include "customer.h"
 #include "order.h"
+#include "command.h"
 
 class QString;
 class DBConnection;
@@ -40,6 +41,11 @@ public:
     virtual OrderPtrVtr getOrders(CustomerPtr customer) = 0;
     virtual bool createNewOrder(OrderPtr order) = 0;
     virtual bool updateOrder(OrderPtr order) = 0;
+
+    virtual CommandPtrVtr getCommands() = 0;
+    virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
+    virtual bool createNewCommand(CommandPtr command) = 0;
+    virtual bool updateCommand(CommandPtr command) = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);
