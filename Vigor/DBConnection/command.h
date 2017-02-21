@@ -45,6 +45,8 @@ public:
 
 private:
     unsigned m_id;
+    unsigned m_idOrder;
+    unsigned m_idCustomer;
 
     int m_priority;
     bool m_priorityChanged;

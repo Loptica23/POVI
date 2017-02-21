@@ -41,6 +41,11 @@ void Employee::setUserName(const QString& userName)
     }
 }
 
+void Employee::setPWD(const QString& pwd)
+{
+    m_pwd = pwd;
+}
+
 void Employee::setWorkPosition(const WorkPosition& workPosition)
 {
     if (m_WorkPosition != workPosition)
@@ -180,6 +185,11 @@ const unsigned Employee::getWorkPositionQInt() const
     }
 }
 
+const Employee::WorkPosition& Employee::getWorkPosition() const
+{
+    return m_WorkPosition;
+}
+
 bool Employee::getActivation() const
 {
     return m_Activation;
@@ -219,6 +229,7 @@ EmployeePtrVtr Employee::createEmployeesFromQuery(QSqlQuery& query)
         emp->setSecondName(query.value("Prezime").toString());
         emp->setUserName(query.value("KorisnickoIme").toString());
         emp->setWorkPosition(query.value("Pozicija").toString());
+        emp->setPWD(query.value("Sifra").toString());
 
         if (query.value("PristupSistemu") == true)
         {
@@ -282,6 +293,16 @@ QString Employee::statemantForUpdatingThisUser() const
         qDebug() << "**************************************nema izmena**************************************";
     }
     return stm;
+}
+
+bool Employee::checkPWD(const QString & pwd) const
+{
+    bool result = false;
+    if (m_pwd == pwd)
+    {
+        result = true;
+    }
+    return result;
 }
 
 bool Employee::isModified() const

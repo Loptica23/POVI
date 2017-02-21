@@ -27,7 +27,7 @@ public:
     virtual ~DBConnection();
 
     virtual bool conectToDb() = 0;
-    virtual bool logIn(QString username, QString pwd) = 0;
+    virtual EmployeePtr logIn(QString username, QString pwd) = 0;
 
     virtual EmployeePtrVtr getEmployees() = 0;
     virtual bool createNewEmployee(EmployeePtr employee) = 0;
@@ -76,6 +76,7 @@ public:
     void setFirstName(const QString& firstName);
     void setSecondName(const QString& secondName);
     void setUserName(const QString& userName);
+    void setPWD(const QString& pwd);
     void setWorkPosition(const WorkPosition& workPosition);
     void setWorkPosition(const QString& workPosition);
     void setWorkPosition(const unsigned workPosition);
@@ -91,6 +92,8 @@ public:
     bool getActivation() const;
     QString getActivationString() const;
     QString getActivationSqlString() const;
+
+    bool checkPWD(const QString & pwd) const;
 
     //statemants
     QString statemantForCreatingThisUser() const;
@@ -115,6 +118,8 @@ private:
 
     WorkPosition m_WorkPosition;
     bool m_WorkPositionChanged;
+
+    QString m_pwd;
 
     bool m_Activation;
     bool m_ActivationChanged;

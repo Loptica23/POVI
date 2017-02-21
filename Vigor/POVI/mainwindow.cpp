@@ -7,10 +7,21 @@
 #include "adminview.h"
 
 MainWindow* MainWindow::mainWindow;
+EmployeePtr MainWindow::loggedUser;
 
 MainWindow* MainWindow::getMainWindow()
 {
     return mainWindow;
+}
+
+EmployeePtr MainWindow::getLogedUser()
+{
+    return loggedUser;
+}
+
+void MainWindow::setLogedUser(EmployeePtr employee)
+{
+    loggedUser = employee;
 }
 
 MainWindow::MainWindow(QWidget *parent) :

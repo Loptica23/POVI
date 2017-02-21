@@ -3,6 +3,7 @@
 #include "ui_commandsview.h"
 #include "command.h"
 #include "mainwindow.h"
+#include "commanddialog.h"
 
 CommandsView::CommandsView(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
     QWidget(parent),
@@ -20,7 +21,9 @@ CommandsView::~CommandsView()
 
 void CommandsView::on_NewCommand_clicked()
 {
-
+    qDebug() << "otvaranje prozora za kreiranje naloga!";
+    auto commanddialog = new CommandDialog(this, m_db, m_order);
+    commanddialog->show();
 }
 
 void CommandsView::on_Refresh_clicked()
@@ -68,7 +71,14 @@ void CommandsView::edit()
 
 void CommandsView::details()
 {
-
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) != m_detailsButtons.end())
+    {
+        auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
+        qDebug() << index;
+        QWidget* commanddialog(new CommandDialog(this, m_db, m_commands->at(index), false));
+        commanddialog->show();
+    }
 }
 
 void CommandsView::createCommand()

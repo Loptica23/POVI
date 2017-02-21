@@ -35,7 +35,8 @@ SOURCES +=  main.cpp\
     customersdialog.cpp \
     ordersview.cpp \
     orderdialog.cpp \
-    commandsview.cpp
+    commandsview.cpp \
+    commanddialog.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -47,7 +48,8 @@ HEADERS +=  mainwindow.h\
     customersdialog.h \
     ordersview.h \
     orderdialog.h \
-    commandsview.h
+    commandsview.h \
+    commanddialog.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -59,7 +61,8 @@ FORMS   +=  mainwindow.ui \
     customersdialog.ui \
     ordersview.ui \
     orderdialog.ui \
-    commandsview.ui
+    commandsview.ui \
+    commanddialog.ui
 
 RESOURCES += resource.qrc
 

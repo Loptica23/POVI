@@ -5,6 +5,8 @@
 
 Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand):
     m_id(idCommand),
+    m_idCustomer(idCustomer),
+    m_idOrder(idOrder),
     m_priority(-1)
 {
     resetChangeTracking();
@@ -98,7 +100,16 @@ void Command::setStoreKeeperDescription(const QString & description)
 
 QString Command::statemantForCreating() const
 {
-    QString stm;
+    QString stm = "insert into nalog (idNarudzbina, idKlijent, OpisKomercijaliste, BrojNaloga, Prioritet, "
+                  "OpisDizajnera, OpisMagacionera) values (";
+    stm += QString::number(m_idOrder) + ", ";
+    stm += QString::number(m_idCustomer) + ", ";
+    stm += "'" + m_comercialistDescription + "', ";
+    stm += QString::number(m_commandNumber) + ", ";
+    stm += QString::number(m_priority) + ", ";
+    stm += "'" + m_designerDescription + "', ";
+    stm += "'" + m_storeKeeperDescription + "')";
+    qDebug() << stm;
     return stm;
 }
 
@@ -133,6 +144,9 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
     {
         CommandPtr command(new Command(query.value("idNalog").toUInt(), query.value("idNarudzbina").toUInt() , query.value("idKlijent").toUInt()));
         command->setCommandNumber(query.value("BrojNaloga").toInt());
+        command->setComercialistDescription(query.value("OpisKomercijaliste").toString());
+        command->setDesignerDescription(query.value("OpisDizajnera").toString());
+        command->setStoreKeeperDescription(query.value("OpisMagacionera").toString());
         commands->push_back(command);
     }
     return commands;

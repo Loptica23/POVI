@@ -34,18 +34,22 @@ bool DBConnectionImpl::conectToDb()
     return result;
 }
 
-bool DBConnectionImpl::logIn(QString username, QString pwd)
+EmployeePtr DBConnectionImpl::logIn(QString username, QString pwd)
 {
-    bool result = false;
+    EmployeePtr result = nullptr;
     QSqlQuery query("select * from radnik");
     if(query.exec())
     {
-        while (query.next())
+        EmployeePtrVtr employees = Employee::createEmployeesFromQuery(query);
+        for (auto iter = employees->begin(); iter != employees->end(); ++iter)
         {
-            if (username == query.value("KorisnickoIme").toString() && pwd == query.value("Sifra").toString() && query.value("PristupSistemu") == true)
+            if (username == (*iter)->getUserName())
             {
-                result = true;
-                break;
+                if ((*iter)->checkPWD(pwd))
+                {
+                    result = (*iter);
+                    break;
+                }
             }
         }
     }
@@ -228,11 +232,25 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
 
 bool DBConnectionImpl::createNewCommand(CommandPtr command)
 {
-    return false;
+    QSqlQuery query;
+    query.prepare(command->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
 }
 
 bool DBConnectionImpl::updateCommand(CommandPtr command)
 {
-    return false;
+    QSqlQuery query;
+    query.prepare(command->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
 }
 

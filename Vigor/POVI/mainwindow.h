@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <memory>
 #include <stack>
+#include "dbconnection.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +28,9 @@ public:
     void back();
 
     static MainWindow* getMainWindow();
+
+    static EmployeePtr getLogedUser();
+    static void setLogedUser(EmployeePtr employee);
 private:
     void connecttodb();
 
@@ -40,4 +44,5 @@ private:
     std::stack<std::shared_ptr<QWidget>> screenStack;
 
     static MainWindow* mainWindow;
+    static EmployeePtr loggedUser;
 };
