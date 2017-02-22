@@ -33,6 +33,11 @@
        <string>Detalji</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Izmeni</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

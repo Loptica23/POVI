@@ -113,5 +113,29 @@ void CommandDialog::createCommand()
 
 void CommandDialog::updateCommand()
 {
+    switch(MainWindow::getLogedUser()->getWorkPosition())
+    {
+    case Employee::WorkPosition::Administrator:
+        if (!ui->commandNumber->text().isEmpty())
+            m_command->setCommandNumber(ui->commandNumber->text().toUInt());
+        if (!ui->comercialistDescription->toPlainText().isEmpty())
+            m_command->setComercialistDescription(ui->comercialistDescription->toPlainText());
+        if (!ui->designerDescription->toPlainText().isEmpty())
+            m_command->setDesignerDescription(ui->designerDescription->toPlainText());
+        if (!ui->storekeeperDescription->toPlainText().isEmpty())
+            m_command->setStoreKeeperDescription(ui->storekeeperDescription->toPlainText());
+        break;
+    case Employee::WorkPosition::Komercijalista:
+        break;
+    }
 
+    if (m_command->isModified())
+    {
+        if (!m_db->updateCommand(m_command))
+        {
+            QString error = m_db->getLastError();
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error",error);
+        }
+    }
 }

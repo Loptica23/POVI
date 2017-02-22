@@ -17,7 +17,6 @@ Command::~Command()
 
 }
 
-
 //gethers
 int Command::getCommandNumber() const
 {
@@ -49,8 +48,6 @@ const QString& Command::getStoreKeeperDescription() const
 {
     return m_storeKeeperDescription;
 }
-
-
 
 //seters
 void Command::setCommandNumber(int commandNumber)
@@ -116,6 +113,33 @@ QString Command::statemantForCreating() const
 QString Command::statemantForUpdating() const
 {
     QString stm;
+    if (isModified())
+    {
+        stm = "update nalog set ";
+        if (m_comercialistDescriptionChanged)
+        {
+            stm += "OpisKomercijaliste = '" + getComercialistDescription() + "', ";
+        }
+        if (m_commandNumberChanged)
+        {
+            stm += "BrojNaloga = " + QString::number(getCommandNumber()) + ", ";
+        }
+        if (m_priorityChanged)
+        {
+            stm += "Prioritet = " + QString::number(getCommandNumber()) + ", ";
+        }
+        if (m_designerDescriptionChanged)
+        {
+            stm += "OpisDizajnere = '" + getDesignerDescription() + "', ";
+        }
+        if (m_storeKeeperDescriptionChanged)
+        {
+            stm += "OpisMagacionera ='" + getStoreKeeperDescription() + "', ";
+        }
+        stm.chop(2);
+        stm += " where idNalog = " + QString::number(m_id);
+        qDebug() << stm;
+    }
     return stm;
 }
 

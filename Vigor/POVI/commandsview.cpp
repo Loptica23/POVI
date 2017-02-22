@@ -54,6 +54,13 @@ void CommandsView::on_Refresh_clicked()
             m_detailsButtons.push_back(btn_details);
             connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
         }
+        {
+            QPushButton* btn_edit = new QPushButton();
+            btn_edit->setText("Izmeni");
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_edit);
+            m_editButtons.push_back(btn_edit);
+            connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+        }
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -66,7 +73,14 @@ void CommandsView::on_Back_clicked()
 
 void CommandsView::edit()
 {
-
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) != m_editButtons.end())
+    {
+        auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
+        qDebug() << index;
+        QWidget* commanddialog(new CommandDialog(this, m_db, m_commands->at(index), true));
+        commanddialog->show();
+    }
 }
 
 void CommandsView::details()
@@ -83,5 +97,6 @@ void CommandsView::details()
 
 void CommandsView::createCommand()
 {
-
+    auto commanddialog = new CommandDialog(this, m_db, m_order);
+    commanddialog->show();
 }
