@@ -73,6 +73,11 @@ void CommandDialog::setUpWindowByWorkPosition()
     }
 }
 
+void CommandDialog::fillTaskTable()
+{
+
+}
+
 void CommandDialog::removeWidget(QWidget * widget)
 {
     qDeleteAll(widget->children());

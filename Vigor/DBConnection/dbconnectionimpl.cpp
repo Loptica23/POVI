@@ -254,3 +254,15 @@ bool DBConnectionImpl::updateCommand(CommandPtr command)
     return true;
 }
 
+TaskTypesPtr DBConnectionImpl::getTaskTypes() const
+{
+    TaskTypesPtr tasktypes = nullptr;
+    QSqlQuery query;
+    query.prepare("select * from TipoviZadataka");
+    if(query.exec())
+    {
+        tasktypes.reset(new TaskTypes(query));
+    }
+    return tasktypes;
+}
+

@@ -34,6 +34,16 @@ unsigned Command::getID() const
     return m_id;
 }
 
+unsigned Command::getIdOrder() const
+{
+    return m_idOrder;
+}
+
+unsigned Command::getIdCustomer() const
+{
+    return m_idCustomer;
+}
+
 const QString& Command::getComercialistDescription() const
 {
     return m_comercialistDescription;

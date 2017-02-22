@@ -23,6 +23,7 @@ private slots:
     void on_buttonBox_accepted();
 
 private:
+    void fillTaskTable();
     void removeWidget(QWidget * widget);
     void createCommand();
     void updateCommand();
@@ -34,4 +35,5 @@ private:
     OrderPtr m_order;
     CommandPtr m_command;
     std::shared_ptr<DBConnection> m_db;
+
 };

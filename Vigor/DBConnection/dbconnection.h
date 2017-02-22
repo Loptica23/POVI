@@ -7,6 +7,7 @@
 #include "customer.h"
 #include "order.h"
 #include "command.h"
+#include "tasktypes.h"
 
 class QString;
 class DBConnection;
@@ -46,6 +47,8 @@ public:
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
+
+    virtual TaskTypesPtr getTaskTypes() const = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);

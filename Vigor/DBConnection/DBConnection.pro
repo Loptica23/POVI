@@ -28,14 +28,18 @@ SOURCES += dbconnection.cpp \
     employee.cpp \
     customer.cpp \
     order.cpp \
-    command.cpp
+    command.cpp \
+    task.cpp \
+    tasktypes.cpp
 
 HEADERS += dbconnection.h\
         dbconnection_global.h \
     dbconnectionimpl.h \
     customer.h \
     order.h \
-    command.h
+    command.h \
+    task.h \
+    tasktypes.h
 
 #unix {
 #    target.path = /usr/lib

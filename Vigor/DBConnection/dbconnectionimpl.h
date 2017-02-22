@@ -36,6 +36,8 @@ public:
     virtual bool createNewCommand(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);
 
+    virtual TaskTypesPtr getTaskTypes() const;
+
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
 

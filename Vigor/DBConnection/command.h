@@ -6,6 +6,7 @@
 
 class Command;
 typedef std::shared_ptr<Command> CommandPtr;
+typedef std::weak_ptr<Command> CommandWeakPtr;
 typedef std::vector<CommandPtr> CommandVtr;
 typedef std::shared_ptr<CommandVtr> CommandPtrVtr;
 
@@ -16,13 +17,14 @@ public:
     enum class State{New, Complited};
 
     Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand);
-
     virtual ~Command();
 
     //gethers
     int getCommandNumber() const;
     int getPriority() const;
     unsigned getID() const;
+    unsigned getIdOrder() const;
+    unsigned getIdCustomer() const;
     const QString& getComercialistDescription() const;
     const QString& getDesignerDescription() const;
     const QString& getStoreKeeperDescription() const;
