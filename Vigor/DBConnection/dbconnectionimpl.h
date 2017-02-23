@@ -36,6 +36,11 @@ public:
     virtual bool createNewCommand(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);
 
+    virtual TaskPtrVtr getTasks();
+    virtual TaskPtrVtr getTasks(CommandPtr command);
+    virtual bool createNewTask(TaskPtr task);
+    virtual bool updateTask(TaskPtr task);
+
     virtual TaskTypesPtr getTaskTypes() const;
 
 protected:

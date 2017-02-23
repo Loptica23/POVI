@@ -1,6 +1,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QComboBox>
 #include "commanddialog.h"
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
@@ -12,9 +13,11 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui(new Ui::CommandDialog),
     m_db(db),
     m_order(order),
-    m_create(true)
+    m_create(true),
+    m_tasks(new TaskVtr())
 {
     ui->setupUi(this);
+    fillTaskTable();
     setUpWindowByWorkPosition();
 }
 
@@ -24,7 +27,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui(new Ui::CommandDialog),
     m_db(db),
     m_command(command),
-    m_create(false)
+    m_create(false),
+    m_tasks(new TaskVtr())
 {
     ui->setupUi(this);
 
@@ -75,6 +79,48 @@ void CommandDialog::setUpWindowByWorkPosition()
 
 void CommandDialog::fillTaskTable()
 {
+    if (m_create)
+    {
+
+        ui->taskTable->setRowCount(0);
+        auto taskTypes = m_db->getTaskTypes()->getTypes();
+        auto i = 0;
+        for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
+        {
+            ui->taskTable->insertRow(i);
+            QComboBox* taskComboBox = new QComboBox(ui->taskTable);
+            for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
+            {
+                taskComboBox->addItem((*type).first);
+                taskComboBox->setCurrentIndex((*iter)->getTaskTypeId());
+                connect(taskComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeTaskType(int)));
+                ui->taskTable->setCellWidget(i, 0, taskComboBox);
+            }
+        }
+        //nakon dodavanja postojecih zadataka potrebno je da dodas opciju za kreiranje
+        {
+            ui->taskTable->insertRow(i);
+            QComboBox* add = new QComboBox(ui->taskTable);
+            for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
+            {
+                add->addItem((*type).first);
+            }
+            add->addItem("Dodaj novi zadatak");
+            add->setCurrentText("Dodaj novi zadatak");
+            connect(add, SIGNAL(currentIndexChanged(int)), this, SLOT(addNewTask(int)));
+            add->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
+            ui->taskTable->setCellWidget(i, 0, add);
+        }
+    }
+    else
+    {
+
+    }
+    ui->taskTable->resizeColumnsToContents();
+}
+
+void CommandDialog::initializeTasks()
+{
 
 }
 
@@ -94,6 +140,19 @@ void CommandDialog::on_buttonBox_accepted()
     {
         updateCommand();
     }
+}
+
+void CommandDialog::addNewTask(int index)
+{
+    //mozda da se iskulira ako je vrednost dodaj novi zadatak;
+    TaskPtr task(new Task(m_command, index));
+    m_tasks->push_back(task);
+    fillTaskTable();
+}
+
+void CommandDialog::changeTaskType(int index)
+{
+    qDebug() << index;
 }
 
 void CommandDialog::createCommand()

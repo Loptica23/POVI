@@ -254,11 +254,51 @@ bool DBConnectionImpl::updateCommand(CommandPtr command)
     return true;
 }
 
+TaskPtrVtr DBConnectionImpl::getTasks()
+{
+    //ova metoda ne bi trebala da se poziva.. zasto bi neko pravio pregled svih taskova?
+    TaskPtrVtr tasks;
+    return tasks;
+}
+
+TaskPtrVtr DBConnectionImpl::getTasks(CommandPtr command)
+{
+    TaskPtrVtr tasks;
+    QSqlQuery query;
+    query.prepare("select * from zadatak");
+    if (query.exec())
+    {
+        tasks = Task::createTaskFromQueryAndCommand(query, command);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return tasks;
+}
+
+bool DBConnectionImpl::createNewTask(TaskPtr task)
+{
+    QSqlQuery query;
+    query.prepare(task->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateTask(TaskPtr task)
+{
+    return false;
+}
+
 TaskTypesPtr DBConnectionImpl::getTaskTypes() const
 {
     TaskTypesPtr tasktypes = nullptr;
     QSqlQuery query;
-    query.prepare("select * from TipoviZadataka");
+    query.prepare("select * from TipoviZadatka");
     if(query.exec())
     {
         tasktypes.reset(new TaskTypes(query));

@@ -3,6 +3,7 @@
 #include "order.h"
 #include "command.h"
 #include "dbconnection.h"
+#include "task.h"
 
 namespace Ui {
 class CommandDialog;
@@ -21,9 +22,12 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
+    void addNewTask(int index);
+    void changeTaskType(int index);
 
 private:
     void fillTaskTable();
+    void initializeTasks();
     void removeWidget(QWidget * widget);
     void createCommand();
     void updateCommand();
@@ -34,6 +38,7 @@ private:
     bool m_create;
     OrderPtr m_order;
     CommandPtr m_command;
+    TaskPtrVtr m_tasks;
     std::shared_ptr<DBConnection> m_db;
 
 };

@@ -30,7 +30,8 @@ SOURCES += dbconnection.cpp \
     order.cpp \
     command.cpp \
     task.cpp \
-    tasktypes.cpp
+    tasktypes.cpp \
+    machine.cpp
 
 HEADERS += dbconnection.h\
         dbconnection_global.h \
@@ -39,7 +40,8 @@ HEADERS += dbconnection.h\
     order.h \
     command.h \
     task.h \
-    tasktypes.h
+    tasktypes.h \
+    machine.h
 
 #unix {
 #    target.path = /usr/lib

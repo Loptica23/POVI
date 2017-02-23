@@ -155,25 +155,10 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="tableWidget_2">
+          <widget class="QTableWidget" name="taskTable">
            <column>
             <property name="text">
              <string>Tip zadatka</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Masina</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Procena</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Radnik</string>
             </property>
            </column>
           </widget>

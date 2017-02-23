@@ -7,8 +7,9 @@
 
 class TaskTypes;
 typedef std::shared_ptr<TaskTypes> TaskTypesPtr;
-typedef std::pair<QString,int> taskPair;
-typedef std::vector<taskPair> taskPairs;
+typedef std::pair<QString,int> TaskPair;
+typedef std::vector<TaskPair> TaskPairs;
+typedef std::shared_ptr<TaskPairs> TaskPairsPtr;
 
 class DBCONNECTIONSHARED_EXPORT TaskTypes
 {
@@ -16,8 +17,8 @@ public:
     TaskTypes(QSqlQuery query);
     virtual ~TaskTypes();
 
-    taskPairs getTypes() const;
+    TaskPairsPtr getTypes() const;
 
 private:
-    taskPairs m_types;
+    TaskPairsPtr m_types;
 };
