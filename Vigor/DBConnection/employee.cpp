@@ -126,6 +126,11 @@ void Employee::setWorkPosition(const unsigned workPosition)
     }
 }
 
+unsigned Employee::getId() const
+{
+    return m_id;
+}
+
 const QString& Employee::getFirstName() const
 {
     return m_FirstName;

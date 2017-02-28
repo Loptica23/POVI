@@ -36,7 +36,8 @@ SOURCES +=  main.cpp\
     ordersview.cpp \
     orderdialog.cpp \
     commandsview.cpp \
-    commanddialog.cpp
+    commanddialog.cpp \
+    commanddialogkomercialist.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -49,7 +50,8 @@ HEADERS +=  mainwindow.h\
     ordersview.h \
     orderdialog.h \
     commandsview.h \
-    commanddialog.h
+    commanddialog.h \
+    commanddialogkomercialist.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \

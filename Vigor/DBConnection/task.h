@@ -16,7 +16,12 @@ class DBCONNECTIONSHARED_EXPORT Task
 public:
     enum class State{New, InProgress, Complited, Leaved, Stopped};
 
+    //ovaj konstruktor se poziva kada se kreira novi task
     Task(CommandPtr command, unsigned taskType);
+
+    //ovaj konstruktor se poziva kada task vec postoji
+    Task(unsigned id, CommandPtr command, unsigned taskType);
+
     virtual ~Task();
 
     //geters
@@ -27,25 +32,33 @@ public:
     unsigned getMachineId() const;
     const State& getState() const;
     QString getStateString() const;
+    unsigned getSerialNumber() const;
 
     //seters
+    void setCommand(CommandPtr command);
     void setWorkerId(const unsigned workerId);
     void setPrediction(const unsigned prediction);
     void setMachineId(const unsigned machineId);
     void setState(const State& state);
     void setState(const QString& state);
+    void setSerialNumber(unsigned serialNumber);
 
 
-    QString statemantForCreating() const;
+    QString statemantForCreating(unsigned employeeID) const;
     QString statemantForUpdating() const;
+    QString statementForDeleting() const;
 
     bool isModified() const;
+    bool isCreated() const;
     void resetChangeTracking();
 
 
     static TaskPtrVtr createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr command);
 
 private:
+    unsigned m_id;
+    bool m_created; //task je upravo kreiran; ne postoji u bazi podataka;
+
     CommandWeakPtr m_command;
 
     unsigned m_taskType;
@@ -59,6 +72,9 @@ private:
 
     unsigned m_machineId;
     bool m_machineIdChanged;
+
+    unsigned m_serialNumber;
+    bool m_serialNumberChanged;
 
     State m_state;
     bool m_stateChanged;

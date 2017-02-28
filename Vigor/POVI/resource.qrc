@@ -1,5 +1,8 @@
 <RCC>
-    <qresource prefix="/resources">
+    <qresource prefix="resources">
         <file>resource/img/vigor-300x291.png</file>
+		<file>resource/img/arrow-down.png</file>
+		<file>resource/img/arrow-up.png</file>
+		<file>resource/img/brisi.png</file>
     </qresource>
 </RCC>

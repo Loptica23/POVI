@@ -4,6 +4,7 @@
 #include "command.h"
 #include "mainwindow.h"
 #include "commanddialog.h"
+#include "commanddialogkomercialist.h"
 
 CommandsView::CommandsView(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
     QWidget(parent),
@@ -22,12 +23,13 @@ CommandsView::~CommandsView()
 void CommandsView::on_NewCommand_clicked()
 {
     qDebug() << "otvaranje prozora za kreiranje naloga!";
-    auto commanddialog = new CommandDialog(this, m_db, m_order);
+    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order);
     commanddialog->show();
 }
 
 void CommandsView::on_Refresh_clicked()
 {
+    //refaktorisi malo ovu funkciju
     m_editButtons.clear();
     m_detailsButtons.clear();
     qDebug() << "user refreshing commands view!";
@@ -78,7 +80,7 @@ void CommandsView::edit()
     {
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
-        QWidget* commanddialog(new CommandDialog(this, m_db, m_commands->at(index), true));
+        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), true));
         commanddialog->show();
     }
 }
@@ -90,13 +92,13 @@ void CommandsView::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        QWidget* commanddialog(new CommandDialog(this, m_db, m_commands->at(index), false));
+        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), false));
         commanddialog->show();
     }
 }
 
 void CommandsView::createCommand()
 {
-    auto commanddialog = new CommandDialog(this, m_db, m_order);
+    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order);
     commanddialog->show();
 }

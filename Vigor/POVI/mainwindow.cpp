@@ -1,10 +1,13 @@
 #include <QDebug>
+#include <memory>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "logintab.h"
 #include "waiting.h"
 #include "dbconnection.h"
 #include "adminview.h"
+#include "customersview.h"
+#include "empoyersview.h"
 
 MainWindow* MainWindow::mainWindow;
 EmployeePtr MainWindow::loggedUser;
@@ -26,14 +29,13 @@ void MainWindow::setLogedUser(EmployeePtr employee)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_state(State::Izlogovan),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     m_dbConnection = DBConnection::create();
     m_LoginTab.reset(new LoginTab(this, m_dbConnection));
     ui->ViewLayout->addWidget(m_LoginTab.get());
-    changeState(State::Izlogovan);
+    m_LoginTab->setHidden(false);
     connecttodb();
     mainWindow = this;
 }
@@ -43,6 +45,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::setUpGuiByWorkPosition()
+{
+    switch(getLogedUser()->getWorkPosition())
+    {
+    case Employee::WorkPosition::Komercijalista:
+        qDebug() << "Komercijalista";
+        setView(new CustomersView(this, m_dbConnection));
+        break;
+    case Employee::WorkPosition::Administrator:
+        qDebug() << "Administrator";
+        setView(new EmpoyersView(this, m_dbConnection));
+        break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::setView(QWidget* view)
+{
+    m_defaultScreen.reset(view); //ovaj kod se duplira treba da ode u funkciju
+    screenStack.push(m_defaultScreen);
+    ui->ViewLayout->addWidget(m_defaultScreen.get());
+    m_LoginTab->setHidden(true);
+    m_defaultScreen->setHidden(false);
+    this->showMaximized();
+}
 
 void MainWindow::connecttodb()
 {
@@ -53,41 +81,8 @@ void MainWindow::connecttodb()
     else
     {
         qDebug() << "nije uspelo konektovanje na bazu podataka, proveriti port i IP adresu!";
+        qDebug() << m_dbConnection->getLastError();
     }
-}
-
-void MainWindow::changeState(State state)
-{
-    if (m_LoginTab->hasHeightForWidth())
-    {
-        m_LoginTab->setHidden(true);
-    }
-    switch(state)
-    {
-    case State::Izlogovan:
-        m_LoginTab->setHidden(false);
-        break;
-    case State::Cekanje:
-        m_LoginTab->setHidden(true);
-        break;
-    case State::Dizajner:
-        m_LoginTab->setHidden(true);
-        break;
-    case State::Komercijala:
-        m_LoginTab->setHidden(true);
-        break;
-    case State::Administrator:
-        m_defaultScreen.reset(new AdminView(this, m_dbConnection));
-        screenStack.push(m_defaultScreen);
-        ui->ViewLayout->addWidget(m_defaultScreen.get());
-        m_LoginTab->setHidden(true);
-        m_defaultScreen->setHidden(false);
-        this->showMaximized();
-        break;
-    default:
-        break;
-    }
-    m_state = state;
 }
 
 void MainWindow::forward(std::shared_ptr<QWidget> widget)
@@ -101,7 +96,6 @@ void MainWindow::forward(std::shared_ptr<QWidget> widget)
 
 void MainWindow::back()
 {
-    //proveris da li se doslo do main windowa i ako se pokusava skidanje njega onda ispisi gresku
     qDebug() << "back";
     screenStack.top()->setHidden(true);
     screenStack.pop();

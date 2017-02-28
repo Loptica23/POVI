@@ -176,7 +176,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
     CommandPtrVtr commands(new CommandVtr());
     while(query.next())
     {
-        CommandPtr command(new Command(query.value("idNalog").toUInt(), query.value("idNarudzbina").toUInt() , query.value("idKlijent").toUInt()));
+        CommandPtr command(new Command(query.value("idKlijent").toUInt(), query.value("idNarudzbina").toUInt(), query.value("idNalog").toUInt()));
         command->setCommandNumber(query.value("BrojNaloga").toInt());
         command->setComercialistDescription(query.value("OpisKomercijaliste").toString());
         command->setDesignerDescription(query.value("OpisDizajnera").toString());

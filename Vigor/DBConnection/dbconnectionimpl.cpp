@@ -198,6 +198,27 @@ bool DBConnectionImpl::updateOrder(OrderPtr order)
     return true;
 }
 
+CommandPtr DBConnectionImpl::getCommand(unsigned commandNumber)
+{
+    CommandPtr command = nullptr;
+    CommandPtrVtr commands;
+    QSqlQuery query;
+    query.prepare("select * from nalog where BrojNaloga = " + QString::number(commandNumber));
+    if(query.exec())
+    {
+        commands = Command::createCommandsFromQuery(query);
+        if (!commands->empty())
+        {
+            command = commands->at(0);
+        }
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!!";
+    }
+    return command;
+}
+
 CommandPtrVtr DBConnectionImpl::getCommands()
 {
     CommandPtrVtr commands;
@@ -265,7 +286,11 @@ TaskPtrVtr DBConnectionImpl::getTasks(CommandPtr command)
 {
     TaskPtrVtr tasks;
     QSqlQuery query;
-    query.prepare("select * from zadatak");
+    QString stm("select * from zadatak where Nalog_idNalog = ");
+    stm += QString::number(command->getID());
+    stm += " order by RedniBroj;";
+    query.prepare(stm);
+    qDebug() << stm;
     if (query.exec())
     {
         tasks = Task::createTaskFromQueryAndCommand(query, command);
@@ -277,10 +302,10 @@ TaskPtrVtr DBConnectionImpl::getTasks(CommandPtr command)
     return tasks;
 }
 
-bool DBConnectionImpl::createNewTask(TaskPtr task)
+bool DBConnectionImpl::createNewTask(TaskPtr task, unsigned employeeID)
 {
     QSqlQuery query;
-    query.prepare(task->statemantForCreating());
+    query.prepare(task->statemantForCreating(employeeID));
     if (!query.exec())
     {
         m_lastError = query.lastError().text();
@@ -291,14 +316,33 @@ bool DBConnectionImpl::createNewTask(TaskPtr task)
 
 bool DBConnectionImpl::updateTask(TaskPtr task)
 {
-    return false;
+    QSqlQuery query;
+    query.prepare(task->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::deleteTask(TaskPtr task)
+{
+    QSqlQuery query;
+    query.prepare(task->statementForDeleting());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
 }
 
 TaskTypesPtr DBConnectionImpl::getTaskTypes() const
 {
     TaskTypesPtr tasktypes = nullptr;
     QSqlQuery query;
-    query.prepare("select * from TipoviZadatka");
+    query.prepare("select * from TipoviZadatka order by idTipoviZadatka");
     if(query.exec())
     {
         tasktypes.reset(new TaskTypes(query));

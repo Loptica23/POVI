@@ -45,14 +45,16 @@ public:
     virtual bool updateOrder(OrderPtr order) = 0;
 
     virtual CommandPtrVtr getCommands() = 0;
+    virtual CommandPtr getCommand(unsigned commandNumber) = 0;
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
 
     virtual TaskPtrVtr getTasks() = 0;
     virtual TaskPtrVtr getTasks(CommandPtr command) = 0;
-    virtual bool createNewTask(TaskPtr task) = 0;
+    virtual bool createNewTask(TaskPtr task, unsigned employeeID) = 0;
     virtual bool updateTask(TaskPtr task) = 0;
+    virtual bool deleteTask(TaskPtr task) = 0;
 
     virtual TaskTypesPtr getTaskTypes() const = 0;
 
@@ -92,6 +94,7 @@ public:
     void setActivation(bool activation);
 
     //geters
+    unsigned getId() const;
     const QString& getFirstName() const;
     const QString& getSecondName() const;
     const QString& getUserName() const;

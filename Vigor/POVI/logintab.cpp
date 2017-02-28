@@ -27,7 +27,7 @@ void LoginTab::on_login_clicked()
     if (loggeduser != nullptr)
     {
         MainWindow::setLogedUser(loggeduser);
-        m_mainWindow->changeState(MainWindow::State::Administrator);
+        m_mainWindow->setUpGuiByWorkPosition();
         qDebug() << "User loged in!";
     }
     else

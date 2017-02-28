@@ -14,11 +14,10 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_db(db),
     m_order(order),
     m_create(true),
-    m_tasks(new TaskVtr())
+    m_tasks(new TaskVtr()),
+    m_edit(true)
 {
     ui->setupUi(this);
-    fillTaskTable();
-    setUpWindowByWorkPosition();
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -28,9 +27,12 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_db(db),
     m_command(command),
     m_create(false),
-    m_tasks(new TaskVtr())
+    m_tasks(new TaskVtr()),
+    m_edit(edit),
+    m_deletedTasks(new TaskVtr())
 {
     ui->setupUi(this);
+    initializeTasks();
 
     ui->commandNumber->setText(QString::number(command->getCommandNumber()));
     ui->comercialistDescription->setText(command->getComercialistDescription());
@@ -38,7 +40,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui->storekeeperDescription->setText(command->getStoreKeeperDescription());
     //ostali su ti taskovi
 
-    if (!edit)
+    if (!m_edit)
     {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         ui->commandNumber->setEnabled(false);
@@ -47,9 +49,6 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->storekeeperDescription->setEnabled(false);
         //ostali su ti taskovi
     }
-
-    //ova funkcija se mora pozvati na kraju konstruktora!
-    setUpWindowByWorkPosition();
 }
 
 CommandDialog::~CommandDialog()
@@ -57,71 +56,10 @@ CommandDialog::~CommandDialog()
     delete ui;
 }
 
-void CommandDialog::setUpWindowByWorkPosition()
-{
-    auto user = MainWindow::getLogedUser();
-    auto username = user->getUserName();
-    qDebug() << username;
-    switch(user->getWorkPosition())
-    {
-        case Employee::WorkPosition::Komercijalista:
-            removeWidget(ui->designer);
-            removeWidget(ui->storekeeper);
-            break;
-        case Employee::WorkPosition::Dizajner:
-            removeWidget(ui->storekeeper);
-            removeWidget(ui->tasks);
-        // nastavi dalje sa caseovima..
-        default:
-            break;
-    }
-}
-
-void CommandDialog::fillTaskTable()
-{
-    if (m_create)
-    {
-
-        ui->taskTable->setRowCount(0);
-        auto taskTypes = m_db->getTaskTypes()->getTypes();
-        auto i = 0;
-        for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
-        {
-            ui->taskTable->insertRow(i);
-            QComboBox* taskComboBox = new QComboBox(ui->taskTable);
-            for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
-            {
-                taskComboBox->addItem((*type).first);
-                taskComboBox->setCurrentIndex((*iter)->getTaskTypeId());
-                connect(taskComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeTaskType(int)));
-                ui->taskTable->setCellWidget(i, 0, taskComboBox);
-            }
-        }
-        //nakon dodavanja postojecih zadataka potrebno je da dodas opciju za kreiranje
-        {
-            ui->taskTable->insertRow(i);
-            QComboBox* add = new QComboBox(ui->taskTable);
-            for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
-            {
-                add->addItem((*type).first);
-            }
-            add->addItem("Dodaj novi zadatak");
-            add->setCurrentText("Dodaj novi zadatak");
-            connect(add, SIGNAL(currentIndexChanged(int)), this, SLOT(addNewTask(int)));
-            add->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToContents);
-            ui->taskTable->setCellWidget(i, 0, add);
-        }
-    }
-    else
-    {
-
-    }
-    ui->taskTable->resizeColumnsToContents();
-}
-
 void CommandDialog::initializeTasks()
 {
-
+    //inicijalizujes taskove uz pomoc naloga
+    m_tasks = m_db->getTasks(m_command);
 }
 
 void CommandDialog::removeWidget(QWidget * widget)
@@ -132,27 +70,30 @@ void CommandDialog::removeWidget(QWidget * widget)
 
 void CommandDialog::on_buttonBox_accepted()
 {
+    qDebug() << "prihvatanje!";
     if (m_create)
     {
         createCommand();
     }
     else
     {
+        qDebug() << "pozivanje funkcije update!";
         updateCommand();
     }
 }
 
-void CommandDialog::addNewTask(int index)
-{
-    //mozda da se iskulira ako je vrednost dodaj novi zadatak;
-    TaskPtr task(new Task(m_command, index));
-    m_tasks->push_back(task);
-    fillTaskTable();
-}
-
 void CommandDialog::changeTaskType(int index)
 {
-    qDebug() << index;
+    QComboBox* comboBoxSender = qobject_cast<QComboBox*>(sender());
+    if (std::find(m_comboBoxes.begin(), m_comboBoxes.end(), comboBoxSender) != m_comboBoxes.end())
+    {
+        auto row = std::find(m_comboBoxes.begin(), m_comboBoxes.end(), comboBoxSender) - m_comboBoxes.begin();
+        qDebug() << row;
+        ++index;
+        qDebug() << index;
+        m_tasks->at(row).reset(new Task(m_command, index));
+        m_tasks->at(row)->setSerialNumber(row + 1);
+    }
 }
 
 void CommandDialog::createCommand()
@@ -172,6 +113,21 @@ void CommandDialog::createCommand()
         QString error = m_db->getLastError();
         QMessageBox messageBox;
         messageBox.critical(0,"Error",error);
+    }
+    else
+    {
+        m_command = m_db->getCommand(command->getCommandNumber());
+        //ako je sve ok proslo sada kreiras zadatke koji su ti u vektoru
+        auto serialNumber = 1;
+        for (auto i = m_tasks->begin(); i != m_tasks->end(); ++i, ++serialNumber)
+        {
+            if (!m_db->createNewTask(*i, MainWindow::getLogedUser()->getId()))
+            {
+                QString error = m_db->getLastError();
+                QMessageBox messageBox;
+                messageBox.critical(0,"Error",error);
+            }
+        }
     }
 }
 

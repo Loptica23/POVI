@@ -1,5 +1,7 @@
 #pragma once
 #include <QDialog>
+#include <QComboBox>
+#include <QPushButton>
 #include "order.h"
 #include "command.h"
 #include "dbconnection.h"
@@ -18,19 +20,22 @@ public:
     CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit);
     ~CommandDialog();
 
-    void setUpWindowByWorkPosition();
+    virtual void setUpWindowByWorkPosition() = 0;
 
-private slots:
+protected slots:
     void on_buttonBox_accepted();
-    void addNewTask(int index);
+    virtual void addNewTask(int index) = 0;
     void changeTaskType(int index);
+    virtual void up() = 0;
+    virtual void down() = 0;
+    virtual void deleteTask() = 0;
 
-private:
+protected:
     void fillTaskTable();
     void initializeTasks();
     void removeWidget(QWidget * widget);
     void createCommand();
-    void updateCommand();
+    virtual void updateCommand();
 
     Ui::CommandDialog *ui;
 
@@ -39,6 +44,11 @@ private:
     OrderPtr m_order;
     CommandPtr m_command;
     TaskPtrVtr m_tasks;
+    TaskPtrVtr m_deletedTasks;
     std::shared_ptr<DBConnection> m_db;
 
+    std::vector<QComboBox*> m_comboBoxes;
+    std::vector<QPushButton*> m_upButtons;
+    std::vector<QPushButton*> m_downButtons;
+    std::vector<QPushButton*> m_deleteButtons;
 };
