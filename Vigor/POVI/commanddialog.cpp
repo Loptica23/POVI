@@ -70,14 +70,12 @@ void CommandDialog::removeWidget(QWidget * widget)
 
 void CommandDialog::on_buttonBox_accepted()
 {
-    qDebug() << "prihvatanje!";
     if (m_create)
     {
         createCommand();
     }
     else
     {
-        qDebug() << "pozivanje funkcije update!";
         updateCommand();
     }
 }
@@ -91,6 +89,8 @@ void CommandDialog::changeTaskType(int index)
         qDebug() << row;
         ++index;
         qDebug() << index;
+        TaskPtr oldtask = m_tasks->at(row);
+        m_deletedTasks->push_back(oldtask);
         m_tasks->at(row).reset(new Task(m_command, index));
         m_tasks->at(row)->setSerialNumber(row + 1);
     }
@@ -121,6 +121,7 @@ void CommandDialog::createCommand()
         auto serialNumber = 1;
         for (auto i = m_tasks->begin(); i != m_tasks->end(); ++i, ++serialNumber)
         {
+            (*i)->setCommand(m_command);
             if (!m_db->createNewTask(*i, MainWindow::getLogedUser()->getId()))
             {
                 QString error = m_db->getLastError();

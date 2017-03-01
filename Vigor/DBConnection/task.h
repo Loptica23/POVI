@@ -14,7 +14,7 @@ typedef std::shared_ptr<TaskVtr> TaskPtrVtr;
 class DBCONNECTIONSHARED_EXPORT Task
 {
 public:
-    enum class State{New, InProgress, Complited, Leaved, Stopped};
+    enum class State{New, Waiting, InProgress, Complited, Leaved, Stopped};
 
     //ovaj konstruktor se poziva kada se kreira novi task
     Task(CommandPtr command, unsigned taskType);

@@ -53,7 +53,7 @@ void CommandDialogKomercialist::fillTaskTable()
             insertDownButton(i, 2);
             insertDeleteButton(i, 3);
         }
-        //jo jedan red za kreiranje novog zadatka
+        disableFirstAndLastButtons();
         insertNewTaskButton(i);
     }
     else
@@ -121,7 +121,6 @@ void CommandDialogKomercialist::deleteTask()
     {
         auto index = std::find(m_deleteButtons.begin(), m_deleteButtons.end(), buttonSender) - m_deleteButtons.begin();
         qDebug() << index;
-        //oznaci ga negde da treba da se brise, vidi kako ces to..
         for (auto iter = (m_tasks->begin() + index); iter != m_tasks->end(); ++iter)
         {
             TaskPtr task = (*iter);
@@ -177,6 +176,18 @@ void CommandDialogKomercialist::insertDownButton(unsigned i, unsigned j)
     connect(btn_down, SIGNAL(clicked()), this, SLOT(down()));
 }
 
+void CommandDialogKomercialist::disableFirstAndLastButtons()
+{
+    if (!m_upButtons.empty())
+    {
+        m_upButtons.at(0)->setEnabled(false);
+    }
+    if (!m_downButtons.empty())
+    {
+        m_downButtons.at(m_downButtons.size() - 1)->setEnabled(false);
+    }
+}
+
 void CommandDialogKomercialist::insertDeleteButton(unsigned i, unsigned j)
 {
     QPushButton* btn_down = new QPushButton();
@@ -225,7 +236,6 @@ void CommandDialogKomercialist::updateCommand()
             messageBox.critical(0,"Error",error);
         }
     }
-    qDebug() << "taskovi dolaze na red!";
 
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
     {
@@ -251,7 +261,6 @@ void CommandDialogKomercialist::updateCommand()
         }
     }
 
-    qDebug() << "taskovi dolaze na red!";
     for (auto iter = m_deletedTasks->begin(); iter != m_deletedTasks->end(); ++iter)
     {
         TaskPtr task = *iter;

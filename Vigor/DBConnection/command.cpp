@@ -59,6 +59,47 @@ const QString& Command::getStoreKeeperDescription() const
     return m_storeKeeperDescription;
 }
 
+const Command::State Command::getState() const
+{
+    return m_state;
+}
+
+unsigned Command::getStateInt() const
+{
+    switch(m_state)
+    {
+    case State::New:
+        return 1;
+    case State::InProgress:
+        return 2;
+    case State::Complited:
+        return 3;
+    case State::Stopped:
+        return 4;
+    default:
+        qDebug() << "***************Ne postoji to stanje**********";
+        return 0;
+    }
+}
+
+QString Command::getStateQString() const
+{
+    switch(m_state)
+    {
+    case State::New:
+        return "nov";
+    case State::InProgress:
+        return "izr";
+    case State::Complited:
+        return "zav";
+    case State::Stopped:
+        return "sto";
+    default:
+        qDebug() << "***************Ne postoji to stanje**********";
+        return "";
+    }
+}
+
 //seters
 void Command::setCommandNumber(int commandNumber)
 {
@@ -105,17 +146,62 @@ void Command::setStoreKeeperDescription(const QString & description)
     }
 }
 
+void Command::setState(const State& state)
+{
+    if (m_state != state)
+    {
+        m_stateChanged = true;
+        m_state = state;
+    }
+}
+
+void Command::setState(const QString &state)
+{
+    if (state == "nov")
+        setState(State::New);
+    else if (state == "izr")
+        setState(State::InProgress);
+    else if (state == "zav")
+        setState(State::Complited);
+    else if (state == "sto")
+        setState((State::Stopped));
+    else
+        qDebug() << "!!!!!!!!!!!!Ne postoji ovo stanje!!!!!!!!!!!!!!!";
+}
+
+void Command::setState(const unsigned state)
+{
+    switch(state)
+    {
+    case 1:
+        setState(State::New);
+        break;
+    case 2:
+        setState(State::InProgress);
+        break;
+    case 3:
+        setState(State::Complited);
+        break;
+    case 4:
+        setState(State::Stopped);
+        break;
+    default:
+        qDebug() << "!!!!!!nema takvog stanja!!!!!!!!!";
+    }
+}
+
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, OpisKomercijaliste, BrojNaloga, Prioritet, "
-                  "OpisDizajnera, OpisMagacionera) values (";
+                  "OpisDizajnera, OpisMagacionera, Stanje) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += "'" + m_comercialistDescription + "', ";
     stm += QString::number(m_commandNumber) + ", ";
     stm += QString::number(m_priority) + ", ";
     stm += "'" + m_designerDescription + "', ";
-    stm += "'" + m_storeKeeperDescription + "')";
+    stm += "'" + m_storeKeeperDescription + "', ";
+    stm += "'nov')";
     qDebug() << stm;
     return stm;
 }
@@ -146,6 +232,10 @@ QString Command::statemantForUpdating() const
         {
             stm += "OpisMagacionera ='" + getStoreKeeperDescription() + "', ";
         }
+        if (m_stateChanged)
+        {
+            stm += "Stanje = '" + getStateQString() + "', ";
+        }
         stm.chop(2);
         stm += " where idNalog = " + QString::number(m_id);
         qDebug() << stm;
@@ -159,6 +249,7 @@ bool Command::isModified() const
             m_comercialistDescriptionChanged ||
             m_designerDescriptionChanged ||
             m_storeKeeperDescriptionChanged ||
+            m_stateChanged ||
             m_commandNumberChanged);
 }
 
@@ -169,6 +260,7 @@ void Command::resetChangeTracking()
     m_comercialistDescriptionChanged    = false;
     m_designerDescriptionChanged        = false;
     m_storeKeeperDescriptionChanged     = false;
+    m_stateChanged                      = false;
 }
 
 CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
@@ -181,6 +273,8 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setComercialistDescription(query.value("OpisKomercijaliste").toString());
         command->setDesignerDescription(query.value("OpisDizajnera").toString());
         command->setStoreKeeperDescription(query.value("OpisMagacionera").toString());
+        command->setState(query.value("Stanje").toString());
+        command->resetChangeTracking();
         commands->push_back(command);
     }
     return commands;

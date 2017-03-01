@@ -60,7 +60,7 @@ void OrderDialog::createOrder()
     QString timeLimit = date + " 00:00:00";
     order->setTimeLimit(timeLimit);
 
-    order->setState(Order::State::New);
+    //order->setState(Order::State::New);
 
     if (!m_db->createNewOrder(order))
     {

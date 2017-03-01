@@ -203,7 +203,9 @@ CommandPtr DBConnectionImpl::getCommand(unsigned commandNumber)
     CommandPtr command = nullptr;
     CommandPtrVtr commands;
     QSqlQuery query;
-    query.prepare("select * from nalog where BrojNaloga = " + QString::number(commandNumber));
+    QString stm = "select * from nalog where BrojNaloga = " + QString::number(commandNumber) + ";";
+    qDebug() << stm;
+    query.prepare(stm);
     if(query.exec())
     {
         commands = Command::createCommandsFromQuery(query);
@@ -273,6 +275,83 @@ bool DBConnectionImpl::updateCommand(CommandPtr command)
         return false;
     }
     return true;
+}
+
+bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
+{
+    //refactor
+    qDebug() << "zavrsen zadatak";
+    TaskPtrVtr tasks = getTasks(command);
+    qDebug() << "dohvaceni zadacai!";
+    if (tasks->empty())
+    {
+        qDebug() << "Nalog nema zadatke!";
+        return false;
+    }
+    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    {
+        qDebug() << "Nalog je verovatno iz stanja New presao u in progress";
+        TaskPtr task = *iter;
+        if (task->getState() == Task::State::New)
+        {
+            task->setState(Task::State::Waiting);
+            command->setState(Command::State::InProgress);
+            if (task->isModified())
+            {
+                if (!updateTask(task))
+                {
+                    return false;
+                }
+            }
+            if (command->isModified())
+            {
+                if (!updateCommand(command))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (task->getState() == Task::State::InProgress)
+        {
+            task->setState(Task::State::Complited);
+            if (task->isModified())
+            {
+                if (!updateTask(task))
+                {
+                    return false;
+                }
+            }
+            ++iter;
+            if (iter == tasks->end())
+            {
+                command->setState(Command::State::Complited);
+            }
+            else
+            {
+                task = *iter;
+                task->setState(Task::State::Waiting);
+                if (task->isModified())
+                {
+                    if (!updateTask(task))
+                    {
+                        return false;
+                    }
+                }
+                if (command->isModified())
+                {
+                    if (!updateCommand(command))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+    return false;
 }
 
 TaskPtrVtr DBConnectionImpl::getTasks()

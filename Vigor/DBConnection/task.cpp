@@ -84,6 +84,8 @@ QString Task::getStateString() const
     case State::New:
         st = "nov";
         break;
+    case State::Waiting:
+        st = "cek";
     case State::InProgress:
         st = "izr";
         break;
@@ -153,6 +155,8 @@ void Task::setState(const QString &state)
 {
     if (state == "nov")
         setState(State::New);
+    else if (state == "cek")
+        setState(State::Waiting);
     else if (state == "izr")
         setState(State::InProgress);
     else if (state == "zav")
@@ -194,6 +198,33 @@ QString Task::statemantForCreating(unsigned employeeID) const
 QString Task::statemantForUpdating() const
 {
     QString stm;
+    if (isModified())
+    {
+        stm = "update zadatak set ";
+        if (m_workerIdChanged)
+        {
+            stm += "Radnik_idRadnik = " + QString::number(getWorkerId()) + ", ";
+        }
+        if (m_predictionChanged)
+        {
+            stm += "Procena = " + QString::number(getPrediction()) + ", ";
+        }
+        if (m_machineIdChanged)
+        {
+            stm += "Masina_idMasina = " + QString::number(getMachineId()) + ", ";
+        }
+        if (m_serialNumberChanged)
+        {
+            stm += "RedniBroj = " + QString::number(getSerialNumber()) + ", ";
+        }
+        if (m_stateChanged)
+        {
+            stm += "Stanje = '" + getStateString() + "', ";
+        }
+        stm.chop(2);
+        stm += " where idZadatak = " + QString::number(m_id) + ";";
+        qDebug() << stm;
+    }
     return stm;
 }
 
@@ -202,6 +233,7 @@ QString Task::statementForDeleting() const
     QString stm;
     stm = "delete from zadatak where idZadatak = ";
     stm += QString::number(m_id);
+    qDebug() << stm;
     return stm;
 }
 
@@ -239,6 +271,7 @@ TaskPtrVtr Task::createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr comm
         task->setMachineId(query.value("Masina_idMasina").toUInt()); //imaj u vidu da ova informacija ne mora da postoji
         task->setState(query.value("Stanje").toString());
         task->setSerialNumber(query.value("RedniBroj").toUInt());
+        task->resetChangeTracking();
         tasks->push_back(task);
     }
     return tasks;

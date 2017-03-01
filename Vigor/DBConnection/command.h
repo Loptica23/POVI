@@ -14,7 +14,7 @@ typedef std::shared_ptr<CommandVtr> CommandPtrVtr;
 class DBCONNECTIONSHARED_EXPORT Command{
 
 public:
-    enum class State{New, Complited};
+    enum class State{New, InProgress, Complited, Stopped};
 
     Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand);
     virtual ~Command();
@@ -28,6 +28,9 @@ public:
     const QString& getComercialistDescription() const;
     const QString& getDesignerDescription() const;
     const QString& getStoreKeeperDescription() const;
+    const State getState() const;
+    unsigned getStateInt() const;
+    QString getStateQString() const;
 
     //seters
     void setCommandNumber(int commandNumber);
@@ -35,6 +38,9 @@ public:
     void setComercialistDescription(const QString & description);
     void setDesignerDescription(const QString & description);
     void setStoreKeeperDescription(const QString & description);
+    void setState(const State& state);
+    void setState(const QString& state);
+    void setState(const unsigned state);
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
@@ -49,6 +55,9 @@ private:
     unsigned m_id;
     unsigned m_idOrder;
     unsigned m_idCustomer;
+
+    State m_state;
+    bool m_stateChanged;
 
     int m_priority;
     bool m_priorityChanged;

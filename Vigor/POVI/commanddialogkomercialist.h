@@ -26,6 +26,7 @@ protected:
     void insertComboBox(TaskPtr task, unsigned i, unsigned j);
     void insertUpButton(unsigned i, unsigned j);
     void insertDownButton(unsigned i, unsigned j);
+    void disableFirstAndLastButtons();
     void insertDeleteButton(unsigned i, unsigned j);
     void insertNewTaskButton(unsigned i);
     void fillComboBoxWithTaskTypes(QComboBox * box);

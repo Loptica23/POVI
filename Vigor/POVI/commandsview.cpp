@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QMessageBox>
 #include "commandsview.h"
 #include "ui_commandsview.h"
 #include "command.h"
@@ -32,6 +33,7 @@ void CommandsView::on_Refresh_clicked()
     //refaktorisi malo ovu funkciju
     m_editButtons.clear();
     m_detailsButtons.clear();
+    m_finishButtons.clear();
     qDebug() << "user refreshing commands view!";
     ui->tableWidget->setRowCount(0);
     auto commands = m_db->getCommands(m_order);
@@ -50,18 +52,37 @@ void CommandsView::on_Refresh_clicked()
             ui->tableWidget->setItem(i, 0,item);
         }
         {
+            auto *item = new QTableWidgetItem((*iter)->getStateQString());
+            ui->tableWidget->setItem(i, 1,item);
+        }
+        {
             QPushButton* btn_details = new QPushButton();
             btn_details->setText("Detalji");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 1), btn_details);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_details);
             m_detailsButtons.push_back(btn_details);
             connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
         }
         {
             QPushButton* btn_edit = new QPushButton();
             btn_edit->setText("Izmeni");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_edit);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_edit);
             m_editButtons.push_back(btn_edit);
             connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+            if ((*iter)->getState() != Command::State::New)
+            {
+                btn_edit->setEnabled(false);
+            }
+        }
+        {
+            QPushButton* btn_finis = new QPushButton();
+            btn_finis->setText("Posalji u proizvodnju");
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 4), btn_finis);
+            m_finishButtons.push_back(btn_finis);
+            connect(btn_finis, SIGNAL(clicked()), this, SLOT(sendToProduction()));
+            if ((*iter)->getState() != Command::State::New)
+            {
+                btn_finis->setEnabled(false);
+            }
         }
     }
     ui->tableWidget->resizeColumnsToContents();
@@ -101,4 +122,20 @@ void CommandsView::createCommand()
 {
     auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order);
     commanddialog->show();
+}
+
+void CommandsView::sendToProduction()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_finishButtons.begin(), m_finishButtons.end(), buttonSender) != m_finishButtons.end())
+    {
+        auto index = std::find(m_finishButtons.begin(), m_finishButtons.end(), buttonSender) - m_finishButtons.begin();
+        qDebug() << index;
+        if (!m_db->completeCurrentTask(m_commands->at(index)))
+        {
+            QString error = m_db->getLastError();
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error",error);
+        }
+    }
 }

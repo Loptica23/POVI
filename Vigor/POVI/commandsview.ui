@@ -30,12 +30,22 @@
      </column>
      <column>
       <property name="text">
+       <string>Stanje</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>Detalji</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Izmeni</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Posalji u proizvodnju</string>
       </property>
      </column>
     </widget>

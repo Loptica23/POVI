@@ -36,6 +36,7 @@ public:
     virtual CommandPtrVtr getCommands(OrderPtr order);
     virtual bool createNewCommand(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);
+    virtual bool completeCurrentTask(CommandPtr command);
 
     virtual TaskPtrVtr getTasks();
     virtual TaskPtrVtr getTasks(CommandPtr command);

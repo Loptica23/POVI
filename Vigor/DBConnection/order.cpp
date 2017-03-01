@@ -42,46 +42,46 @@ unsigned Order::getCustomerId() const
     return m_idCustomer;
 }
 
-const Order::State Order::getState() const
-{
-    return m_state;
-}
+//const Order::State Order::getState() const
+//{
+//    return m_state;
+//}
 
-unsigned Order::getStateInt() const
-{
-    switch(m_state)
-    {
-    case State::New:
-        return 1;
-    case State::WaitingForProduction:
-        return 2;
-    case State::InProgress:
-        return 3;
-    case State::Finished:
-        return 4;
-    default:
-        qDebug() << "***************Ne postoji to stanje**********";
-        return 0;
-    }
-}
+//unsigned Order::getStateInt() const
+//{
+//    switch(m_state)
+//    {
+//    case State::New:
+//        return 1;
+//    case State::WaitingForProduction:
+//        return 2;
+//    case State::InProgress:
+//        return 3;
+//    case State::Finished:
+//        return 4;
+//    default:
+//        qDebug() << "***************Ne postoji to stanje**********";
+//        return 0;
+//    }
+//}
 
-QString Order::getStateQString() const
-{
-    switch(m_state)
-    {
-    case State::New:
-        return "nov";
-    case State::WaitingForProduction:
-        return "cek";
-    case State::InProgress:
-        return "upr";
-    case State::Finished:
-        return "zav";
-    default:
-        qDebug() << "***************Ne postoji to stanje**********";
-        return "";
-    }
-}
+//QString Order::getStateQString() const
+//{
+//    switch(m_state)
+//    {
+//    case State::New:
+//        return "nov";
+//    case State::WaitingForProduction:
+//        return "cek";
+//    case State::InProgress:
+//        return "upr";
+//    case State::Finished:
+//        return "zav";
+//    default:
+//        qDebug() << "***************Ne postoji to stanje**********";
+//        return "";
+//    }
+//}
 
 QString Order::getTimeLimit() const
 {
@@ -120,47 +120,47 @@ void Order::setDescription(const QString & description)
     }
 }
 
-void Order::setState(const State& state)
-{
-    if (m_state != state)
-    {
-        m_stateChanged = true;
-        m_state = state;
-    }
-}
+//void Order::setState(const State& state)
+//{
+//    if (m_state != state)
+//    {
+//        m_stateChanged = true;
+//        m_state = state;
+//    }
+//}
 
-void Order::setState(const QString &state)
-{
-    if (state == "nov")
-        setState(State::New);
-    else if (state == "cek")
-        setState(State::WaitingForProduction);
-    else if (state == "upr")
-        setState(State::InProgress);
-    else if (state == "zav")
-        setState(State::Finished);
-    else
-        qDebug() << "!!!!!!!!!!!!Ne postoji ovo stanje!!!!!!!!!!!!!!!";
-}
+//void Order::setState(const QString &state)
+//{
+//    if (state == "nov")
+//        setState(State::New);
+//    else if (state == "cek")
+//        setState(State::WaitingForProduction);
+//    else if (state == "upr")
+//        setState(State::InProgress);
+//    else if (state == "zav")
+//        setState(State::Finished);
+//    else
+//        qDebug() << "!!!!!!!!!!!!Ne postoji ovo stanje!!!!!!!!!!!!!!!";
+//}
 
-void Order::setState(const unsigned state)
-{
-    switch(state)
-    {
-    case 0:
-        setState(State::New);
-        break;
-    case 1:
-        setState(State::WaitingForProduction);
-        break;
-    case 2:
-        setState(State::InProgress);
-        break;
-    case 3:
-        setState(State::Finished);
-        break;
-    }
-}
+//void Order::setState(const unsigned state)
+//{
+//    switch(state)
+//    {
+//    case 0:
+//        setState(State::New);
+//        break;
+//    case 1:
+//        setState(State::WaitingForProduction);
+//        break;
+//    case 2:
+//        setState(State::InProgress);
+//        break;
+//    case 3:
+//        setState(State::Finished);
+//        break;
+//    }
+//}
 
 void Order::setTimeLimit(const QString & timeLimit)
 {
@@ -179,7 +179,7 @@ QString Order::statemantForCreating() const
     stm += QString::number(m_price) + ", ";
     stm += "'" + m_description + "', ";
     stm += "'" + m_header + "', ";
-    stm += "'" + getStateQString() + "', ";
+    //stm += "'" + getStateQString() + "', ";
     stm += "'" + m_timeLimit + "')";
     qDebug() << stm;
     return stm;
@@ -240,7 +240,7 @@ OrderPtrVtr Order::createOrdersFromQuery(QSqlQuery& query)
         order->setHeader(query.value("Naslov").toString());
         order->setPrice((query.value("Cena").toDouble()));
         order->setDescription(query.value("Opis").toString());
-        order->setState(query.value("Stanje").toString());
+        //order->setState(query.value("Stanje").toString());
         order->setTimeLimit(query.value("Rok").toString());
         order->resetChangeTracking();
         orders->push_back(order);
