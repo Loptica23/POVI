@@ -25,6 +25,7 @@ private slots:
     void on_Refresh_clicked();
     void on_Back_clicked();
     void sendToProduction();
+    void deleteCommand();
 
 private:
     Ui::CommandsView *ui;
@@ -35,4 +36,5 @@ private:
     std::vector<QPushButton*> m_editButtons;
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_finishButtons;
+    std::vector<QPushButton*> m_deleteButtons;
 };

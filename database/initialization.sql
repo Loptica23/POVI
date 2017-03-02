@@ -2,6 +2,7 @@ use vigor;
 
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Milos', 'Pajkic', '1234', 'milos.pajkic', 'adm', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Komercijalista', 'Komercijalista', '5555', 'komercijalista', 'kom', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner', 'Dizajner', '5555', 'dizajner', 'diz', true);
 
 
 insert into klijent (Ime) values ('Znam d.o.o');

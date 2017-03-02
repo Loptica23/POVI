@@ -44,6 +44,7 @@ public:
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
+    QString statementForDeleting() const;
 
     bool isModified() const;
     void resetChangeTracking();

@@ -48,6 +48,11 @@
        <string>Posalji u proizvodnju</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Obrisi</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

@@ -18,6 +18,8 @@ public:
     virtual ~TaskTypes();
 
     TaskPairsPtr getTypes() const;
+    unsigned getTypeIdByString(QString type) const;
+    QString getStringById(unsigned type) const;
 
 private:
     TaskPairsPtr m_types;

@@ -86,6 +86,7 @@ QString Task::getStateString() const
         break;
     case State::Waiting:
         st = "cek";
+        break;
     case State::InProgress:
         st = "izr";
         break;

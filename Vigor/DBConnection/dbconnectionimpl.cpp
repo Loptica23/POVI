@@ -253,6 +253,45 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
     return commands;
 }
 
+CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId)
+{
+    //refactor
+    CommandPtrVtr commands;
+    TaskPtrVtr tasks;
+    QSqlQuery queryGetTasks;
+    QSqlQuery queryGetCommands;
+    QString stm;
+    stm = "select Nalog_idNalog from zadatak where TipoviZadatka_idTipoviZadatka = " + QString::number(taskTypeId);
+    stm += " and Stanje = 'cek';";
+    qDebug() << stm;
+    queryGetTasks.prepare(stm);
+    if (!queryGetTasks.exec())
+    {
+        m_lastError = queryGetTasks.lastError().text();
+        return commands;
+    }
+
+    stm = "select * from Nalog where idNalog in (";
+    while (queryGetTasks.next())
+    {
+        stm += queryGetTasks.value("Nalog_idNalog").toString() + ",";
+    }
+    stm.chop(1);
+    stm += ");";
+    qDebug() << stm;
+    queryGetCommands.prepare(stm);
+
+    if (!queryGetCommands.exec())
+    {
+        m_lastError = queryGetCommands.lastError().text();
+        return commands;
+    }
+
+    commands = Command::createCommandsFromQuery(queryGetCommands);
+
+    return commands;
+}
+
 bool DBConnectionImpl::createNewCommand(CommandPtr command)
 {
     QSqlQuery query;
@@ -269,6 +308,18 @@ bool DBConnectionImpl::updateCommand(CommandPtr command)
 {
     QSqlQuery query;
     query.prepare(command->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::deleteCommand(CommandPtr command)
+{
+    QSqlQuery query;
+    query.prepare(command->statementForDeleting());
     if (!query.exec())
     {
         m_lastError = query.lastError().text();

@@ -8,6 +8,7 @@
 #include "adminview.h"
 #include "customersview.h"
 #include "empoyersview.h"
+#include "commandsviewwaitingontask.h"
 
 MainWindow* MainWindow::mainWindow;
 EmployeePtr MainWindow::loggedUser;
@@ -47,6 +48,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setUpGuiByWorkPosition()
 {
+    unsigned type = 0;
     switch(getLogedUser()->getWorkPosition())
     {
     case Employee::WorkPosition::Komercijalista:
@@ -56,6 +58,11 @@ void MainWindow::setUpGuiByWorkPosition()
     case Employee::WorkPosition::Administrator:
         qDebug() << "Administrator";
         setView(new EmpoyersView(this, m_dbConnection));
+        break;
+    case Employee::WorkPosition::Dizajner:
+        qDebug() << "Administrator";
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn");
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
         break;
     default:
         break;

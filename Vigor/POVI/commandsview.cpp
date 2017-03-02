@@ -34,6 +34,7 @@ void CommandsView::on_Refresh_clicked()
     m_editButtons.clear();
     m_detailsButtons.clear();
     m_finishButtons.clear();
+    m_deleteButtons.clear();
     qDebug() << "user refreshing commands view!";
     ui->tableWidget->setRowCount(0);
     auto commands = m_db->getCommands(m_order);
@@ -84,6 +85,17 @@ void CommandsView::on_Refresh_clicked()
                 btn_finis->setEnabled(false);
             }
         }
+        {
+            QPushButton* btn_delete = new QPushButton();
+            btn_delete->setText("Obrisi nalog");
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 5), btn_delete);
+            m_deleteButtons.push_back(btn_delete);
+            connect(btn_delete, SIGNAL(clicked()), this, SLOT(deleteCommand()));
+            if ((*iter)->getState() != Command::State::New)
+            {
+                btn_delete->setEnabled(false);
+            }
+        }
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -132,6 +144,22 @@ void CommandsView::sendToProduction()
         auto index = std::find(m_finishButtons.begin(), m_finishButtons.end(), buttonSender) - m_finishButtons.begin();
         qDebug() << index;
         if (!m_db->completeCurrentTask(m_commands->at(index)))
+        {
+            QString error = m_db->getLastError();
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error",error);
+        }
+    }
+}
+
+void CommandsView::deleteCommand()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_deleteButtons.begin(), m_deleteButtons.end(), buttonSender) != m_deleteButtons.end())
+    {
+        auto index = std::find(m_deleteButtons.begin(), m_deleteButtons.end(), buttonSender) - m_deleteButtons.begin();
+        qDebug() << index;
+        if (!m_db->deleteCommand(m_commands->at(index)))
         {
             QString error = m_db->getLastError();
             QMessageBox messageBox;

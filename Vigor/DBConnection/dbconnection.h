@@ -47,8 +47,10 @@ public:
     virtual CommandPtrVtr getCommands() = 0;
     virtual CommandPtr getCommand(unsigned commandNumber) = 0;
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
+    virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
+    virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool completeCurrentTask(CommandPtr command) = 0;
 
     virtual TaskPtrVtr getTasks() = 0;

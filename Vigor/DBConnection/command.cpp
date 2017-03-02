@@ -243,6 +243,14 @@ QString Command::statemantForUpdating() const
     return stm;
 }
 
+QString Command::statementForDeleting() const
+{
+    QString stm;
+    stm = "delete from nalog where idNalog = " + QString::number(m_id) + ";";
+    qDebug() << stm;
+    return stm;
+}
+
 bool Command::isModified() const
 {
     return (m_priorityChanged ||
