@@ -399,6 +399,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
         {
             qDebug() << "postavljnje zadatka na zavrseno!";
             task->setState(Task::State::Complited);
+            task->setCurrentTimeForComplited();
             ++iter;
             if (iter == tasks->end())
             {
@@ -457,6 +458,7 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
                 qDebug() << "postavljnje zadatka u ostavljeno stanje!";
                 serialNumber = task->getSerialNumber();
                 task->setState(Task::State::Leaved);
+                task->setCurrentTimeForComplited();
                 newTask.reset(new Task(command, task->getTaskTypeId()));
                 newTask->setSerialNumber(++serialNumber);
                 newTask->setState(Task::State::Waiting);
@@ -498,6 +500,7 @@ bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr
         {
             task->setState(Task::State::InProgress);
             task->setWorkerId(employee->getId());
+            task->setCurrentTimeForStarted();
             updateTask(task);
         }
     }

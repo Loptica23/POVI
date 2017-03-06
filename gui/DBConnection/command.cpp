@@ -7,7 +7,7 @@ Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand):
     m_id(idCommand),
     m_idCustomer(idCustomer),
     m_idOrder(idOrder),
-    m_priority(-1)
+    m_priority(100)
 {
     resetChangeTracking();
 }
@@ -282,6 +282,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setDesignerDescription(query.value("OpisDizajnera").toString());
         command->setStoreKeeperDescription(query.value("OpisMagacionera").toString());
         command->setState(query.value("Stanje").toString());
+        command->setPriority(query.value("Prioritet").toInt());
         command->resetChangeTracking();
         commands->push_back(command);
     }

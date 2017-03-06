@@ -64,6 +64,10 @@ void MainWindow::setUpGuiByWorkPosition()
         type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn");
         setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
         break;
+    case Employee::WorkPosition::Magacioner:
+        qDebug() << "Magacioner";
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Magacin");
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
     default:
         break;
     }

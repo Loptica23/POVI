@@ -39,7 +39,8 @@ SOURCES +=  main.cpp\
     commanddialog.cpp \
     commanddialogkomercialist.cpp \
     commandsviewwaitingontask.cpp \
-    commanddialogdesigner.cpp
+    commanddialogdesigner.cpp \
+    commanddialogstorekeeper.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -55,7 +56,8 @@ HEADERS +=  mainwindow.h\
     commanddialog.h \
     commanddialogkomercialist.h \
     commandsviewwaitingontask.h \
-    commanddialogdesigner.h
+    commanddialogdesigner.h \
+    commanddialogstorekeeper.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \

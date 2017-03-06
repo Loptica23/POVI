@@ -3,6 +3,7 @@ use vigor;
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Milos', 'Pajkic', '1234', 'milos.pajkic', 'adm', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Komercijalista', 'Komercijalista', '5555', 'komercijalista', 'kom', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner', 'Dizajner', '5555', 'dizajner', 'diz', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Magacioner', 'Magacioner', '5555', 'magacioner', 'mag', true);
 
 
 insert into klijent (Ime) values ('Znam d.o.o');
@@ -23,3 +24,8 @@ insert into TipoviZadatka (Naziv) values ('Peglanje');
 insert into TipoviZadatka (Naziv) values ('Lepljenje');
 insert into TipoviZadatka (Naziv) values ('Laser');
 insert into TipoviZadatka (Naziv) values ('Sivenje');
+
+use vigor;
+CREATE USER 'milos.pajkic'@'%'  IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON vigor.* TO 'milos.pajkic'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;

@@ -179,6 +179,16 @@ void Task::setSerialNumber(unsigned serialNumber)
     }
 }
 
+void Task::setCurrentTimeForStarted()
+{
+    m_setStartedTime = true;
+}
+
+void Task::setCurrentTimeForComplited()
+{
+    m_setComplitedTime = true;
+}
+
 QString Task::statemantForCreating(unsigned employeeID) const
 {
     QString stm;
@@ -222,6 +232,14 @@ QString Task::statemantForUpdating() const
         {
             stm += "Stanje = '" + getStateString() + "', ";
         }
+        if (m_setStartedTime)
+        {
+            stm += "Poceo = NOW(), ";
+        }
+        if (m_setComplitedTime)
+        {
+            stm += "Zavrsen = NOW(), ";
+        }
         stm.chop(2);
         stm += " where idZadatak = " + QString::number(m_id) + ";";
         qDebug() << stm;
@@ -244,6 +262,8 @@ bool Task::isModified() const
             m_predictionChanged ||
             m_machineIdChanged ||
             m_serialNumberChanged ||
+            m_setStartedTime ||
+            m_setComplitedTime ||
             m_stateChanged);
 }
 
@@ -259,6 +279,8 @@ void Task::resetChangeTracking()
     m_machineIdChanged = false;
     m_stateChanged = false;
     m_serialNumberChanged = false;
+    m_setStartedTime = false;
+    m_setComplitedTime = false;
 }
 
 TaskPtrVtr Task::createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr command)

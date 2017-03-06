@@ -15,6 +15,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_order(order),
     m_create(true),
     m_tasks(new TaskVtr()),
+    m_deletedTasks(new TaskVtr()),
     m_edit(true),
     m_serialNumberEmpty(true),
     m_comercialistDescriptionEmpty(true),
@@ -166,6 +167,7 @@ void CommandDialog::createCommand()
 
 void CommandDialog::updateCommand()
 {
+    //ova funkcija bi trebalo da je overajdovana! i da je ovaj kod ispod mrtav kod
     switch(MainWindow::getLogedUser()->getWorkPosition())
     {
     case Employee::WorkPosition::Administrator:

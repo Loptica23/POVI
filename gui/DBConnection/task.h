@@ -42,6 +42,8 @@ public:
     void setState(const State& state);
     void setState(const QString& state);
     void setSerialNumber(unsigned serialNumber);
+    void setCurrentTimeForStarted();
+    void setCurrentTimeForComplited();
 
 
     QString statemantForCreating(unsigned employeeID) const;
@@ -78,4 +80,7 @@ private:
 
     State m_state;
     bool m_stateChanged;
+
+    bool m_setStartedTime;
+    bool m_setComplitedTime;
 };

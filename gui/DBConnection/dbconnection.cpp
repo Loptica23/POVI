@@ -14,8 +14,8 @@ DBConnection::DBConnection()
     m_databaseConnectionName = "POVI";
     m_host = "localhost";
     m_databaseName = "vigor";
-    m_userName = "root";
-    m_pwd = "1234";
+    m_userName = "mptest1";
+    m_pwd = "password";
 }
 
 DBConnection::~DBConnection()
