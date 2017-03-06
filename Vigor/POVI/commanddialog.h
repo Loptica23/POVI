@@ -24,11 +24,16 @@ public:
 
 protected slots:
     void on_buttonBox_accepted();
-    virtual void addNewTask(int index) = 0;
+    void on_buttonBox_rejected();
+
     void changeTaskType(int index);
-    virtual void up() = 0;
-    virtual void down() = 0;
-    virtual void deleteTask() = 0;
+    virtual void addNewTask(int index);
+    virtual void up();
+    virtual void down();
+    virtual void deleteTask();
+
+    virtual void acceptButtonClicked();
+    virtual void rejectButtonClicked();
 
 protected:
     void fillTaskTable();
@@ -36,6 +41,11 @@ protected:
     void removeWidget(QWidget * widget);
     void createCommand();
     virtual void updateCommand();
+
+    virtual void serialNumberChanged();
+    virtual void comercialistDescriptionChanged();
+    virtual void designerDescriptionChanged();
+    virtual void storeKeeperDescriptionChanged();
 
     Ui::CommandDialog *ui;
 
@@ -51,4 +61,14 @@ protected:
     std::vector<QPushButton*> m_upButtons;
     std::vector<QPushButton*> m_downButtons;
     std::vector<QPushButton*> m_deleteButtons;
+
+    bool m_serialNumberEmpty;
+    bool m_comercialistDescriptionEmpty;
+    bool m_designerDescriptionEmpty;
+    bool m_storeKeeperDescriptionEmpty;
+private slots:
+    void on_storekeeperDescription_textChanged();
+    void on_designerDescription_textChanged();
+    void on_comercialistDescription_textChanged();
+    void on_commandNumber_textChanged(const QString &arg1);
 };

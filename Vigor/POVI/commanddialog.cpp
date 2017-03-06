@@ -15,7 +15,11 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_order(order),
     m_create(true),
     m_tasks(new TaskVtr()),
-    m_edit(true)
+    m_edit(true),
+    m_serialNumberEmpty(true),
+    m_comercialistDescriptionEmpty(true),
+    m_designerDescriptionEmpty(true),
+    m_storeKeeperDescriptionEmpty(true)
 {
     ui->setupUi(this);
 }
@@ -29,7 +33,11 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_create(false),
     m_tasks(new TaskVtr()),
     m_edit(edit),
-    m_deletedTasks(new TaskVtr())
+    m_deletedTasks(new TaskVtr()),
+    m_serialNumberEmpty(true),
+    m_comercialistDescriptionEmpty(true),
+    m_designerDescriptionEmpty(true),
+    m_storeKeeperDescriptionEmpty(true)
 {
     ui->setupUi(this);
     initializeTasks();
@@ -70,6 +78,8 @@ void CommandDialog::removeWidget(QWidget * widget)
 
 void CommandDialog::on_buttonBox_accepted()
 {
+    acceptButtonClicked();
+
     if (m_create)
     {
         createCommand();
@@ -79,6 +89,18 @@ void CommandDialog::on_buttonBox_accepted()
         updateCommand();
     }
 }
+
+void CommandDialog::on_buttonBox_rejected()
+{
+    rejectButtonClicked();
+}
+
+void CommandDialog::acceptButtonClicked() {}
+void CommandDialog::rejectButtonClicked() {}
+void CommandDialog::serialNumberChanged() {}
+void CommandDialog::comercialistDescriptionChanged() {}
+void CommandDialog::designerDescriptionChanged() {}
+void CommandDialog::storeKeeperDescriptionChanged() {}
 
 void CommandDialog::changeTaskType(int index)
 {
@@ -95,6 +117,16 @@ void CommandDialog::changeTaskType(int index)
         m_tasks->at(row)->setSerialNumber(row + 1);
     }
 }
+
+void CommandDialog::addNewTask(int index)
+{
+    qDebug() << index;
+}
+
+void CommandDialog::up() {}
+void CommandDialog::down() {}
+void CommandDialog::deleteTask() {}
+
 
 void CommandDialog::createCommand()
 {
@@ -159,4 +191,45 @@ void CommandDialog::updateCommand()
             messageBox.critical(0,"Error",error);
         }
     }
+}
+
+
+void CommandDialog::on_storekeeperDescription_textChanged()
+{
+    if (ui->storekeeperDescription->toPlainText().isEmpty())
+        m_storeKeeperDescriptionEmpty = true;
+    else
+        m_storeKeeperDescriptionEmpty = false;
+
+    storeKeeperDescriptionChanged();
+}
+
+void CommandDialog::on_designerDescription_textChanged()
+{
+    if (ui->designerDescription->toPlainText().isEmpty())
+        m_designerDescriptionEmpty = true;
+    else
+        m_designerDescriptionEmpty = false;
+
+    designerDescriptionChanged();
+}
+
+void CommandDialog::on_comercialistDescription_textChanged()
+{
+    if (ui->comercialistDescription->toPlainText().isEmpty())
+        m_comercialistDescriptionEmpty = true;
+    else
+        m_comercialistDescriptionEmpty = false;
+
+    comercialistDescriptionChanged();
+}
+
+void CommandDialog::on_commandNumber_textChanged(const QString &arg1)
+{
+    if (!ui->commandNumber->text().isEmpty())
+        m_serialNumberEmpty = true;
+    else
+        m_serialNumberEmpty = false;
+
+    serialNumberChanged();
 }

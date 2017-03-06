@@ -221,6 +221,49 @@ CommandPtr DBConnectionImpl::getCommand(unsigned commandNumber)
     return command;
 }
 
+CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr employee)
+{
+    CommandPtr command = nullptr;
+    CommandPtrVtr commands;
+    QSqlQuery queryForTasks;
+    QSqlQuery queryForCommands;
+    QString stm;
+    stm = "select Nalog_idNalog from zadatak where Radnik_idRadnik = " + QString::number(employee->getId());
+    stm += " and Stanje = 'izr';";
+    qDebug() << stm;
+    queryForTasks.prepare(stm);
+
+    stm = "select * from nalog where idNalog in (";
+    if(queryForTasks.exec())
+    {
+        while(queryForTasks.next())
+        {
+            stm += queryForTasks.value("Nalog_idNalog").toString() + ",";
+        }
+        stm.chop(1);
+        stm += ");";
+
+        queryForCommands.prepare(stm);
+        if(queryForCommands.exec())
+        {
+            commands = Command::createCommandsFromQuery(queryForCommands);
+            if (!commands->empty())
+            {
+                command = commands->at(0);
+            }
+        }
+        else
+        {
+            qDebug() << "neuspeo kveri!!";
+        }
+    }
+    else
+    {
+        qDebug() << "neuspeo kveri!!";
+    }
+    return command;
+}
+
 CommandPtrVtr DBConnectionImpl::getCommands()
 {
     CommandPtrVtr commands;
@@ -255,18 +298,18 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
 
 CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId)
 {
-    //refactor
     CommandPtrVtr commands;
-    TaskPtrVtr tasks;
     QSqlQuery queryGetTasks;
     QSqlQuery queryGetCommands;
-    QString stm;
-    stm = "select Nalog_idNalog from zadatak where TipoviZadatka_idTipoviZadatka = " + QString::number(taskTypeId);
+    QString stm("select Nalog_idNalog from zadatak where TipoviZadatka_idTipoviZadatka = ");
+    stm += QString::number(taskTypeId);
     stm += " and Stanje = 'cek';";
     qDebug() << stm;
+
     queryGetTasks.prepare(stm);
     if (!queryGetTasks.exec())
     {
+        qDebug() << "neuspesno!";
         m_lastError = queryGetTasks.lastError().text();
         return commands;
     }
@@ -279,16 +322,16 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId
     stm.chop(1);
     stm += ");";
     qDebug() << stm;
-    queryGetCommands.prepare(stm);
 
+    queryGetCommands.prepare(stm);
     if (!queryGetCommands.exec())
     {
+        qDebug() << "neuspesno!";
         m_lastError = queryGetCommands.lastError().text();
         return commands;
     }
 
     commands = Command::createCommandsFromQuery(queryGetCommands);
-
     return commands;
 }
 
@@ -330,50 +373,32 @@ bool DBConnectionImpl::deleteCommand(CommandPtr command)
 
 bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
 {
-    //refactor
-    qDebug() << "zavrsen zadatak";
     TaskPtrVtr tasks = getTasks(command);
-    qDebug() << "dohvaceni zadacai!";
+    TaskPtr task;
+    TaskPtr task1;
     if (tasks->empty())
     {
         qDebug() << "Nalog nema zadatke!";
         return false;
     }
+
     for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
     {
-        qDebug() << "Nalog je verovatno iz stanja New presao u in progress";
-        TaskPtr task = *iter;
+        task = *iter;
+        //ako je ovaj uslov ispunjen radi se o prvom zadatku
         if (task->getState() == Task::State::New)
         {
+            qDebug() << "postavljnje zadatka na cekanje!";
             task->setState(Task::State::Waiting);
             command->setState(Command::State::InProgress);
-            if (task->isModified())
-            {
-                if (!updateTask(task))
-                {
-                    return false;
-                }
-            }
-            if (command->isModified())
-            {
-                if (!updateCommand(command))
-                {
-                    return false;
-                }
-            }
-            return true;
+            break;
         }
 
+        //nije rec o prvom zadatku!
         if (task->getState() == Task::State::InProgress)
         {
+            qDebug() << "postavljnje zadatka na zavrseno!";
             task->setState(Task::State::Complited);
-            if (task->isModified())
-            {
-                if (!updateTask(task))
-                {
-                    return false;
-                }
-            }
             ++iter;
             if (iter == tasks->end())
             {
@@ -381,27 +406,103 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
             }
             else
             {
-                task = *iter;
-                task->setState(Task::State::Waiting);
-                if (task->isModified())
-                {
-                    if (!updateTask(task))
-                    {
-                        return false;
-                    }
-                }
-                if (command->isModified())
-                {
-                    if (!updateCommand(command))
-                    {
-                        return false;
-                    }
-                }
+                task1 = *iter;
+                task1->setState(Task::State::Waiting);
             }
-            return true;
+            break;
         }
     }
 
+    //refactor (ovaj kod dole se stalno ponavlja!!)
+    if (task->isModified())
+    {
+        if (!updateTask(task))
+        {
+            qDebug() << "update task nije uspeo!";
+            return false;
+        }
+    }
+    if (command->isModified())
+    {
+        if (!updateCommand(command))
+        {
+            qDebug() << "update command nije uspeo!";
+            return false;
+        }
+    }
+    if (task1 && task1->isModified())
+    {
+        if (!updateTask(task1))
+        {
+            qDebug() << "update task1 nije uspeo!";
+            return false;
+        }
+    }
+    return true;
+}
+
+bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee)
+{
+    TaskPtrVtr tasks = getTasks(command);
+    TaskPtr task;
+    TaskPtr newTask;
+    auto serialNumber = 150;
+    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    {
+        task = *iter;
+        if (serialNumber == 150)
+        {
+            if (task->getState() == Task::State::InProgress)
+            {
+                qDebug() << "postavljnje zadatka u ostavljeno stanje!";
+                serialNumber = task->getSerialNumber();
+                task->setState(Task::State::Leaved);
+                newTask.reset(new Task(command, task->getTaskTypeId()));
+                newTask->setSerialNumber(++serialNumber);
+                newTask->setState(Task::State::Waiting);
+                if (!createNewTask(newTask, employee->getId()))
+                {
+                    return false;
+                }
+                if (!updateTask(task))
+                {
+                    return false;
+                }
+                qDebug() << "postavljnje zadatka u ostavljeno stanje!";
+            }
+        }
+        else
+        {
+            //znaci da smo sada u stanju inkrementiranja rednog broja zadatka
+            qDebug() << "uvecavanje rednog broja zadatka!!";
+            task->setSerialNumber(++serialNumber);
+            if (!updateTask(task)) return false;
+        }
+    }
+
+    return true;
+}
+
+bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee)
+{
+    TaskPtrVtr tasks = getTasks(command);
+    if (tasks->empty())
+    {
+        qDebug() << "Nalog nema zadatke!";
+        return false;
+    }
+    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    {
+        TaskPtr task = *iter;
+        if (task->getState() == Task::State::Waiting)
+        {
+            task->setState(Task::State::InProgress);
+            task->setWorkerId(employee->getId());
+            updateTask(task);
+        }
+    }
+
+    qDebug() << "nije nadjen ni jedan zadatak u waiting stanju!";
     return false;
 }
 

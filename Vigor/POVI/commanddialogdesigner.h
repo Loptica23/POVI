@@ -11,8 +11,9 @@ public:
     virtual void setUpWindowByWorkPosition();
 
 protected:
-    virtual void addNewTask(int index);
-    virtual void up();
-    virtual void down();
-    virtual void deleteTask();
+    virtual void updateCommand();
+
+    virtual void acceptButtonClicked();
+    virtual void rejectButtonClicked();
+    virtual void designerDescriptionChanged();
 };

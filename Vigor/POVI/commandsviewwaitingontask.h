@@ -27,6 +27,9 @@ private:
     void insertDetailsButton(unsigned i, unsigned j);
     void inserTakeCommandButton(unsigned i, unsigned j);
 
+    void openDialogIfThereIsTaskOnWhichUserWorkingOn();
+    void OpenCommandDialogByWorkPosition(CommandPtr command, bool edit);
+
 
     Ui::CommandsViewWaitingOnTask *ui;
     DBConnectionPtr m_db;

@@ -11,6 +11,7 @@ CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnecti
     m_taskTypeID(taskTypeID)
 {
     ui->setupUi(this);
+    openDialogIfThereIsTaskOnWhichUserWorkingOn();
 }
 
 CommandsViewWaitingOnTask::~CommandsViewWaitingOnTask()
@@ -27,6 +28,7 @@ void CommandsViewWaitingOnTask::on_Refresh_clicked()
 void CommandsViewWaitingOnTask::fillTable()
 {
     qDebug() << "***user refreshing commands view***";
+    clearButtons();
     ui->tableWidget->setRowCount(0);
 
     if (!m_commands || m_commands->empty())
@@ -86,20 +88,42 @@ void CommandsViewWaitingOnTask::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        QWidget* commanddialog;
-        switch(MainWindow::getLogedUser()->getWorkPosition())
-        {
-        case Employee::WorkPosition::Dizajner:
-            commanddialog = new CommandDialogDesigner(this, m_db, m_commands->at(index), false);
-            commanddialog->show();
-            break;
-        default:
-            break;
-        }
+        OpenCommandDialogByWorkPosition(m_commands->at(index), false);
     }
 }
 
 void CommandsViewWaitingOnTask::takeCommand()
 {
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_takeCommandButtons.begin(), m_takeCommandButtons.end(), buttonSender) != m_takeCommandButtons.end())
+    {
+        auto index = std::find(m_takeCommandButtons.begin(), m_takeCommandButtons.end(), buttonSender) - m_takeCommandButtons.begin();
+        qDebug() << index;
+        m_db->startWorkingOnWaitingTask(m_commands->at(index), MainWindow::getLogedUser());
+        OpenCommandDialogByWorkPosition(m_commands->at(index), true);
+    }
+}
 
+void CommandsViewWaitingOnTask::openDialogIfThereIsTaskOnWhichUserWorkingOn()
+{
+    EmployeePtr employee = MainWindow::getLogedUser();
+    CommandPtr command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
+    if (command)
+    {
+        OpenCommandDialogByWorkPosition(command, true);
+    }
+}
+
+void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr command, bool edit)
+{
+    QWidget* commanddialog;
+    switch(MainWindow::getLogedUser()->getWorkPosition())
+    {
+    case Employee::WorkPosition::Dizajner:
+        commanddialog = new CommandDialogDesigner(this, m_db, command, edit);
+        commanddialog->show();
+        break;
+    default:
+        break;
+    }
 }

@@ -46,12 +46,15 @@ public:
 
     virtual CommandPtrVtr getCommands() = 0;
     virtual CommandPtr getCommand(unsigned commandNumber) = 0;
+    virtual CommandPtr getCommandOnWhichEmployeeWorkingOn(EmployeePtr employee) = 0;
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
     virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool completeCurrentTask(CommandPtr command) = 0;
+    virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee) = 0;
+    virtual bool startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee) = 0;
 
     virtual TaskPtrVtr getTasks() = 0;
     virtual TaskPtrVtr getTasks(CommandPtr command) = 0;

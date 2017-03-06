@@ -226,7 +226,7 @@ QString Command::statemantForUpdating() const
         }
         if (m_designerDescriptionChanged)
         {
-            stm += "OpisDizajnere = '" + getDesignerDescription() + "', ";
+            stm += "OpisDizajnera = '" + getDesignerDescription() + "', ";
         }
         if (m_storeKeeperDescriptionChanged)
         {

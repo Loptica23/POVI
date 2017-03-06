@@ -60,7 +60,7 @@ void MainWindow::setUpGuiByWorkPosition()
         setView(new EmpoyersView(this, m_dbConnection));
         break;
     case Employee::WorkPosition::Dizajner:
-        qDebug() << "Administrator";
+        qDebug() << "Dizajner";
         type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn");
         setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
         break;
