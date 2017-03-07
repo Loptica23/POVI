@@ -4,7 +4,7 @@ insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Komercijalista', 'Komercijalista', '5555', 'komercijalista', 'kom', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner', 'Dizajner', '5555', 'dizajner', 'diz', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Magacioner', 'Magacioner', '5555', 'magacioner', 'mag', true);
-
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefProizvodnje', 'SefProizvodnje', '5555', 'sefproizvodnje', 'spr', true);
 
 insert into klijent (Ime) values ('Znam d.o.o');
 

@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include <QMainWindow>
 #include <memory>
@@ -11,7 +11,6 @@ class MainWindow;
 class DBConnection;
 class LoginTab;
 class Waiting;
-class AdminView;
 
 class MainWindow : public QMainWindow
 {

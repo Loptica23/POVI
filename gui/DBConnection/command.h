@@ -1,8 +1,8 @@
+#pragma once
 #include "dbconnection_global.h"
 #include <vector>
 #include <QSqlQuery>
 #include <QString>
-#pragma once
 
 class Command;
 typedef std::shared_ptr<Command> CommandPtr;

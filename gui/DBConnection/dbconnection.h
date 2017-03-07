@@ -9,6 +9,7 @@
 #include "command.h"
 #include "tasktypes.h"
 #include "task.h"
+#include "machine.h"
 
 class QString;
 class DBConnection;
@@ -64,6 +65,10 @@ public:
 
     virtual TaskTypesPtr getTaskTypes() const = 0;
 
+    virtual MachinePtrVtr getMachines() = 0;
+    virtual bool createMachine(MachinePtr machine) = 0;
+    virtual bool updateMachine(MachinePtr machine) = 0;
+
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);
     virtual void setDatabaseName(const QString& databaseName);
@@ -85,7 +90,7 @@ protected:
 class DBCONNECTIONSHARED_EXPORT Employee
 {
 public:
-    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje};
+    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje, SefProizvodnje};
     Employee(unsigned id);
     virtual ~Employee();
 

@@ -5,9 +5,9 @@
 #include "logintab.h"
 #include "waiting.h"
 #include "dbconnection.h"
-#include "adminview.h"
 #include "customersview.h"
 #include "empoyersview.h"
+#include "tabview.h"
 #include "commandsviewwaitingontask.h"
 
 MainWindow* MainWindow::mainWindow;
@@ -68,6 +68,11 @@ void MainWindow::setUpGuiByWorkPosition()
         qDebug() << "Magacioner";
         type = m_dbConnection->getTaskTypes()->getTypeIdByString("Magacin");
         setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
+        break;
+    case Employee::WorkPosition::SefProizvodnje:
+        qDebug() << "Sef Proizvodnje";
+        setView(new TabView(this, m_dbConnection));
+        break;
     default:
         break;
     }

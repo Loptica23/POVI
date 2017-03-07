@@ -584,3 +584,42 @@ TaskTypesPtr DBConnectionImpl::getTaskTypes() const
     return tasktypes;
 }
 
+MachinePtrVtr DBConnectionImpl::getMachines()
+{
+    MachinePtrVtr machines = nullptr;
+    QSqlQuery query;
+    query.prepare("select * from masina;");
+    if(query.exec())
+    {
+        machines = Machine::createMachineFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return machines;
+}
+
+bool DBConnectionImpl::createMachine(MachinePtr machine)
+{
+    QSqlQuery query;
+    query.prepare(machine->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateMachine(MachinePtr machine)
+{
+    QSqlQuery query;
+    query.prepare(machine->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}

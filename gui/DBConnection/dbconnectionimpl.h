@@ -51,6 +51,10 @@ public:
 
     virtual TaskTypesPtr getTaskTypes() const;
 
+    virtual MachinePtrVtr getMachines();
+    virtual bool createMachine(MachinePtr machine);
+    virtual bool updateMachine(MachinePtr machine);
+
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);
 

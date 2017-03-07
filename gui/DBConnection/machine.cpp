@@ -1,4 +1,5 @@
 #include <QVariant>
+#include <QDebug>
 #include "machine.h"
 
 Machine::Machine():
@@ -48,17 +49,28 @@ void Machine::setName(const QString &name)
 QString Machine::statemantForCreating() const
 {
     QString stm;
-    stm = "insert into maina (Naziv, TipoviZadatka_idTipoviZadatka) values (";
+    stm = "insert into masina (Naziv, TipoviZadatka_idTipoviZadatka) values (";
     stm += "'" + getName() + "', ";
     stm += QString::number(getTaskTypeId()) + ", ";
     stm.chop(2);
-    stm += ")";
+    stm += ");";
+    qDebug() << stm;
     return stm;
 }
 
 QString Machine::statemantForUpdating() const
 {
     QString stm;
+    if (isModified())
+    {
+        stm = "update masina set ";
+        if (m_nameChanged)
+        {
+            stm += "Naziv = '" + getName() + "', ";
+        }
+        stm.chop(2);
+        stm += " where idMasina = " + QString::number(m_id) + ";";
+    }
     return stm;
 }
 

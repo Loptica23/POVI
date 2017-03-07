@@ -100,6 +100,11 @@
             <string>Magacioner</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Sef Proizvodnje</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

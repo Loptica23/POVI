@@ -1,5 +1,4 @@
-#ifndef WAITING_H
-#define WAITING_H
+#pragma once
 
 #include <QWidget>
 
@@ -18,5 +17,3 @@ public:
 private:
     Ui::Waiting *ui;
 };
-
-#endif // WAITING_H

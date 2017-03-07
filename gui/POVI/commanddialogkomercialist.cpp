@@ -41,8 +41,11 @@ void CommandDialogKomercialist::fillTaskTable()
     if (m_create || m_edit)
     {
         clearButtons();
+        QStringList headers;
+        headers << "Tip zadatka" << "Gore" << "Dole" << "Brisi";
         ui->taskTable->setRowCount(0);
         ui->taskTable->setColumnCount(4);
+        ui->taskTable->setHorizontalHeaderLabels(headers);
         auto i = 0;
         for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
         {
@@ -59,16 +62,27 @@ void CommandDialogKomercialist::fillTaskTable()
     else
     {
         ui->taskTable->setRowCount(0);
-        ui->taskTable->setColumnCount(1);
+        ui->taskTable->setColumnCount(2);
+        QStringList headers;
+        headers << "Tip zadatka" << "Stanje";
+        ui->taskTable->setHorizontalHeaderLabels(headers);
         auto i = 0;
         for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
         {
             ui->taskTable->insertRow(i);
             TaskPtr task = (*iter);
-            QString str = m_taskTypes->at(task->getTaskTypeId()-1).first;
-            qDebug() << str;
-            auto *item = new QTableWidgetItem(str);
-            ui->taskTable->setItem(i, 0, item);
+            {
+                QString str = m_taskTypes->at(task->getTaskTypeId()-1).first;
+                qDebug() << str;
+                auto *item = new QTableWidgetItem(str);
+                ui->taskTable->setItem(i, 0, item);
+            }
+            {
+                QString str = task->getStateString();
+                qDebug() << str;
+                auto *item = new QTableWidgetItem(str);
+                ui->taskTable->setItem(i, 1, item);
+            }
         }
     }
     ui->taskTable->resizeColumnsToContents();
