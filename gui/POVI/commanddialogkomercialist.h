@@ -1,6 +1,5 @@
 #pragma once
 
-#include "commanddialogkomercialist.h"
 #include "commanddialog.h"
 
 class CommandDialogKomercialist : public CommandDialog

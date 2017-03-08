@@ -33,6 +33,7 @@ void CommandDialogKomercialist::setUpWindowByWorkPosition()
 {
     removeWidget(ui->designer);
     removeWidget(ui->storekeeper);
+    removeWidget(ui->priorityWidget);
     this->repaint();
 }
 

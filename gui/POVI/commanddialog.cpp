@@ -44,6 +44,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     initializeTasks();
 
     ui->commandNumber->setText(QString::number(command->getCommandNumber()));
+    ui->Priority->setText(QString::number(command->getPriority()));
     ui->comercialistDescription->setText(command->getComercialistDescription());
     ui->designerDescription->setText(command->getDesignerDescription());
     ui->storekeeperDescription->setText(command->getStoreKeeperDescription());
@@ -56,6 +57,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->comercialistDescription->setEnabled(false);
         ui->designerDescription->setEnabled(false);
         ui->storekeeperDescription->setEnabled(false);
+        ui->Priority->setEnabled(false);
         //ostali su ti taskovi
     }
 }

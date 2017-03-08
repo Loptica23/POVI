@@ -35,6 +35,7 @@ public:
     virtual CommandPtr getCommand(unsigned commandNumber);
     virtual CommandPtr getCommandOnWhichEmployeeWorkingOn(EmployeePtr employee);
     virtual CommandPtrVtr getCommands(OrderPtr order);
+    virtual CommandPtrVtr getCommands(Command::State & state);
     virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId);
     virtual bool createNewCommand(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);

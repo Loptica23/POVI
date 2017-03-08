@@ -84,20 +84,7 @@ unsigned Command::getStateInt() const
 
 QString Command::getStateQString() const
 {
-    switch(m_state)
-    {
-    case State::New:
-        return "nov";
-    case State::InProgress:
-        return "izr";
-    case State::Complited:
-        return "zav";
-    case State::Stopped:
-        return "sto";
-    default:
-        qDebug() << "***************Ne postoji to stanje**********";
-        return "";
-    }
+    return convertStateToString(m_state);
 }
 
 //seters
@@ -222,7 +209,7 @@ QString Command::statemantForUpdating() const
         }
         if (m_priorityChanged)
         {
-            stm += "Prioritet = " + QString::number(getCommandNumber()) + ", ";
+            stm += "Prioritet = " + QString::number(getPriority()) + ", ";
         }
         if (m_designerDescriptionChanged)
         {
@@ -287,4 +274,27 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         commands->push_back(command);
     }
     return commands;
+}
+
+QString Command::convertStateToString(const State & state)
+{
+    QString result;
+    switch(state)
+    {
+    case State::New:
+        result = "nov";
+        break;
+    case State::InProgress:
+        result = "izr";
+        break;
+    case State::Complited:
+        result = "zav";
+        break;
+    case State::Stopped:
+        result = "sto";
+        break;
+    default:
+        qDebug() << "*****************nema takvog stanja*****************";
+    }
+    return result;
 }

@@ -1,4 +1,5 @@
 #include <QMessageBox>
+#include <QPushButton>
 #include "machinedialog.h"
 #include "ui_machinedialog.h"
 #include "mainwindow.h"
@@ -32,6 +33,7 @@ MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr mac
     if (!m_edit)
     {
         ui->Name->setEnabled(false);
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
 }
 
@@ -68,11 +70,14 @@ void MachineDialog::updateMachine()
         m_machine->setName(ui->Name->text());
     }
 
-    if (!m_db->updateMachine(m_machine))
+    if (m_machine->isModified())
     {
-        QString error = m_db->getLastError();
-        QMessageBox messageBox;
-        messageBox.critical(0, "Error", error);
+        if (!m_db->updateMachine(m_machine))
+        {
+            QString error = m_db->getLastError();
+            QMessageBox messageBox;
+            messageBox.critical(0, "Error", error);
+        }
     }
 }
 

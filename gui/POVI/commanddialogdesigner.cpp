@@ -20,6 +20,7 @@ void CommandDialogDesigner::setUpWindowByWorkPosition()
 {
     removeWidget(ui->storekeeper);
     removeWidget(ui->tasks);
+    removeWidget(ui->priorityWidget);
 
     ui->commandNumber->setEnabled(false);
     ui->comercialistDescription->setEnabled(false);

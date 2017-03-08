@@ -296,6 +296,22 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
     return commands;
 }
 
+CommandPtrVtr DBConnectionImpl::getCommands(Command::State & state)
+{
+    CommandPtrVtr commands;
+    QSqlQuery query;
+    query.prepare("select * from nalog where Stanje = '" + Command::convertStateToString(state) + "';");
+    if(query.exec())
+    {
+        commands = Command::createCommandsFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return commands;
+}
+
 CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId)
 {
     CommandPtrVtr commands;

@@ -51,6 +51,7 @@ public:
 
 
     static CommandPtrVtr createCommandsFromQuery(QSqlQuery& query);
+    static QString convertStateToString(const State &state);
 
 private:
     unsigned m_id;

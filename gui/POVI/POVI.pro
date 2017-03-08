@@ -43,7 +43,9 @@ SOURCES +=  main.cpp\
     commanddialogstorekeeper.cpp \
     tabview.cpp \
     machinesview.cpp \
-    machinedialog.cpp
+    machinedialog.cpp \
+    commandsviewisinstate.cpp \
+    commanddialogchieofproduction.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -63,7 +65,9 @@ HEADERS +=  mainwindow.h\
     commanddialogstorekeeper.h \
     tabview.h \
     machinesview.h \
-    machinedialog.h
+    machinedialog.h \
+    commandsviewisinstate.h \
+    commanddialogchieofproduction.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -80,7 +84,8 @@ FORMS   +=  mainwindow.ui \
     commandsviewwaitingontask.ui \
     tabview.ui \
     machinesview.ui \
-    machinedialog.ui
+    machinedialog.ui \
+    commandsviewisinstate.ui
 
 RESOURCES += resource.qrc
 
