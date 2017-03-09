@@ -33,6 +33,8 @@ public:
 
 
     static MachinePtrVtr createMachineFromQuery(QSqlQuery& query);
+    static MachinePtr getMachineByName(MachinePtrVtr machines, QString name);
+    static MachinePtr getMachineById(MachinePtrVtr machines, unsigned id);
 
 private:
     unsigned m_id;

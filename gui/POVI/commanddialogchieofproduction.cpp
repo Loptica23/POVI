@@ -6,7 +6,7 @@
 CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit):
     CommandDialog(parent, db, command, edit)
 {
-    //this->showMaximized();
+    this->showMaximized();
     m_taskTypes = m_db->getTaskTypes()->getTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
@@ -27,12 +27,7 @@ void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
 
 void CommandDialogChieOfProduction::fillTaskTable()
 {
-    m_machines = m_db->getMachines();
-    ui->taskTable->setRowCount(0);
-    ui->taskTable->setColumnCount(4);
-    QStringList headers;
-    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina";
-    ui->taskTable->setHorizontalHeaderLabels(headers);
+    clearButtonsAndSetHeaders();
     auto i = 0;
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
     {
@@ -56,12 +51,7 @@ void CommandDialogChieOfProduction::updateCommand()
 
     if (m_command->isModified())
     {
-        if (!m_db->updateCommand(m_command))
-        {
-            QString error = m_db->getLastError();
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error",error);
-        }
+        ifFalseShowDbError(m_db->updateCommand(m_command));
     }
 
     auto i = 0;
@@ -73,19 +63,30 @@ void CommandDialogChieOfProduction::updateCommand()
         {
             task->setPrediction(text.toUInt());
             //ovde moram da postavim setovanu masinu!
+            MachinePtr machin = Machine::getMachineByName(m_machines, m_comboBoxes.at(i)->currentText());
+            if (machin)
+            {
+                task->setMachineId(machin->getId());
+            }
             if (task->isModified())
             {
-                if (!m_db->updateTask(task))
-                {
-                    //refactor (ovaj deo koda se stalno pojavljuje!!!) prebaci to u jednu funkciju u osnovnoj klasi
-                    QString error = m_db->getLastError();
-                    QMessageBox messageBox;
-                    messageBox.critical(0,"Error",error);
-                }
+                ifFalseShowDbError(m_db->updateTask(task));
             }
         }
     }
 
+}
+
+void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
+{
+    m_comboBoxes.clear();
+
+    m_machines = m_db->getMachines();
+    ui->taskTable->setRowCount(0);
+    ui->taskTable->setColumnCount(4);
+    QStringList headers;
+    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina";
+    ui->taskTable->setHorizontalHeaderLabels(headers);
 }
 
 void CommandDialogChieOfProduction::insertTaskType(TaskPtr task, unsigned i, unsigned j)
@@ -114,6 +115,7 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
     //moraces na osnovu teksta masine da dohvatas
     QComboBox* taskComboBox = new QComboBox(ui->taskTable);
     //fill combobox with machines
+    taskComboBox->addItem("");
     for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
     {
         MachinePtr machine = *iter;
@@ -123,4 +125,14 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
         }
     }
     ui->taskTable->setCellWidget(i, j, taskComboBox);
+    MachinePtr machine = Machine::getMachineById(m_machines, task->getMachineId());
+    if (machine)
+    {
+        taskComboBox->setCurrentText(machine->getName());
+    }
+    if (!m_edit)
+    {
+        taskComboBox->setEnabled(false);
+    }
+    m_comboBoxes.push_back(taskComboBox);
 }

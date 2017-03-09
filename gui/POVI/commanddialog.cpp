@@ -237,3 +237,13 @@ void CommandDialog::on_commandNumber_textChanged(const QString &arg1)
 
     serialNumberChanged();
 }
+
+void CommandDialog::ifFalseShowDbError(bool b)
+{
+    if (!b)
+    {
+        QString error = m_db->getLastError();
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error",error);
+    }
+}

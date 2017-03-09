@@ -95,3 +95,31 @@ MachinePtrVtr Machine::createMachineFromQuery(QSqlQuery& query)
     }
     return machines;
 }
+
+MachinePtr Machine::getMachineByName(MachinePtrVtr machines, QString name)
+{
+    MachinePtr result = nullptr;
+    for (auto iter = machines->begin(); iter != machines->end(); ++iter)
+    {
+        if (name == (*iter)->getName())
+        {
+            result = *iter;
+            break;
+        }
+    }
+    return result;
+}
+
+MachinePtr Machine::getMachineById(MachinePtrVtr machines, unsigned id)
+{
+    MachinePtr result = nullptr;
+    for (auto iter = machines->begin(); iter != machines->end(); ++iter)
+    {
+        if (id == (*iter)->getId())
+        {
+            result = *iter;
+            break;
+        }
+    }
+    return result;
+}

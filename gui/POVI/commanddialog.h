@@ -47,6 +47,8 @@ protected:
     virtual void designerDescriptionChanged();
     virtual void storeKeeperDescriptionChanged();
 
+    void ifFalseShowDbError(bool b);
+
     Ui::CommandDialog *ui;
 
     bool m_edit;

@@ -244,12 +244,7 @@ void CommandDialogKomercialist::updateCommand()
         m_command->setComercialistDescription(ui->comercialistDescription->toPlainText());
     if (m_command->isModified())
     {
-        if (!m_db->updateCommand(m_command))
-        {
-            QString error = m_db->getLastError();
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error",error);
-        }
+        ifFalseShowDbError(m_db->updateCommand(m_command));
     }
 
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
@@ -257,33 +252,17 @@ void CommandDialogKomercialist::updateCommand()
         TaskPtr task = *iter;
         if (task->isCreated())
         {
-            if (!m_db->createNewTask(task, MainWindow::getLogedUser()->getId()))
-            {
-                QString error = m_db->getLastError();
-                QMessageBox messageBox;
-                messageBox.critical(0,"Error",error);
-            }
+            ifFalseShowDbError(m_db->createNewTask(task, MainWindow::getLogedUser()->getId()));
         }
         else if (task->isModified())
         {
-            if (!m_db->updateTask(task))
-            {
-                //refactor (ovaj deo koda se stalno pojavljuje!!!)
-                QString error = m_db->getLastError();
-                QMessageBox messageBox;
-                messageBox.critical(0,"Error",error);
-            }
+            ifFalseShowDbError(m_db->updateTask(task));
         }
     }
 
     for (auto iter = m_deletedTasks->begin(); iter != m_deletedTasks->end(); ++iter)
     {
         TaskPtr task = *iter;
-        if (!m_db->deleteTask(task))
-        {
-            QString error = m_db->getLastError();
-            QMessageBox messageBox;
-            messageBox.critical(0, "Error", error);
-        }
+        ifFalseShowDbError(m_db->deleteTask(task));
     }
 }

@@ -14,6 +14,7 @@ protected:
     void fillTaskTable();
     virtual void updateCommand();
 
+    void clearButtonsAndSetHeaders();
     void insertTaskType(TaskPtr task, unsigned i, unsigned j);
     void insertTaskState(TaskPtr task, unsigned i, unsigned j);
     void insertTaskPrediction(TaskPtr task, unsigned i, unsigned j);
@@ -21,4 +22,6 @@ protected:
 
     TaskPairsPtr m_taskTypes;
     MachinePtrVtr m_machines;
+
+    std::vector<QComboBox*> m_comboBoxes;
 };

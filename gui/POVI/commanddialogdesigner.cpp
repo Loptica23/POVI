@@ -44,35 +44,18 @@ void CommandDialogDesigner::updateCommand()
 
     if (m_command->isModified())
     {
-        if (!m_db->updateCommand(m_command))
-        {
-            QString error = m_db->getLastError();
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error",error);
-        }
+        ifFalseShowDbError(m_db->updateCommand(m_command));
     }
 }
 
 void CommandDialogDesigner::acceptButtonClicked()
 {
-    if (!m_db->completeCurrentTask(m_command))
-    {
-        qDebug() << "neuspelo zavrsavanje zadatka!";
-        QString error = m_db->getLastError();
-        QMessageBox messageBox;
-        messageBox.critical(0,"Error",error);
-    }
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
 }
 
 void CommandDialogDesigner::rejectButtonClicked()
 {
-    if (!m_db->leaveCurrentTask(m_command, MainWindow::getLogedUser()))
-    {
-        qDebug() << "neuspelo ostavljanje zadatka!";
-        QString error = m_db->getLastError();
-        QMessageBox messageBox;
-        messageBox.critical(0,"Error",error);
-    }
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getLogedUser()));
 }
 
 void CommandDialogDesigner::designerDescriptionChanged()

@@ -128,8 +128,8 @@ void Command::setStoreKeeperDescription(const QString & description)
 {
     if (m_storeKeeperDescription != description)
     {
-        m_designerDescriptionChanged = true;
-        m_designerDescription = description;
+        m_storeKeeperDescriptionChanged = true;
+        m_storeKeeperDescription = description;
     }
 }
 
