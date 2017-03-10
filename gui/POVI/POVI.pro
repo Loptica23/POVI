@@ -96,3 +96,10 @@ else:unix: LIBS += -L$$OUT_PWD/../DBConnection/ -lDBConnection
 
 INCLUDEPATH += $$PWD/../DBConnection
 DEPENDPATH += $$PWD/../DBConnection
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../TimeSimulator/release/ -lTimeSimulator
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../TimeSimulator/debug/ -lTimeSimulator
+else:unix: LIBS += -L$$OUT_PWD/../TimeSimulator/ -lTimeSimulator
+
+INCLUDEPATH += $$PWD/..
+DEPENDPATH += $$PWD/../TimeSimulator

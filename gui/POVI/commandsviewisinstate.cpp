@@ -1,6 +1,8 @@
 #include "commandsviewisinstate.h"
 #include "ui_commandsviewisinstate.h"
 #include "commanddialogchieofproduction.h"
+#include "TimeSimulator/timesimulator.h"
+#include "TimeSimulator/commandterminationtimeengine.h"
 
 CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db) :
     QWidget(parent),
@@ -112,4 +114,13 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
     m_editButtons.push_back(btn_edit);
     connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+}
+
+void CommandsViewIsInState::on_pushButton_2_clicked()
+{
+    //ovde moras da setujes simulator
+    TimeSimulator::TimeSimulator* timesimulator = new TimeSimulator::TimeSimulator();
+    //ocigledno je da ne smes da budes odogovoran za zivot engina
+    engine.reset(new TimeSimulator::CommandTerminationTimeEngine());
+    timesimulator->execute(engine);
 }

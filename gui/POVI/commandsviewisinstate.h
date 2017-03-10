@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "dbconnection.h"
+#include "TimeSimulator/types.h"
 
 namespace Ui {
 class CommandsViewIsInState;
@@ -22,6 +23,8 @@ private slots:
     void details();
     void edit();
 
+    void on_pushButton_2_clicked();
+
 private:
     void fillTable();
     void clearBuutonsAndInitializeHeaders();
@@ -37,4 +40,6 @@ private:
 
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_editButtons;
+
+    TimeSimulator::CommandTerminationTimeEnginePtr engine;
 };
