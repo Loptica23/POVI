@@ -15,7 +15,7 @@ public:
 
     virtual const QString getLastError() const;
 
-    virtual bool conectToDb();
+    virtual bool conectToDb(QString userName, QString pwd);
     virtual EmployeePtr logIn(QString username, QString pwd);
 
     virtual EmployeePtrVtr getEmployees();              //bilo bi dobro da moze da se dohvati i kao neki predictive search
@@ -50,7 +50,7 @@ public:
     virtual bool updateTask(TaskPtr task);
     virtual bool deleteTask(TaskPtr task);
 
-    virtual TaskTypesPtr getTaskTypes() const;
+    virtual TaskTypesPtr getTaskTypes();
 
     virtual MachinePtrVtr getMachines();
     virtual bool createMachine(MachinePtr machine);

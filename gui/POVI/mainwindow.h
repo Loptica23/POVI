@@ -30,9 +30,10 @@ public:
 
     static EmployeePtr getLogedUser();
     static void setLogedUser(EmployeePtr employee);
-private:
-    void connecttodb();
+private slots:
+    void on_actionPromena_lozinke_triggered();
 
+private:
     Ui::MainWindow *ui;
     std::shared_ptr<DBConnection> m_dbConnection;
     std::shared_ptr<LoginTab>   m_LoginTab;

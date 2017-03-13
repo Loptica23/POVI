@@ -45,7 +45,8 @@ SOURCES +=  main.cpp\
     machinesview.cpp \
     machinedialog.cpp \
     commandsviewisinstate.cpp \
-    commanddialogchieofproduction.cpp
+    commanddialogchieofproduction.cpp \
+    changepassworddialog.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -67,7 +68,8 @@ HEADERS +=  mainwindow.h\
     machinesview.h \
     machinedialog.h \
     commandsviewisinstate.h \
-    commanddialogchieofproduction.h
+    commanddialogchieofproduction.h \
+    changepassworddialog.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -85,7 +87,8 @@ FORMS   +=  mainwindow.ui \
     tabview.ui \
     machinesview.ui \
     machinedialog.ui \
-    commandsviewisinstate.ui
+    commandsviewisinstate.ui \
+    changepassworddialog.ui
 
 RESOURCES += resource.qrc
 

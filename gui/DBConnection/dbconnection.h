@@ -29,7 +29,7 @@ public:
 
     virtual ~DBConnection();
 
-    virtual bool conectToDb() = 0;
+    virtual bool conectToDb(QString userName, QString pwd) = 0;
     virtual EmployeePtr logIn(QString username, QString pwd) = 0;
 
     virtual EmployeePtrVtr getEmployees() = 0;
@@ -64,7 +64,7 @@ public:
     virtual bool updateTask(TaskPtr task) = 0;
     virtual bool deleteTask(TaskPtr task) = 0;
 
-    virtual TaskTypesPtr getTaskTypes() const = 0;
+    virtual TaskTypesPtr getTaskTypes() = 0;
 
     virtual MachinePtrVtr getMachines() = 0;
     virtual bool createMachine(MachinePtr machine) = 0;
@@ -73,8 +73,6 @@ public:
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);
     virtual void setDatabaseName(const QString& databaseName);
-    virtual void setUserName(const QString& userName);
-    virtual void setPwd(const QString& pwd);
 
     virtual const QString getLastError() const = 0;
 
@@ -84,8 +82,6 @@ protected:
     QString m_databaseConnectionName;
     QString m_host;
     QString m_databaseName;
-    QString m_userName;
-    QString m_pwd;
 };
 
 class DBCONNECTIONSHARED_EXPORT Employee
@@ -120,8 +116,8 @@ public:
     bool checkPWD(const QString & pwd) const;
 
     //statemants
-    QString statemantForCreatingThisUser() const;
-    QString statemantForUpdatingThisUser() const;
+    QString statemantForCreatingUser() const;
+    QString statemantForUpdatingUser() const;
 
     bool isModified() const;
     void resetChangeTracking();

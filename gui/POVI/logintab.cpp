@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "logintab.h"
 #include "ui_logintab.h"
 #include "mainwindow.h"
@@ -18,10 +19,34 @@ LoginTab::~LoginTab()
     delete ui;
 }
 
+bool LoginTab::connectToDB(QString userName, QString pwd)
+{
+    if(m_dbConnection->conectToDb(userName, pwd))
+    {
+        qDebug() << "uspesno konektovanje na bazu podataka!";
+        return true;
+    }
+    else
+    {
+        qDebug() << "nije uspelo konektovanje na bazu podataka, proveriti port i IP adresu!";
+        return false;
+    }
+}
+
 void LoginTab::on_login_clicked()
 {
     auto username = ui->username->text();
     auto pwd = ui->pwd->text();
+
+    if (!connectToDB(username, pwd))
+    {
+        QString error = m_dbConnection->getLastError();
+        qDebug() << error;
+        QMessageBox messageBox;
+        messageBox.critical(this,"Error",error);
+        return;
+    }
+
     auto loggeduser = m_dbConnection->logIn(username, pwd);
 
     if (loggeduser != nullptr)

@@ -14,8 +14,6 @@ DBConnection::DBConnection()
     m_databaseConnectionName = "POVI";
     m_host = "localhost";
     m_databaseName = "vigor";
-    m_userName = "mptest1";
-    m_pwd = "password";
 }
 
 DBConnection::~DBConnection()
@@ -36,14 +34,4 @@ void DBConnection::setHost(const QString& host)
 void DBConnection::setDatabaseName(const QString& databaseName)
 {
     m_databaseName = databaseName;
-}
-
-void DBConnection::setUserName(const QString& userName)
-{
-    m_userName = userName;
-}
-
-void DBConnection::setPwd(const QString& pwd)
-{
-    m_pwd = pwd;
 }

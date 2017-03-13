@@ -20,17 +20,17 @@ const QString DBConnectionImpl::getLastError() const
     return m_lastError;
 }
 
-bool DBConnectionImpl::conectToDb()
+bool DBConnectionImpl::conectToDb(QString userName, QString pwd)
 {
     bool result;
     m_db = std::make_shared<QSqlDatabase>( QSqlDatabase::addDatabase("QMYSQL"));       // ne mozes jebeno ovako
     m_db->setHostName(m_host);
     m_db->setDatabaseName(m_databaseName);
-    m_db->setUserName(m_userName);
-    m_db->setPassword(m_pwd);
+    m_db->setUserName(userName);
+    m_db->setPassword(pwd);
     result =  m_db->open();
     if (!result)
-        qDebug() << m_db->lastError();
+        m_lastError = m_db->lastError().text();
     return result;
 }
 
@@ -55,6 +55,7 @@ EmployeePtr DBConnectionImpl::logIn(QString username, QString pwd)
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return result;
@@ -71,6 +72,7 @@ EmployeePtrVtr DBConnectionImpl::getEmployees()
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return employees;
@@ -79,9 +81,10 @@ EmployeePtrVtr DBConnectionImpl::getEmployees()
 bool DBConnectionImpl::createNewEmployee(EmployeePtr employee)
 {
     QSqlQuery query;
-    query.prepare(employee->statemantForCreatingThisUser());
+    query.prepare(employee->statemantForCreatingUser());
     if (!query.exec())
     {
+        qDebug() << "neuspelo kreiranje radnika!";
         m_lastError = query.lastError().text();
         return false;
     }
@@ -91,7 +94,7 @@ bool DBConnectionImpl::createNewEmployee(EmployeePtr employee)
 bool DBConnectionImpl::updateEmployee(EmployeePtr employee)
 {
     QSqlQuery query;
-    query.prepare(employee->statemantForUpdatingThisUser());
+    query.prepare(employee->statemantForUpdatingUser());
     if (!query.exec())
     {
         m_lastError = query.lastError().text();
@@ -111,6 +114,7 @@ CustomerPtrVtr DBConnectionImpl::getCustomers()
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return customers;
@@ -152,6 +156,7 @@ OrderPtrVtr DBConnectionImpl::getOrders()
     else
     {
         qDebug() << "nije uspeo query!";
+        m_lastError = query.lastError().text();
     }
     return orders;
 }
@@ -169,6 +174,7 @@ OrderPtrVtr DBConnectionImpl::getOrders(CustomerPtr customer)
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return orders;
@@ -216,6 +222,7 @@ CommandPtr DBConnectionImpl::getCommand(unsigned commandNumber)
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!!";
     }
     return command;
@@ -254,11 +261,13 @@ CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr empl
         }
         else
         {
+            m_lastError = queryForCommands.lastError().text();
             qDebug() << "neuspeo kveri!!";
         }
     }
     else
     {
+        m_lastError = queryForTasks.lastError().text();
         qDebug() << "neuspeo kveri!!";
     }
     return command;
@@ -275,6 +284,7 @@ CommandPtrVtr DBConnectionImpl::getCommands()
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!!";
     }
     return commands;
@@ -291,6 +301,7 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return commands;
@@ -307,6 +318,7 @@ CommandPtrVtr DBConnectionImpl::getCommands(Command::State & state)
     }
     else
     {
+        m_lastError = query.lastError().text();
         qDebug() << "nije uspeo query!";
     }
     return commands;
@@ -588,7 +600,7 @@ bool DBConnectionImpl::deleteTask(TaskPtr task)
     return true;
 }
 
-TaskTypesPtr DBConnectionImpl::getTaskTypes() const
+TaskTypesPtr DBConnectionImpl::getTaskTypes()
 {
     TaskTypesPtr tasktypes = nullptr;
     QSqlQuery query;
@@ -596,6 +608,11 @@ TaskTypesPtr DBConnectionImpl::getTaskTypes() const
     if(query.exec())
     {
         tasktypes.reset(new TaskTypes(query));
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+        m_lastError = query.lastError().text();
     }
     return tasktypes;
 }
@@ -612,6 +629,7 @@ MachinePtrVtr DBConnectionImpl::getMachines()
     else
     {
         qDebug() << "nije uspeo query!";
+        m_lastError = query.lastError().text();
     }
     return machines;
 }

@@ -262,7 +262,7 @@ EmployeePtrVtr Employee::createEmployeesFromQuery(QSqlQuery& query)
     return employees;
 }
 
-QString Employee::statemantForCreatingThisUser() const
+QString Employee::statemantForCreatingUser() const
 {
     QString stm = "insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('" +
             getFirstName() + "', '" +
@@ -270,12 +270,15 @@ QString Employee::statemantForCreatingThisUser() const
             "5555" + "', '" +
             getUserName() + "', '" +
             getWorkPositionQString() + "', " +
-            getActivationSqlString() + ")";
+            getActivationSqlString() + ");";
+    stm += "CREATE USER '" + getUserName() + "'@'%'  IDENTIFIED BY '5555';";
+    stm += "GRANT ALL PRIVILEGES ON *.* TO '" + getUserName() + "'@'%' WITH GRANT OPTION;";
+    stm += "FLUSH PRIVILEGES;";
     qDebug() << stm;
     return stm;
 }
 
-QString Employee::statemantForUpdatingThisUser() const
+QString Employee::statemantForUpdatingUser() const
 {
     QString stm;
     if (isModified())

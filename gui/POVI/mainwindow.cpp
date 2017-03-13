@@ -9,6 +9,7 @@
 #include "empoyersview.h"
 #include "tabview.h"
 #include "commandsviewwaitingontask.h"
+#include "changepassworddialog.h"
 
 MainWindow* MainWindow::mainWindow;
 EmployeePtr MainWindow::loggedUser;
@@ -37,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_LoginTab.reset(new LoginTab(this, m_dbConnection));
     ui->ViewLayout->addWidget(m_LoginTab.get());
     m_LoginTab->setHidden(false);
-    connecttodb();
     mainWindow = this;
 }
 
@@ -88,19 +88,6 @@ void MainWindow::setView(QWidget* view)
     this->showMaximized();
 }
 
-void MainWindow::connecttodb()
-{
-    if(m_dbConnection->conectToDb())
-    {
-        qDebug() << "uspesno konektovanje na bazu podataka!";
-    }
-    else
-    {
-        qDebug() << "nije uspelo konektovanje na bazu podataka, proveriti port i IP adresu!";
-        qDebug() << m_dbConnection->getLastError();
-    }
-}
-
 void MainWindow::forward(std::shared_ptr<QWidget> widget)
 {
     qDebug() << "forward";
@@ -116,4 +103,11 @@ void MainWindow::back()
     screenStack.top()->setHidden(true);
     screenStack.pop();
     screenStack.top()->setHidden(false);
+}
+
+void MainWindow::on_actionPromena_lozinke_triggered()
+{
+    //ovde moras da otvoris novi prozor za promenu passworda!
+    auto changePassword = new ChangePasswordDialog(this, m_dbConnection);
+    changePassword->show();
 }
