@@ -19,6 +19,7 @@ public:
     virtual EmployeePtr logIn(QString username, QString pwd);
 
     virtual EmployeePtrVtr getEmployees();              //bilo bi dobro da moze da se dohvati i kao neki predictive search
+    virtual EmployeePtr getEmployee(QString username);
     virtual bool createNewEmployee(EmployeePtr employee);
     virtual bool updateEmployee(EmployeePtr employee);
 

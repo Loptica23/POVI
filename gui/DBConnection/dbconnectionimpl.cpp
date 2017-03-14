@@ -22,7 +22,11 @@ const QString DBConnectionImpl::getLastError() const
 
 bool DBConnectionImpl::conectToDb(QString userName, QString pwd)
 {
-    bool result;
+    bool result = false;
+    if (m_db && m_db->isOpen())
+    {
+        m_db->close();
+    }
     m_db = std::make_shared<QSqlDatabase>( QSqlDatabase::addDatabase("QMYSQL"));       // ne mozes jebeno ovako
     m_db->setHostName(m_host);
     m_db->setDatabaseName(m_databaseName);
@@ -76,6 +80,32 @@ EmployeePtrVtr DBConnectionImpl::getEmployees()
         qDebug() << "nije uspeo query!";
     }
     return employees;
+}
+
+EmployeePtr DBConnectionImpl::getEmployee(QString username)
+{
+    EmployeePtr employee = nullptr;
+    EmployeePtrVtr employees = nullptr;
+    QSqlQuery query;
+    QString stm = "select * from radnik where KorisnickoIme = '" + username + "';";
+    qDebug() << stm;
+    query.prepare(stm);
+    if(query.exec())
+    {
+        employees = Employee::createEmployeesFromQuery(query);
+    }
+    else
+    {
+        m_lastError = query.lastError().text();
+        qDebug() << "nije uspeo query!";
+        qDebug() << m_lastError;
+    }
+    if (employees && !employees->empty())
+    {
+        employee = employees->at(0);
+    }
+
+    return employee;
 }
 
 bool DBConnectionImpl::createNewEmployee(EmployeePtr employee)
@@ -541,6 +571,7 @@ TaskPtrVtr DBConnectionImpl::getTasks()
 {
     //ova metoda ne bi trebala da se poziva.. zasto bi neko pravio pregled svih taskova?
     TaskPtrVtr tasks;
+    qDebug() << "***************pozvana je ne implementirana metoda ****************";
     return tasks;
 }
 

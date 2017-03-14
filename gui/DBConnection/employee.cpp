@@ -43,7 +43,11 @@ void Employee::setUserName(const QString& userName)
 
 void Employee::setPWD(const QString& pwd)
 {
-    m_pwd = pwd;
+    if (m_pwd != pwd)
+    {
+        m_pwd = pwd;
+        m_pwdChanged = true;
+    }
 }
 
 void Employee::setWorkPosition(const WorkPosition& workPosition)
@@ -286,26 +290,35 @@ QString Employee::statemantForUpdatingUser() const
         stm = "update radnik set ";
         if (m_FirstNameChanged)
         {
-            stm += "Ime = \"" + getFirstName() + "\" , ";
+            stm += "Ime = '" + getFirstName() + "' , ";
         }
         if (m_SecondNameChanged)
         {
-            stm += "Prezime = \"" + getSecondName() + "\" , ";
+            stm += "Prezime = '" + getSecondName() + "' , ";
         }
         if (m_UserNameChanged)
         {
-            stm += "KorisnickoIme = \"" + getUserName() + "\" , ";
+            stm += "KorisnickoIme = '" + getUserName() + "' , ";
         }
         if (m_WorkPositionChanged)
         {
-            stm += "Pozicija = \"" + getWorkPositionQString() + "\" , ";
+            stm += "Pozicija = '" + getWorkPositionQString() + "' , ";
         }
         if (m_ActivationChanged)
         {
             stm += "PristupSistemu = " + getActivationSqlString() + " , ";
         }
+        if (m_pwdChanged)
+        {
+            stm += "Sifra = '" + m_pwd + "' , ";
+        }
         stm.chop(2);
-        stm += "where idRadnik = " + QString::number(m_id);
+        stm += "where idRadnik = " + QString::number(m_id) + ";";
+        if (m_pwdChanged)
+        {
+            stm += "SET PASSWORD FOR '" + m_UserName + "'@'%' = PASSWORD('" + m_pwd + "');";
+        }
+        qDebug() << stm;
     }
     else
     {
@@ -330,6 +343,7 @@ bool Employee::isModified() const
             m_SecondNameChanged ||
             m_UserNameChanged ||
             m_WorkPositionChanged ||
+            m_pwdChanged ||
             m_ActivationChanged);
 }
 
@@ -340,5 +354,6 @@ void Employee::resetChangeTracking()
     m_UserNameChanged       = false;
     m_WorkPositionChanged   = false;
     m_ActivationChanged     = false;
+    m_pwdChanged            = false;
 }
 

@@ -33,6 +33,7 @@ public:
     virtual EmployeePtr logIn(QString username, QString pwd) = 0;
 
     virtual EmployeePtrVtr getEmployees() = 0;
+    virtual EmployeePtr getEmployee(QString username) = 0;
     virtual bool createNewEmployee(EmployeePtr employee) = 0;
     virtual bool updateEmployee(EmployeePtr employee) = 0;
 
@@ -140,6 +141,7 @@ private:
     bool m_WorkPositionChanged;
 
     QString m_pwd;
+    bool m_pwdChanged;
 
     bool m_Activation;
     bool m_ActivationChanged;
