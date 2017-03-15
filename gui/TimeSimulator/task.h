@@ -22,6 +22,8 @@ public:
     void setState(const State & state);
 
     bool checkIsEverythingSetUp();
+
+    bool decrementTime();
 private:
     unsigned m_machine;
     unsigned m_prediction;

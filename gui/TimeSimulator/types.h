@@ -1,13 +1,16 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <queue>
 
 namespace TimeSimulator
 {
 class Command;
 using CommandPtr = std::shared_ptr<Command>;
 using CommandVtr = std::vector<CommandPtr>;
+using CommandQueue = std::queue<CommandPtr>;
 using CommandVtrPtr = std::shared_ptr<CommandVtr>;
+using ComandQueuePtr = std::shared_ptr<CommandQueue>;
 
 class Machine;
 using MachinePtr = std::shared_ptr<Machine>;

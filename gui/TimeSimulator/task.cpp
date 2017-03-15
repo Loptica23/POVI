@@ -39,3 +39,14 @@ bool TimeSimulator::Task::checkIsEverythingSetUp()
     if (m_prediction == 0) return false;
     return true;
 }
+
+//ako vrati false znaci da je stigao do nule (jos u predhodnom koraku)
+bool TimeSimulator::Task::decrementTime()
+{
+    if (m_prediction != 0)
+    {
+        --m_prediction;
+        return true;
+    }
+    return false;
+}

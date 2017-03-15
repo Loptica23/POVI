@@ -12,7 +12,10 @@ DBConnectionImpl::DBConnectionImpl()
 
 DBConnectionImpl::~DBConnectionImpl()
 {
-    m_db->close();
+    if (m_db && m_db->isOpen())
+    {
+        m_db->close();
+    }
 }
 
 const QString DBConnectionImpl::getLastError() const

@@ -1,7 +1,9 @@
 #include "machine.h"
 #include "command.h"
 
-TimeSimulator::Machine::Machine()
+TimeSimulator::Machine::Machine(unsigned id):
+    m_currentCommand(nullptr),
+    m_id(id)
 {
 
 }
@@ -13,7 +15,7 @@ TimeSimulator::Machine::~Machine()
 
 bool TimeSimulator::Machine::checkIsEverythingSetUp()
 {
-    for (auto iter = m_commands->begin(); iter != m_commands->end(); ++iter)
+    for (auto iter = m_commandsInQueue->begin(); iter != m_commandsInQueue->end(); ++iter)
     {
         CommandPtr command = *iter;
         if (!command->checkIsEverythingSetUp())
@@ -21,4 +23,46 @@ bool TimeSimulator::Machine::checkIsEverythingSetUp()
     }
 
     return true;
+}
+
+TimeSimulator::CommandPtr TimeSimulator::Machine::decrementTime()
+{
+    CommandPtr command = nullptr;
+    if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
+    {
+        command = m_currentCommand;
+        m_currentCommand = getFirstFromQueue();
+    }
+
+    if (!m_currentCommand)
+        m_currentCommand = getFirstFromQueue();
+
+    return command;
+}
+
+bool TimeSimulator::Machine::checkIsFinished()
+{
+    bool result = false;
+    if (!m_currentCommand) result = true;
+    return  result;
+}
+
+TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
+{
+    CommandPtr command = nullptr;
+    if (m_commandsInQueue && !m_commandsInQueue->empty())
+    {
+        command = m_commandsInQueue->at(0);
+    }
+    return command;
+}
+
+unsigned TimeSimulator::Machine::getId() const
+{
+    return m_id;
+}
+
+void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)
+{
+    m_commandsInQueue->push_back(command);
 }
