@@ -5,6 +5,7 @@
 #include "TimeSimulator/commandterminationtimeengine.h"
 #include "TimeSimulator/machine.h"
 #include "TimeSimulator/command.h"
+#include "TimeSimulator/task.h"
 #include "machine.h"
 
 CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db) :
@@ -121,23 +122,20 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
 
 void CommandsViewIsInState::on_pushButton_2_clicked()
 {
-    //ovde moras da setujes simulator
-    TimeSimulator::TimeSimulator* timesimulator = new TimeSimulator::TimeSimulator();
-    //ocigledno je da ne smes da budes odogovoran za zivot engina
-    engine.reset(new TimeSimulator::CommandTerminationTimeEngine());
-    //sada inicijalizujes simulator
+    m_timeSimulator.reset(new TimeSimulator::TimeSimulator());
 
-    //pravim masine
-    TimeSimulator::MachineVtrPtr timeMachines(new TimeSimulator::MachineVtr());
-    MachinePtrVtr AllMachines = m_db->getMachines();
-    for (auto iter = AllMachines->begin(); iter != AllMachines->end(); ++iter)
+    initializeTimeEngine();
+
+    if (m_engine->checkIsEverythingSetUp())
     {
-        MachinePtr machine = *iter;
-        TimeSimulator::MachinePtr newTimeMachine(new TimeSimulator::Machine(machine->getId()));
-        timeMachines->push_back(newTimeMachine);
+        m_timeSimulator->execute(m_engine);
     }
-    //setujem masine simulatoru
-    engine->setMachines(timeMachines);
+}
+
+void CommandsViewIsInState::initializeTimeEngine()
+{
+    m_engine.reset(new TimeSimulator::CommandTerminationTimeEngine());
+    initializeTimeMachines();
 
     //dohvatanje komandi
     auto commands = m_db->getCommands(m_state);
@@ -146,42 +144,73 @@ void CommandsViewIsInState::on_pushButton_2_clicked()
     for (auto iter = m_commands->begin(); iter != m_commands->end(); ++iter)
     {
         CommandPtr command = *iter;
-        TimeSimulator::CommandPtr timeCommand(new TimeSimulator::Command(command->getID()));
-        TaskPtrVtr tasks = m_db->getTasks(command);
+        initializeTimeTasksForCommand(command);
+    }
+}
 
-        //moram da prodjem kroz taskove
-        //da li su ovi taskovi u po rednom broju
-        for (auto taskIter = tasks->begin(); taskIter != tasks->end(); ++iter)
+void CommandsViewIsInState::initializeTimeMachines()
+{
+    //pravim masine
+    m_timeMachines.reset(new TimeSimulator::MachineVtr());
+    MachinePtrVtr AllMachines = m_db->getMachines();
+    for (auto iter = AllMachines->begin(); iter != AllMachines->end(); ++iter)
+    {
+        MachinePtr machine = *iter;
+        TimeSimulator::MachinePtr newTimeMachine(new TimeSimulator::Machine(machine->getId()));
+        m_timeMachines->push_back(newTimeMachine);
+    }
+    //setujem masine simulatoru
+    m_engine->setMachines(m_timeMachines);
+}
+
+void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
+{
+    bool wrongCommand = false;
+    TimeSimulator::CommandPtr timeCommand(new TimeSimulator::Command(command->getID(), command->getPriority()));
+    TaskPtrVtr tasks = m_db->getTasks(command);
+
+    for (auto taskIter = tasks->begin(); taskIter != tasks->end(); ++taskIter)
+    {
+        TaskPtr task = *taskIter;
+        TimeSimulator::TaskPtr timeTask(new TimeSimulator::Task(task->getMachineId()));
+        TimeSimulator::MachinePtr timeMachine = m_engine->getMachineWithId(task->getMachineId());
+        switch(task->getState())
         {
-            TaskPtr task = *taskIter;
-            switch(task->getState())
+        case Task::State::Complited:
+            break;
+        case Task::State::Leaved:
+            break;
+        case Task::State::InProgress:
+            timeTask->setPrediction(task->getPrediction());
+            timeMachine->putCurrentCommand(timeCommand);
+            if (!task->getMachineId())
             {
-            case Task::State::Complited:
-                //ne radis nista
-                break;
-            case Task::State::Leaved:
-                //ne radis nista
-                break;
-            case Task::State::InProgress:
-                //ovde moras da radis oduzimanje
-                //dodas komandi
-                break;
-            case Task::State::Waiting:
-                //ubacujes u listu cekanja za masinu
-                //dodas komandi
-                break;
-            case Task::State::New:
-                //ne radis nista
-                //dodaj komandi
-                break;
-            case Task::State::Stopped:
-                //nemam pojma sta u ovoj situaciji, najbolje je da ga ne racunas
-                //to jest nekako da preskocis tu komandu
-                break;
+                wrongCommand = true;
             }
+            break;
+        case Task::State::Waiting:
+            timeTask->setPrediction(task->getPrediction());
+            timeMachine->putCommandIntoQueue(timeCommand);
+            if (!task->getMachineId())
+            {
+                wrongCommand = true;
+            }
+            break;
+        case Task::State::New:
+            if (!task->getMachineId())
+            {
+                wrongCommand = true;
+            }
+            break;
+        case Task::State::Stopped:
+            wrongCommand = true;
+            break;
         }
     }
 
-    //startovanje motora
-    timesimulator->execute(engine);
+    if (wrongCommand)
+    {
+        qDebug() << "nalog id = " << command->getID() << "nema sve informacije za izracunavanje i zbog toga ispada iz kalkulacije!";
+        m_engine->eliminateCommandFromCalculation(timeCommand);
+    }
 }

@@ -20,8 +20,12 @@ public:
     unsigned getId() const;
 
     void putCommandIntoQueue(CommandPtr command);
+    void putCurrentCommand(CommandPtr command);
+    void eliminateCommandFromCalculation(CommandPtr command);
 private:
     CommandPtr getFirstFromQueue();
+    void sortCommandsByPriority();
+    static bool compareFunction(CommandPtr command1, CommandPtr command2);
 
     unsigned m_id;
     CommandVtrPtr m_commandsInQueue;

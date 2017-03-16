@@ -10,13 +10,15 @@ namespace TimeSimulator
 class TIMESIMULATORSHARED_EXPORT Command
 {
 public:
-    Command(unsigned id);
+    Command(unsigned id, unsigned priority);
     virtual ~Command();
 
     bool checkIsEverythingSetUp();
     bool decrementTimeOfCurrentTask();
+
     unsigned getIdOfNextMachine();
     TaskPtr getCurrentTask();
+    unsigned getPriority();
 
 private:
     TaskPtr changeCurrentTask();

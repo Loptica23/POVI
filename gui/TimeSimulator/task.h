@@ -12,19 +12,20 @@ class TIMESIMULATORSHARED_EXPORT Task
 public:
     enum class State{New, InProgress, Complited};
 
-    Task(unsigned machine, unsigned prediction, State state);
+    Task(unsigned machine);
     virtual ~Task();
 
     unsigned getMachine() const;
     unsigned getPrediction() const;
-    State getState() const;
 
+    State getState() const;
     void setState(const State & state);
+    void setPrediction(unsigned prediction);
 
     bool checkIsEverythingSetUp();
-
     bool decrementTime();
 private:
+
     unsigned m_machine;
     unsigned m_prediction;
     State m_state;

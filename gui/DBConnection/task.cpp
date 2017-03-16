@@ -8,12 +8,12 @@
 Task::Task(CommandPtr command, unsigned taskType):
     m_command(command),
     m_taskType(taskType),
-    m_workerId(-1),
+    m_workerId(0),
     m_prediction(0),
-    m_machineId(-1),
+    m_machineId(0),
     m_state(State::New),
     m_serialNumber(0),
-    m_id(-1),
+    m_id(0),
     m_created(true)
 {
     resetChangeTracking();
@@ -23,9 +23,9 @@ Task::Task(CommandPtr command, unsigned taskType):
 Task::Task(unsigned id, CommandPtr command, unsigned taskType):
     m_command(command),
     m_taskType(taskType),
-    m_workerId(-1),
+    m_workerId(0),
     m_prediction(0),
-    m_machineId(-1),
+    m_machineId(0),
     m_state(State::New),
     m_serialNumber(0),
     m_id(id),

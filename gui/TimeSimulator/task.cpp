@@ -1,9 +1,8 @@
+#include <QDebug>
 #include "task.h"
 
-TimeSimulator::Task::Task(unsigned machine, unsigned prediction, State state):
-    m_machine(machine),
-    m_prediction(prediction),
-    m_state(state)
+TimeSimulator::Task::Task(unsigned machine):
+    m_machine(machine)
 {
 
 }
@@ -33,6 +32,11 @@ void TimeSimulator::Task::setState(const State & state)
     m_state = state;
 }
 
+void TimeSimulator::Task::setPrediction(unsigned prediction)
+{
+    m_prediction = prediction;
+}
+
 bool TimeSimulator::Task::checkIsEverythingSetUp()
 {
     if (m_machine == 0) return false;
@@ -43,9 +47,11 @@ bool TimeSimulator::Task::checkIsEverythingSetUp()
 //ako vrati false znaci da je stigao do nule (jos u predhodnom koraku)
 bool TimeSimulator::Task::decrementTime()
 {
+     qDebug() << "dekrementiranje zadatka!";
     if (m_prediction != 0)
     {
         --m_prediction;
+        qDebug() << "ostalo je jos: " << m_prediction;
         return true;
     }
     return false;

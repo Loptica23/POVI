@@ -32,15 +32,37 @@ insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (1, 55.20, 'O
 
 insert into nalog (idNarudzbina, idKlijent, BrojNaloga, Stanje) values (1, 1, 100, 'nov');
 
-insert into TipoviZadatka (Naziv) values ('Dizajn');
-insert into TipoviZadatka (Naziv) values ('Magacin');
-insert into TipoviZadatka (Naziv) values ('Planiranje');
-insert into TipoviZadatka (Naziv) values ('Lastis');
-insert into TipoviZadatka (Naziv) values ('Stampa');
-insert into TipoviZadatka (Naziv) values ('Tkanje');
-insert into TipoviZadatka (Naziv) values ('Secenje');
-insert into TipoviZadatka (Naziv) values ('Savijanje');
-insert into TipoviZadatka (Naziv) values ('Peglanje');
-insert into TipoviZadatka (Naziv) values ('Lepljenje');
-insert into TipoviZadatka (Naziv) values ('Laser');
-insert into TipoviZadatka (Naziv) values ('Sivenje');
+insert into TipoviZadatka (Naziv) values ('Dizajn'); 			#1
+insert into TipoviZadatka (Naziv) values ('Magacin');			#2
+insert into TipoviZadatka (Naziv) values ('Planiranje');		#3
+insert into TipoviZadatka (Naziv) values ('Lastis');			#4
+insert into TipoviZadatka (Naziv) values ('Stampa');			#5
+insert into TipoviZadatka (Naziv) values ('Tkanje');			#6
+insert into TipoviZadatka (Naziv) values ('Secenje');			#7
+insert into TipoviZadatka (Naziv) values ('Savijanje');			#8
+insert into TipoviZadatka (Naziv) values ('Peglanje');			#9
+insert into TipoviZadatka (Naziv) values ('Lepljenje');			#10
+insert into TipoviZadatka (Naziv) values ('Laser');				#11
+insert into TipoviZadatka (Naziv) values ('Sivenje');			#12
+
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za planiranje 1', 3);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lastis 1', 4);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za stampu 1', 5);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za tkanje 1', 6);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za secenje 1', 7);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za savijanje 1', 8);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za peglanje 1', 9);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lepljenje 1', 10);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za laser 1', 11);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za sivenje 1', 12);
+
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za planiranje 2', 3);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lastis 2', 4);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za stampu 2', 5);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za tkanje 2', 6);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za secenje 2', 7);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za savijanje 2', 8);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za peglanje 2', 9);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lepljenje 2', 10);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za laser 2', 11);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za sivenje 2', 12);

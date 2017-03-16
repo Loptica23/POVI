@@ -1,8 +1,10 @@
 #include "command.h"
 #include "task.h"
 
-TimeSimulator::Command::Command(unsigned id):
-    m_id(id)
+TimeSimulator::Command::Command(unsigned id, unsigned priority):
+    m_id(id),
+    m_priority(priority),
+    m_tasks(new TaskVtr())
 {
 
 }
@@ -45,6 +47,11 @@ TimeSimulator::TaskPtr TimeSimulator::Command::getCurrentTask()
 {
     TaskPtr task = *m_iterator;
     return task;
+}
+
+unsigned TimeSimulator::Command::getPriority()
+{
+    return m_priority;
 }
 
 TimeSimulator::TaskPtr TimeSimulator::Command::changeCurrentTask()

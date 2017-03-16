@@ -3,7 +3,8 @@
 
 TimeSimulator::Machine::Machine(unsigned id):
     m_currentCommand(nullptr),
-    m_id(id)
+    m_id(id),
+    m_commandsInQueue(new TimeSimulator::CommandVtr())
 {
 
 }
@@ -57,6 +58,16 @@ TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
     return command;
 }
 
+void TimeSimulator::Machine::sortCommandsByPriority()
+{
+    std::sort(m_commandsInQueue->begin(), m_commandsInQueue->end(), compareFunction);
+}
+
+bool TimeSimulator::Machine::compareFunction(CommandPtr command1, CommandPtr command2)
+{
+    return command1->getPriority() < command2->getPriority();
+}
+
 unsigned TimeSimulator::Machine::getId() const
 {
     return m_id;
@@ -65,4 +76,18 @@ unsigned TimeSimulator::Machine::getId() const
 void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)
 {
     m_commandsInQueue->push_back(command);
+}
+
+void TimeSimulator::Machine::putCurrentCommand(CommandPtr command)
+{
+    m_currentCommand = command;
+}
+
+void TimeSimulator::Machine::eliminateCommandFromCalculation(CommandPtr command)
+{
+    auto it = std::find(m_commandsInQueue->begin(), m_commandsInQueue->end(), command);
+    if(it != m_commandsInQueue->end())
+        m_commandsInQueue->erase(it);
+    if (m_currentCommand == command)
+        m_currentCommand = nullptr;
 }

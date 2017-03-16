@@ -174,7 +174,7 @@ void Order::setTimeLimit(const QString & timeLimit)
 QString Order::statemantForCreating() const
 {
     QString stm;
-    stm = "insert into narudzbina (idKlijent, Cena, Opis, Naslov, Stanje, Rok) values (";
+    stm = "insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_price) + ", ";
     stm += "'" + m_description + "', ";

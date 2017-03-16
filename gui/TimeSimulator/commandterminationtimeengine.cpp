@@ -2,6 +2,7 @@
 #include "commandterminationtimeengine.h"
 #include "machine.h"
 #include "command.h"
+#include "types.h"
 
 TimeSimulator::CommandTerminationTimeEngine::CommandTerminationTimeEngine()
 {
@@ -24,8 +25,9 @@ void TimeSimulator::CommandTerminationTimeEngine::run()
     time = 0;
     while (true)
     {
+        qDebug() << "TIME: " << time++;
         //ovde iteriras kroz masine
-        for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter, ++time)
+        for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
         {
             MachinePtr machine = *iter;
             CommandPtr command = machine->decrementTime();
@@ -57,6 +59,15 @@ bool TimeSimulator::CommandTerminationTimeEngine::checkIsEverythingSetUp()
     }
 
     return true;
+}
+
+void TimeSimulator::CommandTerminationTimeEngine::eliminateCommandFromCalculation(TimeSimulator::CommandPtr command)
+{
+    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
+    {
+        MachinePtr machine = *iter;
+        machine->eliminateCommandFromCalculation(command);
+    }
 }
 
 bool TimeSimulator::CommandTerminationTimeEngine::checkIsFinished()

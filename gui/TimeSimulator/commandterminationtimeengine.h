@@ -15,9 +15,11 @@ public:
     void setMachines(MachineVtrPtr machines);
     void run();
     bool checkIsEverythingSetUp();
+
+    void eliminateCommandFromCalculation(CommandPtr command);
+    MachinePtr getMachineWithId(unsigned id);
 private:
     bool  checkIsFinished();
-    MachinePtr getMachineWithId(unsigned id);
 
     unsigned time;
     MachineVtrPtr m_machines;

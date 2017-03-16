@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include "dbconnection.h"
 #include "TimeSimulator/types.h"
+#include "TimeSimulator/timesimulator.h"
 
 namespace Ui {
 class CommandsViewIsInState;
@@ -33,6 +34,10 @@ private:
     void insertDetailsButton(unsigned i, unsigned j);
     void insertEditButton(unsigned i, unsigned j);
 
+    void initializeTimeEngine();
+    void initializeTimeMachines();
+    void initializeTimeTasksForCommand(CommandPtr command);
+
     Ui::CommandsViewIsInState *ui;
     DBConnectionPtr m_db;
     CommandPtrVtr m_commands;
@@ -41,5 +46,7 @@ private:
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_editButtons;
 
-    TimeSimulator::CommandTerminationTimeEnginePtr engine;
+    TimeSimulator::CommandTerminationTimeEnginePtr m_engine;
+    std::shared_ptr<TimeSimulator::TimeSimulator> m_timeSimulator;
+    TimeSimulator::MachineVtrPtr m_timeMachines;
 };
