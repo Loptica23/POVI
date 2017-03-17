@@ -126,15 +126,17 @@ void CommandsViewIsInState::on_pushButton_2_clicked()
 
     initializeTimeEngine();
 
+    qDebug() << "initialization is finished!";
     if (m_engine->checkIsEverythingSetUp())
     {
+        qDebug() << "starting engine from main thread!";
         m_timeSimulator->execute(m_engine);
     }
 }
 
 void CommandsViewIsInState::initializeTimeEngine()
 {
-    m_engine.reset(new TimeSimulator::CommandTerminationTimeEngine());
+    m_engine = new TimeSimulator::CommandTerminationTimeEngine();
     initializeTimeMachines();
 
     //dohvatanje komandi
@@ -168,11 +170,11 @@ void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
     bool wrongCommand = false;
     TimeSimulator::CommandPtr timeCommand(new TimeSimulator::Command(command->getID(), command->getPriority()));
     TaskPtrVtr tasks = m_db->getTasks(command);
-
+    TimeSimulator::TaskVtrPtr timeTasks(new TimeSimulator::TaskVtr());
     for (auto taskIter = tasks->begin(); taskIter != tasks->end(); ++taskIter)
     {
         TaskPtr task = *taskIter;
-        TimeSimulator::TaskPtr timeTask(new TimeSimulator::Task(task->getMachineId()));
+        TimeSimulator::TaskPtr timeTask(new TimeSimulator::Task(task->getMachineId(), task->getSerialNumber()));
         TimeSimulator::MachinePtr timeMachine = m_engine->getMachineWithId(task->getMachineId());
         switch(task->getState())
         {
@@ -183,6 +185,7 @@ void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
         case Task::State::InProgress:
             timeTask->setPrediction(task->getPrediction());
             timeMachine->putCurrentCommand(timeCommand);
+            timeTasks->push_back(timeTask);
             if (!task->getMachineId())
             {
                 wrongCommand = true;
@@ -191,12 +194,15 @@ void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
         case Task::State::Waiting:
             timeTask->setPrediction(task->getPrediction());
             timeMachine->putCommandIntoQueue(timeCommand);
+            timeTasks->push_back(timeTask);
             if (!task->getMachineId())
             {
                 wrongCommand = true;
             }
             break;
         case Task::State::New:
+            timeTask->setPrediction(task->getPrediction());
+            timeTasks->push_back(timeTask);
             if (!task->getMachineId())
             {
                 wrongCommand = true;
@@ -212,5 +218,10 @@ void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
     {
         qDebug() << "nalog id = " << command->getID() << "nema sve informacije za izracunavanje i zbog toga ispada iz kalkulacije!";
         m_engine->eliminateCommandFromCalculation(timeCommand);
+    }
+    else
+    {
+        qDebug() << "setting tasks";
+        timeCommand->setTasks(timeTasks);
     }
 }

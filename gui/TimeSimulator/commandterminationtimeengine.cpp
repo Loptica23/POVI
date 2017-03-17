@@ -1,17 +1,20 @@
 #include <QDebug>
+#include <chrono>
+#include <thread>
 #include "commandterminationtimeengine.h"
 #include "machine.h"
 #include "command.h"
 #include "types.h"
 
-TimeSimulator::CommandTerminationTimeEngine::CommandTerminationTimeEngine()
+TimeSimulator::CommandTerminationTimeEngine::CommandTerminationTimeEngine():
+    m_keepRunning(true)
 {
     qDebug() << "konstruktor engine!";
 }
 
 TimeSimulator::CommandTerminationTimeEngine::~CommandTerminationTimeEngine()
 {
-
+    qDebug() << "destrukcija motora";
 }
 
 void TimeSimulator::CommandTerminationTimeEngine::setMachines(MachineVtrPtr machines)
@@ -23,9 +26,8 @@ void TimeSimulator::CommandTerminationTimeEngine::run()
 {
     qDebug() << "Prediction started!";
     time = 0;
-    while (true)
+    while (m_keepRunning)
     {
-        qDebug() << "TIME: " << time++;
         //ovde iteriras kroz masine
         for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
         {
@@ -35,9 +37,17 @@ void TimeSimulator::CommandTerminationTimeEngine::run()
             {
                 //masina je vretila nalog, znaci da je taj zadatak zavrsen..
                 //Izlogovati vreme i prebaciti nalog na sledecu masinu masinu
-                qDebug() << time << "  : nalog sa Idjem prelazi na masinu sa";
-                MachinePtr nextMachine = getMachineWithId(command->getIdOfNextMachine());
-                nextMachine->putCommandIntoQueue(command);
+                unsigned idMachine = command->getIdOfNextMachine();
+                if (idMachine)
+                {
+                    qDebug() << time << "  : nalog sa idjem: " + QString::number(command->getId()) +  " prelazi na masinu sa idjem: " + QString::number(idMachine);
+                    MachinePtr nextMachine = getMachineWithId(idMachine);
+                    nextMachine->putCommandIntoQueue(command);
+                }
+                else
+                {
+                    qDebug() << time << "  : nalog sa idjem: " + QString::number(command->getId()) + " je zavrsio!";
+                }
             }
         }
 
@@ -45,6 +55,8 @@ void TimeSimulator::CommandTerminationTimeEngine::run()
         {
             break;
         }
+        time++;
+        //std::this_thread::sleep_for(std::chrono::milliseconds(250));
     }
     qDebug() << "Prediction finished!";
 }
@@ -100,4 +112,9 @@ TimeSimulator::MachinePtr TimeSimulator::CommandTerminationTimeEngine::getMachin
     }
 
     return resultMachine;
+}
+
+void TimeSimulator::CommandTerminationTimeEngine::stopEngine()
+{
+    m_keepRunning = false;
 }

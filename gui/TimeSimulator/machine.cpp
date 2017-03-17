@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "machine.h"
 #include "command.h"
 
@@ -54,6 +55,8 @@ TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
     if (m_commandsInQueue && !m_commandsInQueue->empty())
     {
         command = m_commandsInQueue->at(0);
+        m_commandsInQueue->erase(m_commandsInQueue->begin());
+        qDebug() << "Nalog sa idjem: " + QString::number(command->getId()) + " je poceo da se izvrsava na masini " + QString::number(m_id);
     }
     return command;
 }
@@ -76,6 +79,7 @@ unsigned TimeSimulator::Machine::getId() const
 void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)
 {
     m_commandsInQueue->push_back(command);
+    sortCommandsByPriority();
 }
 
 void TimeSimulator::Machine::putCurrentCommand(CommandPtr command)

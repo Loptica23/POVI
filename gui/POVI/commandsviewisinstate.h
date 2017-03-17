@@ -46,7 +46,7 @@ private:
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_editButtons;
 
-    TimeSimulator::CommandTerminationTimeEnginePtr m_engine;
+    TimeSimulator::CommandTerminationTimeEngine* m_engine;
     std::shared_ptr<TimeSimulator::TimeSimulator> m_timeSimulator;
     TimeSimulator::MachineVtrPtr m_timeMachines;
 };

@@ -13,7 +13,7 @@ public:
     virtual ~TimeSimulator();
 
     CommandTerminationTimeEnginePtr getCommandTerminationTimeEngine();
-    void execute(CommandTerminationTimeEnginePtr commandTerminationTimeEngine);
+    void execute(CommandTerminationTimeEngine* commandTerminationTimeEngine);
 
 private:
     QThreadPool *m_threadPool;

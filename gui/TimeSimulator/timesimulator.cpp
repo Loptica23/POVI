@@ -1,6 +1,7 @@
 #include <QDebug>
 #include "timesimulator.h"
 #include "commandterminationtimeengine.h"
+#include "types.h"
 
 
 TimeSimulator::TimeSimulator::TimeSimulator()
@@ -21,7 +22,8 @@ TimeSimulator::CommandTerminationTimeEnginePtr TimeSimulator::TimeSimulator::get
     return result;
 }
 
-void TimeSimulator::TimeSimulator::execute(CommandTerminationTimeEnginePtr commandTerminationTimeEngine)
+void TimeSimulator::TimeSimulator::execute(CommandTerminationTimeEngine* commandTerminationTimeEngine)
 {
-    m_threadPool->start(commandTerminationTimeEngine.get());
+    //commandTerminationTimeEngine->setAutoDelete(false);
+    m_threadPool->start(commandTerminationTimeEngine);
 }

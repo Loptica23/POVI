@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "command.h"
 #include "task.h"
 
@@ -52,6 +53,18 @@ TimeSimulator::TaskPtr TimeSimulator::Command::getCurrentTask()
 unsigned TimeSimulator::Command::getPriority()
 {
     return m_priority;
+}
+
+unsigned TimeSimulator::Command::getId() const
+{
+    return m_id;
+}
+
+void TimeSimulator::Command::setTasks(TaskVtrPtr tasks)
+{
+    m_tasks = tasks;
+    std::sort(m_tasks->begin(), m_tasks->end(), Task::compareFunction);
+    m_iterator = m_tasks->begin();
 }
 
 TimeSimulator::TaskPtr TimeSimulator::Command::changeCurrentTask()

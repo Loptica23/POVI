@@ -12,7 +12,7 @@ class TIMESIMULATORSHARED_EXPORT Task
 public:
     enum class State{New, InProgress, Complited};
 
-    Task(unsigned machine);
+    Task(unsigned machine, unsigned serialNumber);
     virtual ~Task();
 
     unsigned getMachine() const;
@@ -24,10 +24,13 @@ public:
 
     bool checkIsEverythingSetUp();
     bool decrementTime();
+
+    static bool compareFunction(TaskPtr task1, TaskPtr task2);
 private:
 
     unsigned m_machine;
     unsigned m_prediction;
+    unsigned m_serialNumber;
     State m_state;
 };
 

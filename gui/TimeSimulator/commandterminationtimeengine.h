@@ -1,5 +1,6 @@
 #pragma once
 #include <QRunnable>
+#include <atomic>
 #include "timesimulator_global.h"
 #include "types.h"
 
@@ -18,12 +19,16 @@ public:
 
     void eliminateCommandFromCalculation(CommandPtr command);
     MachinePtr getMachineWithId(unsigned id);
+
+    void stopEngine();
 private:
     bool  checkIsFinished();
 
     unsigned time;
     MachineVtrPtr m_machines;
     ResultVector m_resultVector;
-};
 
+    std::atomic_bool m_keepRunning;
+
+};
 }

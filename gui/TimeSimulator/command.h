@@ -19,6 +19,9 @@ public:
     unsigned getIdOfNextMachine();
     TaskPtr getCurrentTask();
     unsigned getPriority();
+    unsigned getId() const;
+
+    void setTasks(TaskVtrPtr tasks);
 
 private:
     TaskPtr changeCurrentTask();
