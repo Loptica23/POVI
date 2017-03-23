@@ -1,7 +1,7 @@
 use vigor;
 
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Administrator', 'Administrator', '5555', 'administrator', 'adm', true);
-CREATE USER 'administrator'@'%'  IDENTIFIED BY '1234';
+CREATE USER 'administrator'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'administrator'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
