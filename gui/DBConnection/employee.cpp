@@ -99,6 +99,10 @@ void Employee::setWorkPosition(const QString &workPosition)
     {
         setWorkPosition(WorkPosition::SefProizvodnje);
     }
+    else if (workPosition == "ssm")
+    {
+        setWorkPosition(WorkPosition::SefSmene);
+    }
     else
     {
         qDebug() << "***************************Greska ne postoji ta radna pozicija!****************************";
@@ -130,6 +134,9 @@ void Employee::setWorkPosition(const unsigned workPosition)
         break;
     case 6:
         setWorkPosition(WorkPosition::SefProizvodnje);
+        break;
+    case 7:
+        setWorkPosition(WorkPosition::SefSmene);
         break;
     default:
         qDebug() << "**************************NE postoji ova opcija**************************";
@@ -175,6 +182,8 @@ const QString Employee::getWorkPositionQString() const
         return "diz";
     case WorkPosition::SefProizvodnje:
         return "spr";
+    case WorkPosition::SefSmene:
+        return "ssm";
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";
         return "";
@@ -199,6 +208,8 @@ const unsigned Employee::getWorkPositionQInt() const
         return 5;
     case WorkPosition::SefProizvodnje:
         return 6;
+    case WorkPosition::SefSmene:
+        return 7;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";
         return 88;

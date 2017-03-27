@@ -105,6 +105,11 @@
             <string>Sef Proizvodnje</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Sef Smene</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

@@ -10,6 +10,7 @@
 #include "tabview.h"
 #include "commandsviewwaitingontask.h"
 #include "changepassworddialog.h"
+#include "shiftmanagerview.h"
 
 MainWindow* MainWindow::mainWindow;
 EmployeePtr MainWindow::loggedUser;
@@ -73,6 +74,9 @@ void MainWindow::setUpGuiByWorkPosition()
         qDebug() << "Sef Proizvodnje";
         setView(new TabView(this, m_dbConnection));
         break;
+    case Employee::WorkPosition::SefSmene:
+        qDebug() << "Sef smene";
+        setView(new ShiftManagerView(this, m_dbConnection));
     default:
         break;
     }

@@ -88,7 +88,7 @@ protected:
 class DBCONNECTIONSHARED_EXPORT Employee
 {
 public:
-    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje, SefProizvodnje};
+    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje, SefProizvodnje, SefSmene};
     Employee(unsigned id);
     virtual ~Employee();
 
