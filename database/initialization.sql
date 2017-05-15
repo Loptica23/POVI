@@ -32,37 +32,90 @@ insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (1, 55.20, 'O
 
 insert into nalog (idNarudzbina, idKlijent, BrojNaloga, Stanje) values (1, 1, 100, 'nov');
 
-insert into TipoviZadatka (Naziv) values ('Dizajn'); 			#1
-insert into TipoviZadatka (Naziv) values ('Magacin');			#2
-insert into TipoviZadatka (Naziv) values ('Planiranje');		#3
-insert into TipoviZadatka (Naziv) values ('Lastis');			#4
-insert into TipoviZadatka (Naziv) values ('Stampa');			#5
-insert into TipoviZadatka (Naziv) values ('Tkanje');			#6
-insert into TipoviZadatka (Naziv) values ('Secenje');			#7
-insert into TipoviZadatka (Naziv) values ('Savijanje');			#8
-insert into TipoviZadatka (Naziv) values ('Peglanje');			#9
-insert into TipoviZadatka (Naziv) values ('Lepljenje');			#10
-insert into TipoviZadatka (Naziv) values ('Laser');				#11
-insert into TipoviZadatka (Naziv) values ('Sivenje');			#12
+insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Lastis', False); 			#1
+insert into TipoviZadatka (Naziv, Faktura) values ('Snovanje', False);					#2
+insert into TipoviZadatka (Naziv, Faktura) values ('Tkanje Lastis', True);				#3
+insert into TipoviZadatka (Naziv, Faktura) values ('Peglanje Lastis', False);			#4
+insert into TipoviZadatka (Naziv, Faktura) values ('Namotavanje', False);				#5
+insert into TipoviZadatka (Naziv, Faktura) values ('Kontrola Pakovanje', False);		#6
+insert into TipoviZadatka (Naziv, Faktura) values ('Faktura', False);					#7
+insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Tkanje', False);				#8
+insert into TipoviZadatka (Naziv, Faktura) values ('Magacin Zaduzivanje', False);		#9
+insert into TipoviZadatka (Naziv, Faktura) values ('Tkacnica', False);					#10
+insert into TipoviZadatka (Naziv, Faktura) values ('Magacuin Razduzivanje', True);		#11
+insert into TipoviZadatka (Naziv, Faktura) values ('Peglanje Tkanje', False);			#12
+insert into TipoviZadatka (Naziv, Faktura) values ('Secenje-Savijanje', False);			#13
+insert into TipoviZadatka (Naziv, Faktura) values ('Lepljenje', True);					#14
+insert into TipoviZadatka (Naziv, Faktura) values ('Laser', False);						#15
+insert into TipoviZadatka (Naziv, Faktura) values ('Endlanje', False);					#16
+insert into TipoviZadatka (Naziv, Faktura) values ('Sivenje', False);					#17
+insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Stampa', False);				#18
+insert into TipoviZadatka (Naziv, Faktura) values ('Stampa', True);						#19
+insert into TipoviZadatka (Naziv, Faktura) values ('Transfer', False);					#20
+insert into TipoviZadatka (Naziv, Faktura) values ('Blindruk', False);					#21
+#insert into TipoviZadatka (Naziv, Faktura) values ('Laser', False);					#22
 
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za planiranje 1', 3);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lastis 1', 4);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za stampu 1', 5);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za tkanje 1', 6);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za secenje 1', 7);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za savijanje 1', 8);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za peglanje 1', 9);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lepljenje 1', 10);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za laser 1', 11);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za sivenje 1', 12);
-
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za planiranje 2', 3);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lastis 2', 4);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za stampu 2', 5);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za tkanje 2', 6);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za secenje 2', 7);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za savijanje 2', 8);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za peglanje 2', 9);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za lepljenje 2', 10);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za laser 2', 11);
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka) values ('Masina za sivenje 2', 12);
+#1
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Dizajn Lastis', 1, True);
+#2
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Snovanje', 2, True);
+#3
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MBJ1', 3, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MBJ2', 3, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('NF', 3, False);
+#4
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Peglanje Lastis', 4, True);
+#5
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Namotavanje', 5, True);
+#6
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Kontrola Pakovanje', 6, True);
+#7
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Faktura', 7, True);
+#8
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Dizajn Tkanje', 8, True);
+#9
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Magacin Zaduzivanje', 9, True);
+#10
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MVC BELI', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MVC CRNI', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MUGRIP1', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MUGRIP2', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MUGRIP3', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MUGRIP4', 10, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MUGRIP5', 10, False);
+#11
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Magacin Razduzivanje', 11, True);
+#12
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('SAR', 12, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MONTY', 12, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('WILLY', 12, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('V.PRESA', 12, False);
+#13
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('WILLY1', 13, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('WILLY2; WILLY3; MULLER;', 13, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('WILLY3; MULLER;', 13, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MULLER;', 13, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Secenje-Savijanje', 13, True);
+#14
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Lepljenje', 14, True);
+#15
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Lepljenje', 15, True);
+#16
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Endlanje', 16, True);
+#17
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Sivenje', 17, True);
+#18
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Dizajn Stampa', 18, True);
+#19
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('EPSON1', 19, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('EPSON2', 19, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('EPSON3', 19, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('CDS', 19, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('PAXAR', 19, False);
+#20
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MONTY', 20, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('SAR', 20, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('PRESA1', 20, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('PRESA2', 20, False);
+#21
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Blindruk', 21, True);
