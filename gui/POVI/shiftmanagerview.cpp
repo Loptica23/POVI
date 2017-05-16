@@ -14,3 +14,14 @@ ShiftManagerView::~ShiftManagerView()
 {
     delete ui;
 }
+
+void ShiftManagerView::refreshProductionEmployees()
+{
+
+}
+
+void ShiftManagerView::on_pushButton_clicked()
+{
+    //refresh
+    refreshProductionEmployees();
+}

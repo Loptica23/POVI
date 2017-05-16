@@ -47,7 +47,7 @@ void MachineDialog::initializeComboBox()
     auto taskTypes = m_db->getTaskTypes()->getTypes();
     for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
     {
-        ui->comboBox->addItem((*type).first);
+        ui->comboBox->addItem((*type)->getName());
     }
 }
 

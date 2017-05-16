@@ -31,5 +31,5 @@ protected:
     void fillComboBoxWithTaskTypes(QComboBox * box);
 
 
-    TaskPairsPtr m_taskTypes;
+    TaskTypesPtr m_taskTypes;
 };

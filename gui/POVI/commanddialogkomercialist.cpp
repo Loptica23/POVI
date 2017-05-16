@@ -10,7 +10,7 @@
 CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
     CommandDialog(parent, db, order)
 {
-    m_taskTypes = m_db->getTaskTypes()->getTypes();
+    m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
@@ -19,7 +19,7 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
 CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
     CommandDialog(parent, db, command, edit)
 {
-    m_taskTypes = m_db->getTaskTypes()->getTypes();
+    m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
@@ -73,7 +73,7 @@ void CommandDialogKomercialist::fillTaskTable()
             ui->taskTable->insertRow(i);
             TaskPtr task = (*iter);
             {
-                QString str = m_taskTypes->at(task->getTaskTypeId()-1).first;
+                QString str = m_taskTypes->getTypes()->at(task->getTaskTypeId()-1)->getName();
                 qDebug() << str;
                 auto *item = new QTableWidgetItem(str);
                 ui->taskTable->setItem(i, 0, item);
@@ -229,9 +229,9 @@ void CommandDialogKomercialist::insertNewTaskButton(unsigned i)
 
 void CommandDialogKomercialist::fillComboBoxWithTaskTypes(QComboBox * box)
 {
-    for (auto type = m_taskTypes->begin(); type != m_taskTypes->end(); ++type)
+    for (auto type = m_taskTypes->getTypes()->begin(); type != m_taskTypes->getTypes()->end(); ++type)
     {
-        box->addItem((*type).first);
+        box->addItem((*type)->getName());
     }
 }
 

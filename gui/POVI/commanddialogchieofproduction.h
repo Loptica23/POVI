@@ -20,7 +20,7 @@ protected:
     void insertTaskPrediction(TaskPtr task, unsigned i, unsigned j);
     void insertMachineComboBox(TaskPtr task, unsigned i, unsigned j);
 
-    TaskPairsPtr m_taskTypes;
+    TaskTypesPtr m_taskTypes;
     MachinePtrVtr m_machines;
 
     std::vector<QComboBox*> m_comboBoxes;

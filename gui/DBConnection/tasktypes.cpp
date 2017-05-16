@@ -1,12 +1,44 @@
 #include "tasktypes.h"
 
+//--------------------------------------------------------------
+//TaskType
+
+TaskType::TaskType(int id, QString name, bool isVirtual)
+{
+    m_id = id;
+    m_name = name;
+    m_isVirtual = isVirtual;
+}
+TaskType::~TaskType()
+{
+
+}
+
+int TaskType::getId() const
+{
+    return m_id;
+}
+
+QString TaskType::getName() const
+{
+    return m_name;
+}
+
+bool TaskType::isVirtual() const
+{
+    return m_isVirtual;
+}
+
+//--------------------------------------------------------------
+//TaskTypes
 TaskTypes::TaskTypes(QSqlQuery query):
-    m_types(new TaskPairs())
+    m_types(new TaskTypeVtr())
 {
     while (query.next())
     {
-        auto pair = std::make_pair(query.value("Naziv").toString(), query.value("idTipoviZadatka").toUInt());
-        m_types->push_back(pair);
+        TaskTypePtr taskType;
+        taskType.reset(new TaskType(query.value("idTipoviZadatka").toUInt(), query.value("Naziv").toString(), query.value("Faktura").toBool()));
+        m_types->push_back(taskType);
     }
 }
 
@@ -15,39 +47,39 @@ TaskTypes::~TaskTypes()
 
 }
 
-TaskPairsPtr TaskTypes::getTypes() const
+TaskTypePtrVtr TaskTypes::getTypes() const
 {
     return m_types;
 }
 
 unsigned TaskTypes::getTypeIdByString(QString type) const
 {
-    //refactor
     unsigned result = 0;
-    for (auto iter = m_types->begin(); iter != m_types->end(); ++iter)
+    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
+            {
+                return taskType->getName() == type;
+            });
+
+    if (it != m_types->end())
     {
-        TaskPair taskPair = *iter;
-        if (taskPair.first == type)
-        {
-            result = taskPair.second;
-            break;
-        }
+        TaskTypePtr taskType = *it;
+        result = taskType->getId();
     }
     return result;
 }
 
 QString TaskTypes::getStringById(unsigned type) const
 {
-    //refactor
     QString result = 0;
-    for (auto iter = m_types->begin(); iter != m_types->end(); ++iter)
+    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
+            {
+                return taskType->getId() == type;
+            });
+
+    if (it != m_types->end())
     {
-        TaskPair taskPair = *iter;
-        if (taskPair.second == type)
-        {
-            result = taskPair.first;
-            break;
-        }
+        TaskTypePtr taskType = *it;
+        result = taskType->getName();
     }
     return result;
 }

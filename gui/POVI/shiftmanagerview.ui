@@ -6,26 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>529</height>
+    <width>942</width>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>380</x>
-     <y>160</y>
-     <width>55</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>BLAAA</string>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTableWidget" name="tableWidget"/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Osvezi</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

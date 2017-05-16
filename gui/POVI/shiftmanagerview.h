@@ -15,6 +15,12 @@ public:
     ~ShiftManagerView();
 
 private:
+    void refreshProductionEmployees();
+
+private slots:
+    void on_pushButton_clicked();
+
+private:
     Ui::ShiftManagerView *ui;
     DBConnectionPtr m_db;
 };

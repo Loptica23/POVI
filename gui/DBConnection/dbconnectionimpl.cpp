@@ -85,6 +85,23 @@ EmployeePtrVtr DBConnectionImpl::getEmployees()
     return employees;
 }
 
+EmployeePtrVtr DBConnectionImpl::getEmployees(Employee::WorkPosition & workPosition)
+{
+    EmployeePtrVtr employees;
+    QSqlQuery query;
+    query.prepare("select * from radnik where Pozicija = " + Employee::getQstringFromWorkPosition(workPosition));
+    if(query.exec())
+    {
+        employees = Employee::createEmployeesFromQuery(query);
+    }
+    else
+    {
+        m_lastError = query.lastError().text();
+        qDebug() << "nije uspeo query!";
+    }
+    return employees;
+}
+
 EmployeePtr DBConnectionImpl::getEmployee(QString username)
 {
     EmployeePtr employee = nullptr;

@@ -41,7 +41,8 @@ HEADERS += dbconnection.h\
     command.h \
     task.h \
     tasktypes.h \
-    machine.h
+    machine.h \
+    employee.h
 
 #unix {
 #    target.path = /usr/lib

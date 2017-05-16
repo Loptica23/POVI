@@ -7,7 +7,7 @@ CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DB
     CommandDialog(parent, db, command, edit)
 {
     this->showMaximized();
-    m_taskTypes = m_db->getTaskTypes()->getTypes();
+    m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
@@ -91,7 +91,7 @@ void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
 
 void CommandDialogChieOfProduction::insertTaskType(TaskPtr task, unsigned i, unsigned j)
 {
-    QString str = m_taskTypes->at(task->getTaskTypeId()-1).first;
+    QString str = m_taskTypes->getTypes()->at(task->getTaskTypeId()-1)->getName();
     auto *item = new QTableWidgetItem(str);
     ui->taskTable->setItem(i, j, item);
 }

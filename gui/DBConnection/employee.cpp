@@ -71,77 +71,13 @@ void Employee::setActivation(bool activation)
 
 void Employee::setWorkPosition(const QString &workPosition)
 {
-    if (workPosition == "adm")
-    {
-        setWorkPosition(WorkPosition::Administrator);
-    }
-    else if(workPosition == "diz")
-    {
-        setWorkPosition(WorkPosition::Dizajner);
-    }
-    else if(workPosition == "mag")
-    {
-        setWorkPosition(WorkPosition::Magacioner);
-    }
-    else if(workPosition == "pro")
-    {
-        setWorkPosition(WorkPosition::Proizvodnja);
-    }
-    else if(workPosition == "pak")
-    {
-        setWorkPosition(WorkPosition::Pakovanje);
-    }
-    else if(workPosition == "kom")
-    {
-        setWorkPosition(WorkPosition::Komercijalista);
-    }
-    else if (workPosition == "spr")
-    {
-        setWorkPosition(WorkPosition::SefProizvodnje);
-    }
-    else if (workPosition == "ssm")
-    {
-        setWorkPosition(WorkPosition::SefSmene);
-    }
-    else
-    {
-        qDebug() << "***************************Greska ne postoji ta radna pozicija!****************************";
-    }
+    setWorkPosition(Employee::getWorkPositionFromQstring(workPosition));
 }
 
 void Employee::setWorkPosition(const unsigned workPosition)
 {
+    setWorkPosition(Employee::getWorkPositionFromUint(workPosition));
     qDebug() << "setovana radna pozicija preko inta";
-    switch(workPosition)
-    {
-    case 0:
-        setWorkPosition(WorkPosition::Administrator);
-        break;
-    case 1:
-        setWorkPosition(WorkPosition::Komercijalista);
-        break;
-    case 2:
-        setWorkPosition(WorkPosition::Proizvodnja);
-        break;
-    case 3:
-        setWorkPosition(WorkPosition::Dizajner);
-        break;
-    case 4:
-        setWorkPosition(WorkPosition::Pakovanje);
-        break;
-    case 5:
-        setWorkPosition(WorkPosition::Magacioner);
-        break;
-    case 6:
-        setWorkPosition(WorkPosition::SefProizvodnje);
-        break;
-    case 7:
-        setWorkPosition(WorkPosition::SefSmene);
-        break;
-    default:
-        qDebug() << "**************************NE postoji ova opcija**************************";
-        break;
-    }
 }
 
 unsigned Employee::getId() const
@@ -166,54 +102,12 @@ const QString& Employee::getUserName() const
 
 const QString Employee::getWorkPositionQString() const
 {
-    switch(m_WorkPosition)
-    {
-    case WorkPosition::Administrator:
-        return "adm";
-    case WorkPosition::Komercijalista:
-        return "kom";
-    case WorkPosition::Magacioner:
-        return "mag";
-    case WorkPosition::Proizvodnja:
-        return "pro";
-    case WorkPosition::Pakovanje:
-        return "pak";
-    case WorkPosition::Dizajner:
-        return "diz";
-    case WorkPosition::SefProizvodnje:
-        return "spr";
-    case WorkPosition::SefSmene:
-        return "ssm";
-    default:
-        qDebug() << "***************************Greska nema tog enuma!************************";
-        return "";
-    }
+    return Employee::getQstringFromWorkPosition(m_WorkPosition);
 }
 
 const unsigned Employee::getWorkPositionQInt() const
 {
-    switch(m_WorkPosition)
-    {
-    case WorkPosition::Administrator:
-        return 0;
-    case WorkPosition::Komercijalista:
-        return 1;
-    case WorkPosition::Proizvodnja:
-        return 2;
-    case WorkPosition::Dizajner:
-        return 3;
-    case WorkPosition::Pakovanje:
-        return 4;
-    case WorkPosition::Magacioner:
-        return 5;
-    case WorkPosition::SefProizvodnje:
-        return 6;
-    case WorkPosition::SefSmene:
-        return 7;
-    default:
-        qDebug() << "***************************Greska nema tog enuma!************************";
-        return 88;
-    }
+    return Employee::getUnsignedFromWorkPosition(m_WorkPosition);
 }
 
 const Employee::WorkPosition& Employee::getWorkPosition() const
@@ -275,6 +169,139 @@ EmployeePtrVtr Employee::createEmployeesFromQuery(QSqlQuery& query)
         employees->push_back(emp);
     }
     return employees;
+}
+
+Employee::WorkPosition Employee::getWorkPositionFromQstring(const QString & workPosition)
+{
+    Employee::WorkPosition result;
+    if (workPosition == "adm")
+    {
+        result = WorkPosition::Administrator;
+    }
+    else if(workPosition == "diz")
+    {
+        result = WorkPosition::Dizajner;
+    }
+    else if(workPosition == "mag")
+    {
+        result = WorkPosition::Magacioner;
+    }
+    else if(workPosition == "pro")
+    {
+        result = WorkPosition::Proizvodnja;
+    }
+    else if(workPosition == "pak")
+    {
+        result = WorkPosition::Pakovanje;
+    }
+    else if(workPosition == "kom")
+    {
+        result = WorkPosition::Komercijalista;
+    }
+    else if (workPosition == "spr")
+    {
+        result = WorkPosition::SefProizvodnje;
+    }
+    else if (workPosition == "ssm")
+    {
+        result = WorkPosition::SefSmene;
+    }
+    else
+    {
+        qDebug() << "***************************Greska ne postoji ta radna pozicija!****************************";
+    }
+    return result;
+}
+Employee::WorkPosition Employee::getWorkPositionFromUint(unsigned workPosition)
+{
+    Employee::WorkPosition result;
+    switch(workPosition)
+    {
+    case 0:
+        result = WorkPosition::Administrator;
+        break;
+    case 1:
+        result = WorkPosition::Komercijalista;
+        break;
+    case 2:
+        result = WorkPosition::Proizvodnja;
+        break;
+    case 3:
+        result = WorkPosition::Dizajner;
+        break;
+    case 4:
+        result = WorkPosition::Pakovanje;
+        break;
+    case 5:
+        result = WorkPosition::Magacioner;
+        break;
+    case 6:
+        result = WorkPosition::SefProizvodnje;
+        break;
+    case 7:
+        result = WorkPosition::SefSmene;
+        break;
+    default:
+        qDebug() << "**************************NE postoji ova opcija**************************";
+        break;
+    }
+    return result;
+}
+
+QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition &workPosition)
+{
+    QString result = "";
+    switch(workPosition)
+    {
+    case WorkPosition::Administrator:
+        result = "adm";
+    case WorkPosition::Komercijalista:
+        result = "kom";
+    case WorkPosition::Magacioner:
+        result = "mag";
+    case WorkPosition::Proizvodnja:
+        result = "pro";
+    case WorkPosition::Pakovanje:
+        result = "pak";
+    case WorkPosition::Dizajner:
+        result = "diz";
+    case WorkPosition::SefProizvodnje:
+        result = "spr";
+    case WorkPosition::SefSmene:
+        result = "ssm";
+    default:
+        qDebug() << "***************************Greska nema tog enuma!************************";
+        result = "";
+    }
+    return result;
+}
+
+unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition & workPosition)
+{
+    unsigned result = 88;
+    switch(workPosition)
+    {
+    case WorkPosition::Administrator:
+        result = 0;
+    case WorkPosition::Komercijalista:
+        result = 1;
+    case WorkPosition::Proizvodnja:
+        result = 2;
+    case WorkPosition::Dizajner:
+        result = 3;
+    case WorkPosition::Pakovanje:
+        result = 4;
+    case WorkPosition::Magacioner:
+        result = 5;
+    case WorkPosition::SefProizvodnje:
+        result = 6;
+    case WorkPosition::SefSmene:
+        result = 7;
+    default:
+        qDebug() << "***************************Greska nema tog enuma!************************";
+        result = 88;
+    }
+    return result;
 }
 
 QString Employee::statemantForCreatingUser() const

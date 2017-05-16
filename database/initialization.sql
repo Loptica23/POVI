@@ -25,6 +25,20 @@ CREATE USER 'sefproizvodnje'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'sefproizvodnje'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefSmene', 'SefSmene', '5555', 'sefsmene', 'ssm', true);
+CREATE USER 'sefsmene'@'%'  IDENTIFIED BY '5555';
+GRANT ALL PRIVILEGES ON *.* TO 'sefsmene'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje1', 'RadnikProizvodnje1', '0000', 'radnikproizvodnje1', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje2', 'RadnikProizvodnje2', '0000', 'radnikproizvodnje2', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje3', 'RadnikProizvodnje3', '0000', 'radnikproizvodnje3', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje4', 'RadnikProizvodnje4', '0000', 'radnikproizvodnje4', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje5', 'RadnikProizvodnje5', '0000', 'radnikproizvodnje5', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje6', 'RadnikProizvodnje6', '0000', 'radnikproizvodnje6', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje7', 'RadnikProizvodnje7', '0000', 'radnikproizvodnje7', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje8', 'RadnikProizvodnje8', '0000', 'radnikproizvodnje8', 'pro', true);
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje9', 'RadnikProizvodnje9', '0000', 'radnikproizvodnje9', 'pro', true);
 
 insert into klijent (Ime) values ('Znam d.o.o');
 
@@ -53,7 +67,6 @@ insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Stampa', False);				#
 insert into TipoviZadatka (Naziv, Faktura) values ('Stampa', True);						#19
 insert into TipoviZadatka (Naziv, Faktura) values ('Transfer', False);					#20
 insert into TipoviZadatka (Naziv, Faktura) values ('Blindruk', False);					#21
-#insert into TipoviZadatka (Naziv, Faktura) values ('Laser', False);					#22
 
 #1
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Dizajn Lastis', 1, True);
@@ -99,7 +112,10 @@ insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Ru
 #14
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Lepljenje', 14, True);
 #15
-insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Lepljenje', 15, True);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Laser 1', 15, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Laser 2', 15, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Laser 3', 15, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Laser 4', 15, False);
 #16
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Endlanje', 16, True);
 #17
