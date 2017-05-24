@@ -50,8 +50,8 @@ public:
 
     static WorkPosition getWorkPositionFromQstring(const QString & workPosition);
     static WorkPosition getWorkPositionFromUint(unsigned workPosition);
-    static QString getQstringFromWorkPosition(const WorkPosition & workPosition);
-    static unsigned getUnsignedFromWorkPosition(const WorkPosition & workPosition);
+    static QString getQstringFromWorkPosition(const WorkPosition workPosition);
+    static unsigned getUnsignedFromWorkPosition(const WorkPosition workPosition);
 
 private:
     unsigned m_id;

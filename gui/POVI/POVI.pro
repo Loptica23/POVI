@@ -47,7 +47,9 @@ SOURCES +=  main.cpp\
     commandsviewisinstate.cpp \
     commanddialogchieofproduction.cpp \
     changepassworddialog.cpp \
-    shiftmanagerview.cpp
+    shiftmanagerview.cpp \
+    tasksinproductionview.cpp \
+    workerview.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -71,7 +73,9 @@ HEADERS +=  mainwindow.h\
     commandsviewisinstate.h \
     commanddialogchieofproduction.h \
     changepassworddialog.h \
-    shiftmanagerview.h
+    shiftmanagerview.h \
+    tasksinproductionview.h \
+    workerview.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -91,7 +95,9 @@ FORMS   +=  mainwindow.ui \
     machinedialog.ui \
     commandsviewisinstate.ui \
     changepassworddialog.ui \
-    shiftmanagerview.ui
+    shiftmanagerview.ui \
+    tasksinproductionview.ui \
+    workerview.ui
 
 RESOURCES += resource.qrc
 

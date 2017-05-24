@@ -248,58 +248,74 @@ Employee::WorkPosition Employee::getWorkPositionFromUint(unsigned workPosition)
     return result;
 }
 
-QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition &workPosition)
+QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition workPosition)
 {
     QString result = "";
     switch(workPosition)
     {
     case WorkPosition::Administrator:
         result = "adm";
+        break;
     case WorkPosition::Komercijalista:
         result = "kom";
+        break;
     case WorkPosition::Magacioner:
         result = "mag";
+        break;
     case WorkPosition::Proizvodnja:
         result = "pro";
+        break;
     case WorkPosition::Pakovanje:
         result = "pak";
+        break;
     case WorkPosition::Dizajner:
         result = "diz";
+        break;
     case WorkPosition::SefProizvodnje:
         result = "spr";
+        break;
     case WorkPosition::SefSmene:
         result = "ssm";
+        break;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";
-        result = "";
+        break;
     }
     return result;
 }
 
-unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition & workPosition)
+unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition workPosition)
 {
     unsigned result = 88;
     switch(workPosition)
     {
     case WorkPosition::Administrator:
         result = 0;
+        break;
     case WorkPosition::Komercijalista:
         result = 1;
+        break;
     case WorkPosition::Proizvodnja:
         result = 2;
+        break;
     case WorkPosition::Dizajner:
         result = 3;
+        break;
     case WorkPosition::Pakovanje:
         result = 4;
+        break;
     case WorkPosition::Magacioner:
         result = 5;
+        break;
     case WorkPosition::SefProizvodnje:
         result = 6;
+        break;
     case WorkPosition::SefSmene:
         result = 7;
+        break;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";
-        result = 88;
+        break;
     }
     return result;
 }
