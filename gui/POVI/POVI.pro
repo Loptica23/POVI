@@ -49,7 +49,8 @@ SOURCES +=  main.cpp\
     changepassworddialog.cpp \
     shiftmanagerview.cpp \
     tasksinproductionview.cpp \
-    workerview.cpp
+    workerview.cpp \
+    commanddialogworker.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -75,7 +76,8 @@ HEADERS +=  mainwindow.h\
     changepassworddialog.h \
     shiftmanagerview.h \
     tasksinproductionview.h \
-    workerview.h
+    workerview.h \
+    commanddialogworker.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \

@@ -23,10 +23,11 @@ private slots:
     void on_back_clicked();
     void on_pushButton_clicked();
     void on_refresh_clicked();
+    void on_task_clicked();
 
 private:
     void refresh();
-    void clearTabel();
+    void clearTable();
     void insertTaskButton(unsigned id, unsigned column);
 
 private:
@@ -34,6 +35,7 @@ private:
     DBConnectionPtr m_db;
     EmployeePtr m_employee;
     std::vector<QPushButton*> m_taskButtons;
+    std::vector<unsigned> m_tasksIDs;
     TaskTypesPtr m_taskTypes;
 
 protected:

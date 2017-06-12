@@ -50,6 +50,7 @@ public:
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
     virtual CommandPtrVtr getCommands(Command::State & state) = 0;
     virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;
+    virtual bool isThereCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;

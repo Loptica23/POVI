@@ -1,6 +1,7 @@
 #include "workerview.h"
 #include "ui_workerview.h"
 #include "mainwindow.h"
+#include "commandsviewwaitingontask.h"
 
 #define TASK_BUTTON_FONT_SIZE 25
 
@@ -23,20 +24,25 @@ WorkerView::~WorkerView()
 
 void WorkerView::refresh()
 {
-    clearTabel();
+    clearTable();
     auto i = 0;
-    for(auto iter = TaskTypeIDs.begin(); iter != TaskTypeIDs.end(); ++iter, ++i)
+    for(auto iter = TaskTypeIDs.begin(); iter != TaskTypeIDs.end(); ++iter)
     {
         unsigned id = *iter;
-        ui->tableWidget->insertRow(i);
-        insertTaskButton(id, i);
+        if (m_db->isThereCommandWhichWaitingOnTask(id))
+        {
+            ui->tableWidget->insertRow(i);
+            insertTaskButton(id, i);
+            ++i;
+        }
     }
     ui->tableWidget->resizeRowsToContents();
 }
 
-void WorkerView::clearTabel()
+void WorkerView::clearTable()
 {
     m_taskButtons.clear();
+    m_tasksIDs.clear();
     ui->tableWidget->setRowCount(0);
 }
 
@@ -51,7 +57,8 @@ void WorkerView::insertTaskButton(unsigned id, unsigned column)
     taskButton->setFont(font);
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(column, 0), taskButton);
     m_taskButtons.push_back(taskButton);
-    //connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
+    m_tasksIDs.push_back(id);
+    connect(taskButton, SIGNAL(clicked()), this, SLOT(on_task_clicked()));
 }
 
 void WorkerView::paintEvent(QPaintEvent *event)
@@ -74,4 +81,18 @@ void WorkerView::on_pushButton_clicked()
 void WorkerView::on_refresh_clicked()
 {
     refresh();
+}
+
+void WorkerView::on_task_clicked()
+{
+    //refaktor -- za sada neka ostane ovako.. ali nije dobro, dva puta je pozvano find, pa bi bilo dobro da se kod ne ponavlja
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_taskButtons.begin(), m_taskButtons.end(), buttonSender) != m_taskButtons.end())
+    {
+        auto index = std::find(m_taskButtons.begin(), m_taskButtons.end(), buttonSender) - m_taskButtons.begin();
+        qDebug() << index;
+        auto mainWindow = MainWindow::getMainWindow();
+        std::shared_ptr<QWidget> workerView(new CommandsViewWaitingOnTask(this, m_db, m_tasksIDs.at(index)));
+        mainWindow->forward(workerView);
+    }
 }

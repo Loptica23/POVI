@@ -415,6 +415,31 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId
     return commands;
 }
 
+bool DBConnectionImpl::isThereCommandWhichWaitingOnTask(unsigned taskTypeId)
+{
+    QSqlQuery queryGetTasks;
+    QString stm("select Nalog_idNalog from zadatak where TipoviZadatka_idTipoviZadatka = ");
+    stm += QString::number(taskTypeId);
+    stm += " and Stanje = 'cek';";
+    qDebug() << stm;
+    queryGetTasks.prepare(stm);
+    if (!queryGetTasks.exec())
+    {
+        qDebug() << "neuspesno!";
+        m_lastError = queryGetTasks.lastError().text();
+        return false;
+    }
+
+    if (queryGetTasks.next())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool DBConnectionImpl::createNewCommand(CommandPtr command)
 {
     QSqlQuery query;
