@@ -87,7 +87,17 @@
           </item>
           <item>
            <property name="text">
-            <string>Dizajner</string>
+            <string>Dizajner Lastis</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Dizajner Tkanje</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Dizajner Stampa</string>
            </property>
           </item>
           <item>

@@ -1,6 +1,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include "commanddialogworker.h"
+#include "mainwindow.h"
 #include "ui_commanddialog.h"
 
 CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit):
@@ -22,6 +23,7 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
 
     ui->commandNumber->setEnabled(false);
     ui->comercialistDescription->setEnabled(false);
+    ui->designer->setEnabled(false);
     //nalog je preuzet
     if (m_edit)
     {
@@ -35,10 +37,10 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
 
 void CommandDialogWorker::acceptButtonClicked()
 {
-
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
 }
 
 void CommandDialogWorker::rejectButtonClicked()
 {
-
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
 }

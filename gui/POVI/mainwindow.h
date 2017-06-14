@@ -30,6 +30,10 @@ public:
 
     static EmployeePtr getLogedUser();
     static void setLogedUser(EmployeePtr employee);
+
+    static EmployeePtr getWorker();
+    static void setWorker(EmployeePtr employee);
+
 private slots:
     void on_actionPromena_lozinke_triggered();
 
@@ -43,4 +47,5 @@ private:
 
     static MainWindow* mainWindow;
     static EmployeePtr loggedUser;
+    static EmployeePtr worker;
 };

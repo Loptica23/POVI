@@ -21,7 +21,6 @@ protected:
 
 private slots:
     void on_back_clicked();
-    void on_pushButton_clicked();
     void on_refresh_clicked();
     void on_task_clicked();
 

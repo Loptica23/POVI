@@ -14,6 +14,7 @@
 
 MainWindow* MainWindow::mainWindow;
 EmployeePtr MainWindow::loggedUser;
+EmployeePtr MainWindow::worker;
 
 MainWindow* MainWindow::getMainWindow()
 {
@@ -28,6 +29,17 @@ EmployeePtr MainWindow::getLogedUser()
 void MainWindow::setLogedUser(EmployeePtr employee)
 {
     loggedUser = employee;
+    worker = employee;
+}
+
+EmployeePtr MainWindow::getWorker()
+{
+    return worker;
+}
+
+void MainWindow::setWorker(EmployeePtr employee)
+{
+    worker = employee;
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -60,9 +72,19 @@ void MainWindow::setUpGuiByWorkPosition()
         qDebug() << "Administrator";
         setView(new EmpoyersView(this, m_dbConnection));
         break;
-    case Employee::WorkPosition::Dizajner:
+    case Employee::WorkPosition::DizajnerLastis:
         qDebug() << "Dizajner";
-        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn");
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn Lastis");
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
+        break;
+    case Employee::WorkPosition::DizajnerTkanje:
+        qDebug() << "Dizajner";
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn Tkanje");
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
+        break;
+    case Employee::WorkPosition::DizajnerStampa:
+        qDebug() << "Dizajner";
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Dizajn Stampa");
         setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
         break;
     case Employee::WorkPosition::Magacioner:
@@ -111,7 +133,6 @@ void MainWindow::back()
 
 void MainWindow::on_actionPromena_lozinke_triggered()
 {
-    //ovde moras da otvoris novi prozor za promenu passworda!
     auto changePassword = new ChangePasswordDialog(this, m_dbConnection);
     changePassword->show();
 }

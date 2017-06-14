@@ -10,9 +10,19 @@ CREATE USER 'komercijalista'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'komercijalista'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner', 'Dizajner', '5555', 'dizajner', 'diz', true);
-CREATE USER 'dizajner'@'%'  IDENTIFIED BY '5555';
-GRANT ALL PRIVILEGES ON *.* TO 'dizajner'@'%' WITH GRANT OPTION;
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Lastis', 'Dizajner Lastis', '5555', 'dizajnerlastis', 'dil', true);
+CREATE USER 'dizajnerlastis'@'%'  IDENTIFIED BY '5555';
+GRANT ALL PRIVILEGES ON *.* TO 'dizajnerlastis'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Tkanje', 'Dizajner Tkanje', '5555', 'dizajnertkanje', 'dit', true);
+CREATE USER 'dizajnertkanje'@'%'  IDENTIFIED BY '5555';
+GRANT ALL PRIVILEGES ON *.* TO 'dizajnertkanje'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Stampa', 'Dizajner Stampa', '5555', 'dizajnerstampa', 'dis', true);
+CREATE USER 'dizajnerstampa'@'%'  IDENTIFIED BY '5555';
+GRANT ALL PRIVILEGES ON *.* TO 'dizajnerstampa'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Magacioner', 'Magacioner', '5555', 'magacioner', 'mag', true);

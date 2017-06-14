@@ -55,7 +55,7 @@ void CommandDialogDesigner::acceptButtonClicked()
 
 void CommandDialogDesigner::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getLogedUser()));
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
 }
 
 void CommandDialogDesigner::designerDescriptionChanged()

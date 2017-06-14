@@ -11,7 +11,16 @@ typedef std::shared_ptr<EmployeeVtr> EmployeePtrVtr;
 class DBCONNECTIONSHARED_EXPORT Employee
 {
 public:
-    enum class WorkPosition{Administrator, Komercijalista, Dizajner, Magacioner, Proizvodnja, Pakovanje, SefProizvodnje, SefSmene};
+    enum class WorkPosition{Administrator,
+                            Komercijalista,
+                            DizajnerLastis,
+                            DizajnerTkanje,
+                            DizajnerStampa,
+                            Magacioner,
+                            Proizvodnja,
+                            Pakovanje,
+                            SefProizvodnje,
+                            SefSmene};
     Employee(unsigned id);
     virtual ~Employee();
 

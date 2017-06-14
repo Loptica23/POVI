@@ -178,9 +178,17 @@ Employee::WorkPosition Employee::getWorkPositionFromQstring(const QString & work
     {
         result = WorkPosition::Administrator;
     }
-    else if(workPosition == "diz")
+    else if(workPosition == "dil")
     {
-        result = WorkPosition::Dizajner;
+        result = WorkPosition::DizajnerLastis;
+    }
+    else if(workPosition == "dit")
+    {
+        result = WorkPosition::DizajnerTkanje;
+    }
+    else if(workPosition == "dis")
+    {
+        result = WorkPosition::DizajnerStampa;
     }
     else if(workPosition == "mag")
     {
@@ -227,18 +235,24 @@ Employee::WorkPosition Employee::getWorkPositionFromUint(unsigned workPosition)
         result = WorkPosition::Proizvodnja;
         break;
     case 3:
-        result = WorkPosition::Dizajner;
+        result = WorkPosition::DizajnerLastis;
         break;
     case 4:
-        result = WorkPosition::Pakovanje;
+        result = WorkPosition::DizajnerTkanje;
         break;
     case 5:
-        result = WorkPosition::Magacioner;
+        result = WorkPosition::DizajnerStampa;
         break;
     case 6:
-        result = WorkPosition::SefProizvodnje;
+        result = WorkPosition::Pakovanje;
         break;
     case 7:
+        result = WorkPosition::Magacioner;
+        break;
+    case 8:
+        result = WorkPosition::SefProizvodnje;
+        break;
+    case 9:
         result = WorkPosition::SefSmene;
         break;
     default:
@@ -268,8 +282,14 @@ QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition workPo
     case WorkPosition::Pakovanje:
         result = "pak";
         break;
-    case WorkPosition::Dizajner:
-        result = "diz";
+    case WorkPosition::DizajnerLastis:
+        result = "dil";
+        break;
+    case WorkPosition::DizajnerTkanje:
+        result = "dit";
+        break;
+    case WorkPosition::DizajnerStampa:
+        result = "dis";
         break;
     case WorkPosition::SefProizvodnje:
         result = "spr";
@@ -298,20 +318,26 @@ unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition work
     case WorkPosition::Proizvodnja:
         result = 2;
         break;
-    case WorkPosition::Dizajner:
+    case WorkPosition::DizajnerLastis:
         result = 3;
         break;
-    case WorkPosition::Pakovanje:
+    case WorkPosition::DizajnerTkanje:
         result = 4;
         break;
-    case WorkPosition::Magacioner:
+    case WorkPosition::DizajnerStampa:
         result = 5;
         break;
-    case WorkPosition::SefProizvodnje:
+    case WorkPosition::Pakovanje:
         result = 6;
         break;
-    case WorkPosition::SefSmene:
+    case WorkPosition::Magacioner:
         result = 7;
+        break;
+    case WorkPosition::SefProizvodnje:
+        result = 8;
+        break;
+    case WorkPosition::SefSmene:
+        result = 9;
         break;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";

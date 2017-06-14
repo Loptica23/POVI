@@ -25,6 +25,7 @@ private slots:
 private:
     void createUser();
     void updateUser();
+    void initializeWorkPosition();
 
     Ui::DialogForCreatingNewEmployee *ui;
     std::shared_ptr<DBConnection> m_db;

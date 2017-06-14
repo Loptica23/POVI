@@ -2,6 +2,7 @@
 #include "ui_workerview.h"
 #include "mainwindow.h"
 #include "commandsviewwaitingontask.h"
+#include "mainwindow.h"
 
 #define TASK_BUTTON_FONT_SIZE 25
 
@@ -15,6 +16,7 @@ WorkerView::WorkerView(QWidget *parent, DBConnectionPtr db, EmployeePtr employee
 {
     ui->setupUi(this);
     m_taskTypes = m_db->getTaskTypes();
+    MainWindow::setWorker(employee);
 }
 
 WorkerView::~WorkerView()
@@ -67,12 +69,6 @@ void WorkerView::paintEvent(QPaintEvent *event)
 }
 
 void WorkerView::on_back_clicked()
-{
-    auto mainWindow = MainWindow::getMainWindow();
-    mainWindow->back();
-}
-
-void WorkerView::on_pushButton_clicked()
 {
     auto mainWindow = MainWindow::getMainWindow();
     mainWindow->back();

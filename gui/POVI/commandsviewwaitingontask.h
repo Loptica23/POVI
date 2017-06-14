@@ -20,6 +20,8 @@ private slots:
     void details();
     void takeCommand();
 
+    void on_Back_clicked();
+
 private:
     void fillTable();
     void clearButtons();

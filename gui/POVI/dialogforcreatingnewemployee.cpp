@@ -18,9 +18,13 @@ DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBCo
     ui->UserName->setText(m_employee->getUserName());
     ui->Position->setCurrentIndex(m_employee->getWorkPositionQInt());
     if (m_employee->getActivation())
+    {
         ui->PristupSistemu->setCurrentIndex(0);
+    }
     else
+    {
         ui->PristupSistemu->setCurrentIndex(1);
+    }
 
     employee->resetChangeTracking();
 }

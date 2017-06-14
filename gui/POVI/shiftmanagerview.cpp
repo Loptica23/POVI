@@ -4,6 +4,7 @@
 #include "employee.h"
 #include "mainwindow.h"
 #include "workerview.h"
+#include "commanddialogworker.h"
 
 #define NUMBER_OF_COLUMN 4
 
@@ -77,10 +78,18 @@ void ShiftManagerView::buttonClicked()
     {
         auto index = std::find(m_buttons.begin(), m_buttons.end(), buttonSender) - m_buttons.begin();
         qDebug() << index;
-        //imas indeks zaposlenog, znaci imas zaposlenog..
-        //postavis ga da je on logovan i u zavisnosti od toga da li ima dodeljen zadatak prikazuje nalog ili listu zadataka koje treba izvrsiti...
-        auto mainWindow = MainWindow::getMainWindow();
-        std::shared_ptr<QWidget> workerView(new WorkerView(this, m_db, m_employees->at(index)));
-        mainWindow->forward(workerView);
+        auto employee = m_employees->at(index);
+        auto command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
+        if (command != nullptr)
+        {
+            auto commanddialog = new CommandDialogWorker(this, m_db, command, true);
+            commanddialog->show();
+        }
+        else
+        {
+            auto mainWindow = MainWindow::getMainWindow();
+            std::shared_ptr<QWidget> workerView(new WorkerView(this, m_db, employee));
+            mainWindow->forward(workerView);
+        }
     }
 }

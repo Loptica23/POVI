@@ -101,27 +101,33 @@ void CommandsViewWaitingOnTask::takeCommand()
     {
         auto index = std::find(m_takeCommandButtons.begin(), m_takeCommandButtons.end(), buttonSender) - m_takeCommandButtons.begin();
         qDebug() << index;
-        m_db->startWorkingOnWaitingTask(m_commands->at(index), MainWindow::getLogedUser());
+        m_db->startWorkingOnWaitingTask(m_commands->at(index), MainWindow::getWorker());
         OpenCommandDialogByWorkPosition(m_commands->at(index), true);
     }
 }
 
 void CommandsViewWaitingOnTask::openDialogIfThereIsTaskOnWhichUserWorkingOn()
 {
-    EmployeePtr employee = MainWindow::getLogedUser();
-    CommandPtr command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
-    if (command)
+    EmployeePtr employee = MainWindow::getWorker();
+    //ako nije radnik onda otvaras ovo, u slucaju radnika se trenutni zadatak otvara ranije
+    if (employee->getWorkPosition() != Employee::WorkPosition::Proizvodnja)
     {
-        OpenCommandDialogByWorkPosition(command, true);
+        CommandPtr command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
+        if (command)
+        {
+            OpenCommandDialogByWorkPosition(command, true);
+        }
     }
 }
 
 void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr command, bool edit)
 {
     QWidget* commanddialog;
-    switch(MainWindow::getLogedUser()->getWorkPosition())
+    switch(MainWindow::getWorker()->getWorkPosition())
     {
-    case Employee::WorkPosition::Dizajner:
+    case Employee::WorkPosition::DizajnerLastis:
+    case Employee::WorkPosition::DizajnerTkanje:
+    case Employee::WorkPosition::DizajnerStampa:
         commanddialog = new CommandDialogDesigner(this, m_db, command, edit);
         commanddialog->show();
         break;
@@ -129,11 +135,17 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
         commanddialog = new CommandDialogStoreKeeper(this, m_db, command, edit);
         commanddialog->show();
         break;
-    case Employee::WorkPosition::SefSmene:
+    case Employee::WorkPosition::Proizvodnja:
         commanddialog = new CommandDialogWorker(this, m_db, command, edit);
         commanddialog->show();
         break;
     default:
         break;
     }
+}
+
+void CommandsViewWaitingOnTask::on_Back_clicked()
+{
+    auto mainWindow = MainWindow::getMainWindow();
+    mainWindow->back();
 }

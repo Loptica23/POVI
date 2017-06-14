@@ -252,7 +252,7 @@ void CommandDialogKomercialist::updateCommand()
         TaskPtr task = *iter;
         if (task->isCreated())
         {
-            ifFalseShowDbError(m_db->createNewTask(task, MainWindow::getLogedUser()->getId()));
+            ifFalseShowDbError(m_db->createNewTask(task, MainWindow::getWorker()->getId()));
         }
         else if (task->isModified())
         {

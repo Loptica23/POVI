@@ -183,6 +183,30 @@
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="comboBox">
+           <item>
+            <property name="text">
+             <string>Lastis</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Tkanje</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Stampa</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Manuelno biranje zadataka</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QTableWidget" name="taskTable">
            <column>
             <property name="text">

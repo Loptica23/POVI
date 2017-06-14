@@ -157,7 +157,7 @@ void CommandDialog::createCommand()
         for (auto i = m_tasks->begin(); i != m_tasks->end(); ++i, ++serialNumber)
         {
             (*i)->setCommand(m_command);
-            if (!m_db->createNewTask(*i, MainWindow::getLogedUser()->getId()))
+            if (!m_db->createNewTask(*i, MainWindow::getWorker()->getId()))
             {
                 QString error = m_db->getLastError();
                 QMessageBox messageBox;
@@ -170,7 +170,7 @@ void CommandDialog::createCommand()
 void CommandDialog::updateCommand()
 {
     //ova funkcija bi trebalo da je overajdovana! i da je ovaj kod ispod mrtav kod
-    switch(MainWindow::getLogedUser()->getWorkPosition())
+    switch(MainWindow::getWorker()->getWorkPosition())
     {
     case Employee::WorkPosition::Administrator:
         if (!ui->commandNumber->text().isEmpty())
