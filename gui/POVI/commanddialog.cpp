@@ -23,6 +23,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_storeKeeperDescriptionEmpty(true)
 {
     ui->setupUi(this);
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -41,6 +42,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_storeKeeperDescriptionEmpty(true)
 {
     ui->setupUi(this);
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
     initializeTasks();
 
     ui->commandNumber->setText(QString::number(command->getCommandNumber()));
@@ -58,6 +60,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->designerDescription->setEnabled(false);
         ui->storekeeperDescription->setEnabled(false);
         ui->Priority->setEnabled(false);
+        ui->comboBox->setVisible(false);
         //ostali su ti taskovi
     }
 }
@@ -98,12 +101,18 @@ void CommandDialog::on_buttonBox_rejected()
     rejectButtonClicked();
 }
 
+void CommandDialog::templateChanged(int i)
+{
+    taskTemplateChanged(i);
+}
+
 void CommandDialog::acceptButtonClicked() {}
 void CommandDialog::rejectButtonClicked() {}
 void CommandDialog::serialNumberChanged() {}
 void CommandDialog::comercialistDescriptionChanged() {}
 void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
+void CommandDialog::taskTemplateChanged(int i) {}
 
 void CommandDialog::changeTaskType(int index)
 {

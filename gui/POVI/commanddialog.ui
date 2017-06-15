@@ -186,6 +186,11 @@
           <widget class="QComboBox" name="comboBox">
            <item>
             <property name="text">
+             <string>Manuelno biranje zadataka</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>Lastis</string>
             </property>
            </item>
@@ -197,11 +202,6 @@
            <item>
             <property name="text">
              <string>Stampa</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Manuelno biranje zadataka</string>
             </property>
            </item>
           </widget>

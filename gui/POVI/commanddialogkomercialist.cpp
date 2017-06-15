@@ -7,10 +7,15 @@
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 
+const std::vector<int> CommandDialogKomercialist::LastisTemplate ({1,2,3,4,5,6,7});
+const std::vector<int> CommandDialogKomercialist::TkanjeTemplate ({8,9,10,11,12,5,13,14,15,17,6,7});
+const std::vector<int> CommandDialogKomercialist::StampaTemplate ({18,19,20,13,5,21,15,16,17,6,7});
+
 CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
     CommandDialog(parent, db, order)
 {
     m_taskTypes = m_db->getTaskTypes();
+    m_template = TaskTemplate::Manual;
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
@@ -20,6 +25,7 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
     CommandDialog(parent, db, command, edit)
 {
     m_taskTypes = m_db->getTaskTypes();
+    m_template = TaskTemplate::Manual;
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
@@ -89,6 +95,32 @@ void CommandDialogKomercialist::fillTaskTable()
     ui->taskTable->resizeColumnsToContents();
 }
 
+void CommandDialogKomercialist::taskTemplateChanged(int i)
+{
+    switch(i)
+    {
+    case 0:
+        m_template = TaskTemplate::Manual;
+        break;
+    case 1:
+        m_template = TaskTemplate::Lastis;
+        m_tasks->clear();
+        break;
+    case 2:
+        m_template = TaskTemplate::Tkanje;
+        m_tasks->clear();
+        break;
+    case 3:
+        m_template = TaskTemplate::Stampa;
+        m_tasks->clear();
+        break;
+    default:
+        qDebug() << "GRESKA: NE POSTOJI OVAKAV TASKTEMPLATE!";
+    }
+    setTaskTemplateVector();
+    fillTaskTable();
+}
+
 void CommandDialogKomercialist::addNewTask(int index)
 {
     ++index;
@@ -147,6 +179,35 @@ void CommandDialogKomercialist::deleteTask()
     }
 
     fillTaskTable();
+}
+
+void CommandDialogKomercialist::setTaskTemplateVector()
+{
+    switch (m_template)
+    {
+    case TaskTemplate::Manual:
+        break;
+    case TaskTemplate::Lastis:
+        initializeTasksWithTaskIDs(LastisTemplate);
+        break;
+    case TaskTemplate::Tkanje:
+        initializeTasksWithTaskIDs(TkanjeTemplate);
+        break;
+    case TaskTemplate::Stampa:
+        initializeTasksWithTaskIDs(StampaTemplate);
+        break;
+    }
+}
+
+void CommandDialogKomercialist::initializeTasksWithTaskIDs(std::vector<int> vector)
+{
+    for (auto iter = vector.begin(); iter != vector.end(); ++iter)
+    {
+        int id = *iter;
+        TaskPtr task(new Task(m_command, id));
+        task->setSerialNumber((unsigned)m_tasks->size());
+        m_tasks->push_back(task);
+    }
 }
 
 void CommandDialogKomercialist::clearButtons()

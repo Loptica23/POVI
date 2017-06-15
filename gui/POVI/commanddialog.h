@@ -26,6 +26,8 @@ protected slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 
+    void templateChanged(int i);
+
     void changeTaskType(int index);
     virtual void addNewTask(int index);
     virtual void up();
@@ -46,6 +48,7 @@ protected:
     virtual void comercialistDescriptionChanged();
     virtual void designerDescriptionChanged();
     virtual void storeKeeperDescriptionChanged();
+    virtual void taskTemplateChanged(int i);
 
     void ifFalseShowDbError(bool b);
 
