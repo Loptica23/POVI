@@ -52,6 +52,22 @@ TaskTypePtrVtr TaskTypes::getTypes() const
     return m_types;
 }
 
+TaskTypePtr TaskTypes::getTaskTypeById(unsigned type) const
+{
+    TaskTypePtr result;
+
+    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
+            {
+                return taskType->getId() == type;
+            });
+
+    if (it != m_types->end())
+    {
+        result = *it;
+    }
+    return result;
+}
+
 unsigned TaskTypes::getTypeIdByString(QString type) const
 {
     unsigned result = 0;

@@ -36,6 +36,7 @@ public:
     virtual ~TaskTypes();
 
     TaskTypePtrVtr getTypes() const;
+    TaskTypePtr getTaskTypeById(unsigned type) const;
     unsigned getTypeIdByString(QString type) const;
     QString getStringById(unsigned type) const;
 
