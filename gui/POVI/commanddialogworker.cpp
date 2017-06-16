@@ -58,10 +58,13 @@ void CommandDialogWorker::rejectButtonClicked()
 void CommandDialogWorker::removeInvoiceWidgetIfTaskDontNeedIt()
 {
     m_haveItInvoice = true;
-    TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(m_currentTask->getTaskTypeId());
-    if (!taskType->isVirtual())
+    if (m_currentTask)
     {
-        removeWidget(ui->invoice);
-        m_haveItInvoice = false;
+        TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(m_currentTask->getTaskTypeId());
+        if (!taskType->isVirtual())
+        {
+            removeWidget(ui->invoice);
+            m_haveItInvoice = false;
+        }
     }
 }

@@ -20,7 +20,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_serialNumberEmpty(true),
     m_comercialistDescriptionEmpty(true),
     m_designerDescriptionEmpty(true),
-    m_storeKeeperDescriptionEmpty(true)
+    m_storeKeeperDescriptionEmpty(true),
+    m_currentTask(nullptr)
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
@@ -39,7 +40,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_serialNumberEmpty(true),
     m_comercialistDescriptionEmpty(true),
     m_designerDescriptionEmpty(true),
-    m_storeKeeperDescriptionEmpty(true)
+    m_storeKeeperDescriptionEmpty(true),
+    m_currentTask(nullptr)
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
@@ -59,6 +61,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->comercialistDescription->setEnabled(false);
         ui->designerDescription->setEnabled(false);
         ui->storekeeperDescription->setEnabled(false);
+        ui->invoiceDescription->setEnabled(false);
         ui->Priority->setEnabled(false);
         ui->comboBox->setVisible(false);
         //ostali su ti taskovi
