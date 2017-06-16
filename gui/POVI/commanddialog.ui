@@ -183,7 +183,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QTextEdit" name="textEdit"/>
+          <widget class="QTextEdit" name="invoiceDescription"/>
          </item>
         </layout>
        </widget>

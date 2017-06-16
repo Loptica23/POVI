@@ -72,8 +72,15 @@ CommandDialog::~CommandDialog()
 
 void CommandDialog::initializeTasks()
 {
-    //inicijalizujes taskove uz pomoc naloga
     m_tasks = m_db->getTasks(m_command);
+    for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
+    {
+        TaskPtr task = *iter;
+        if(task->getState() == Task::State::InProgress)
+        {
+            m_currentTask = task;
+        }
+    }
 }
 
 void CommandDialog::removeWidget(QWidget * widget)

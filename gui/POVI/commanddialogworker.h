@@ -15,4 +15,6 @@ protected:
     virtual void rejectButtonClicked();
 
     void removeInvoiceWidgetIfTaskDontNeedIt();
+
+    bool m_haveItInvoice;
 };

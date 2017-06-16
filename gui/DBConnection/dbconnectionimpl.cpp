@@ -678,6 +678,61 @@ bool DBConnectionImpl::deleteTask(TaskPtr task)
     return true;
 }
 
+InvoicePtrVtr DBConnectionImpl::getInvoices(TaskPtr task)
+{
+    InvoicePtrVtr invoices(new InvoiceVtr());
+    QSqlQuery query;
+    QString stm("select * from faktura where Zadatak_idZadatak = ");
+    stm += QString::number(task->getId()) + ";";
+    query.prepare(stm);
+    qDebug() << stm;
+    if (query.exec())
+    {
+        invoices = Invoice::createInvoicesFromQueryAndCommand(query, task);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+    }
+    return invoices;
+}
+
+bool DBConnectionImpl::createNewInvoice(InvoicePtr invoice)
+{
+    QSqlQuery query;
+    query.prepare(invoice->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateInvoice(InvoicePtr invoice)
+{
+    QSqlQuery query;
+    query.prepare(invoice->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::deleteInvoice(InvoicePtr invoice)
+{
+    QSqlQuery query;
+    query.prepare(invoice->statementForDeleting());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
 TaskTypesPtr DBConnectionImpl::getTaskTypes()
 {
     TaskTypesPtr tasktypes = nullptr;

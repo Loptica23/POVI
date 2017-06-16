@@ -25,6 +25,7 @@ public:
     virtual ~Task();
 
     //geters
+    unsigned getId() const;
     CommandPtr getCommand() const;
     unsigned getTaskTypeId() const;
     unsigned getWorkerId() const;

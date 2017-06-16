@@ -6,7 +6,8 @@
 #include "tasktypes.h"
 
 CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit):
-    CommandDialog(parent, db, command, edit)
+    CommandDialog(parent, db, command, edit),
+    m_haveItInvoice(false)
 {
     setUpWindowByWorkPosition();
 }
@@ -35,11 +36,18 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
     }
 
     this->repaint();
+
+    qDebug()<< "konstruktor je zavrsio";
 }
 
 void CommandDialogWorker::acceptButtonClicked()
 {
     ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    if (m_haveItInvoice)
+    {
+        InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
+        ifFalseShowDbError(m_db->createNewInvoice(invoice));
+    }
 }
 
 void CommandDialogWorker::rejectButtonClicked()
@@ -49,17 +57,11 @@ void CommandDialogWorker::rejectButtonClicked()
 
 void CommandDialogWorker::removeInvoiceWidgetIfTaskDontNeedIt()
 {
-    for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
+    m_haveItInvoice = true;
+    TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(m_currentTask->getTaskTypeId());
+    if (!taskType->isVirtual())
     {
-        TaskPtr task = *iter;
-        if(task->getState() == Task::State::InProgress)
-        {
-            TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(task->getTaskTypeId());
-            if (!taskType->isVirtual())
-            {
-                removeWidget(ui->storekeeper);
-            }
-            break;
-        }
+        removeWidget(ui->invoice);
+        m_haveItInvoice = false;
     }
 }

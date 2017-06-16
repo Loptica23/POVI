@@ -59,6 +59,7 @@ protected:
     OrderPtr m_order;
     CommandPtr m_command;
     TaskPtrVtr m_tasks;
+    TaskPtr m_currentTask;
     TaskPtrVtr m_deletedTasks;
     std::shared_ptr<DBConnection> m_db;
 

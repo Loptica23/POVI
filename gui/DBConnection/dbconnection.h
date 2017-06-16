@@ -11,6 +11,7 @@
 #include "task.h"
 #include "machine.h"
 #include "employee.h"
+#include "invoice.h"
 
 class QString;
 class DBConnection;
@@ -63,6 +64,11 @@ public:
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) = 0;
     virtual bool updateTask(TaskPtr task) = 0;
     virtual bool deleteTask(TaskPtr task) = 0;
+
+    virtual InvoicePtrVtr getInvoices(TaskPtr task) = 0;
+    virtual bool createNewInvoice(InvoicePtr invoice) = 0;
+    virtual bool updateInvoice(InvoicePtr invoice) = 0;
+    virtual bool deleteInvoice(InvoicePtr invoice) = 0;
 
     virtual TaskTypesPtr getTaskTypes() = 0;
 

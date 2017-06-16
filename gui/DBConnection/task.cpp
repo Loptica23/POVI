@@ -40,6 +40,11 @@ Task::~Task()
 }
 
 //geters
+unsigned Task::getId() const
+{
+    return m_id;
+}
+
 CommandPtr Task::getCommand() const
 {
     CommandPtr command;
