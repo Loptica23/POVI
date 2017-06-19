@@ -123,6 +123,7 @@ void CommandsViewWaitingOnTask::openDialogIfThereIsTaskOnWhichUserWorkingOn()
 void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr command, bool edit)
 {
     QWidget* commanddialog;
+    auto mainWindow = MainWindow::getMainWindow();
     switch(MainWindow::getWorker()->getWorkPosition())
     {
     case Employee::WorkPosition::DizajnerLastis:

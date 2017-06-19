@@ -22,6 +22,7 @@ public:
 
     void forward(std::shared_ptr<QWidget> widget);
     void back();
+    void backToDefaultScreen();
 
     void setUpGuiByWorkPosition();
     void setView(QWidget *view);
@@ -43,7 +44,7 @@ private:
     std::shared_ptr<LoginTab>   m_LoginTab;
     std::shared_ptr<QWidget>    m_defaultScreen;
 
-    std::stack<std::shared_ptr<QWidget>> screenStack;
+    std::stack<std::shared_ptr<QWidget>> m_screenStack;
 
     static MainWindow* mainWindow;
     static EmployeePtr loggedUser;

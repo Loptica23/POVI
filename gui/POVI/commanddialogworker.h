@@ -13,6 +13,7 @@ public:
 protected:
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
+    virtual void backToDefaultScreen();
 
     void removeInvoiceWidgetIfTaskDontNeedIt();
 

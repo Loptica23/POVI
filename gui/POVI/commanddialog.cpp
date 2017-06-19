@@ -66,10 +66,18 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->comboBox->setVisible(false);
         //ostali su ti taskovi
     }
+    else
+    {
+        auto cont = new QPushButton("Nastavi rad na nalogu!");
+        ui->buttonBox->addButton(cont, QDialogButtonBox::DestructiveRole);
+        connect(cont, SIGNAL(clicked(bool)), this, SLOT(continueToWorkOnCommand()));
+    }
+    qDebug() << "false!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 }
 
 CommandDialog::~CommandDialog()
 {
+    qDebug() << "Destrukcija naloga!";
     delete ui;
 }
 
@@ -104,11 +112,14 @@ void CommandDialog::on_buttonBox_accepted()
     {
         updateCommand();
     }
+
+    backToDefaultScreen();
 }
 
 void CommandDialog::on_buttonBox_rejected()
 {
     rejectButtonClicked();
+    backToDefaultScreen();
 }
 
 void CommandDialog::templateChanged(int i)
@@ -123,6 +134,7 @@ void CommandDialog::comercialistDescriptionChanged() {}
 void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {}
+void CommandDialog::backToDefaultScreen() {}
 
 void CommandDialog::changeTaskType(int index)
 {
@@ -255,6 +267,13 @@ void CommandDialog::on_commandNumber_textChanged(const QString &arg1)
         m_serialNumberEmpty = false;
 
     serialNumberChanged();
+}
+
+void CommandDialog::continueToWorkOnCommand()
+{
+    close();
+    auto mainWindow = MainWindow::getMainWindow();
+    mainWindow->backToDefaultScreen();
 }
 
 void CommandDialog::ifFalseShowDbError(bool b)

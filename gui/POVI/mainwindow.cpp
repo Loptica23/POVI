@@ -106,8 +106,8 @@ void MainWindow::setUpGuiByWorkPosition()
 
 void MainWindow::setView(QWidget* view)
 {
-    m_defaultScreen.reset(view); //ovaj kod se duplira treba da ode u funkciju
-    screenStack.push(m_defaultScreen);
+    m_defaultScreen.reset(view);
+    m_screenStack.push(m_defaultScreen);
     ui->ViewLayout->addWidget(m_defaultScreen.get());
     m_LoginTab->setHidden(true);
     m_defaultScreen->setHidden(false);
@@ -118,17 +118,31 @@ void MainWindow::forward(std::shared_ptr<QWidget> widget)
 {
     qDebug() << "forward";
     ui->ViewLayout->addWidget(widget.get());
-    screenStack.top()->setHidden(true);
+    m_screenStack.top()->setHidden(true);
     widget->setHidden(false);
-    screenStack.push(widget);
+    m_screenStack.push(widget);
 }
 
 void MainWindow::back()
 {
     qDebug() << "back";
-    screenStack.top()->setHidden(true);
-    screenStack.pop();
-    screenStack.top()->setHidden(false);
+    if (m_screenStack.size()>1)
+    {
+        m_screenStack.top()->setHidden(true);
+        m_screenStack.pop();
+        m_screenStack.top()->setHidden(false);
+    }
+}
+
+void MainWindow::backToDefaultScreen()
+{
+    qDebug() << "back to default screen";
+    m_screenStack.top()->setHidden(true);
+    while (m_screenStack.size() > 1)
+    {
+        m_screenStack.pop();
+    }
+    m_screenStack.top()->setHidden(false);
 }
 
 void MainWindow::on_actionPromena_lozinke_triggered()

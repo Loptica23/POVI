@@ -14,7 +14,7 @@ CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConn
 
 CommandDialogWorker::~CommandDialogWorker()
 {
-
+    qDebug() << "Destrukcija izvede klase naloga za radnike";
 }
 
 void CommandDialogWorker::setUpWindowByWorkPosition()
@@ -37,6 +37,8 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
 
     this->repaint();
 
+    showMaximized();
+
     qDebug()<< "konstruktor je zavrsio";
 }
 
@@ -53,6 +55,12 @@ void CommandDialogWorker::acceptButtonClicked()
 void CommandDialogWorker::rejectButtonClicked()
 {
     ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
+}
+
+void CommandDialogWorker::backToDefaultScreen()
+{
+    auto mainWindow = MainWindow::getMainWindow();
+    mainWindow->backToDefaultScreen();
 }
 
 void CommandDialogWorker::removeInvoiceWidgetIfTaskDontNeedIt()

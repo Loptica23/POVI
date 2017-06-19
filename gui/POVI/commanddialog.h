@@ -49,6 +49,7 @@ protected:
     virtual void designerDescriptionChanged();
     virtual void storeKeeperDescriptionChanged();
     virtual void taskTemplateChanged(int i);
+    virtual void backToDefaultScreen();
 
     void ifFalseShowDbError(bool b);
 
@@ -77,4 +78,5 @@ private slots:
     void on_designerDescription_textChanged();
     void on_comercialistDescription_textChanged();
     void on_commandNumber_textChanged(const QString &arg1);
+    void continueToWorkOnCommand();
 };
