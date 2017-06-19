@@ -214,6 +214,10 @@ Employee::WorkPosition Employee::getWorkPositionFromQstring(const QString & work
     {
         result = WorkPosition::SefSmene;
     }
+    else if (workPosition == "kfa")
+    {
+        result = WorkPosition::KnjigovodjaFakture;
+    }
     else
     {
         qDebug() << "***************************Greska ne postoji ta radna pozicija!****************************";
@@ -254,6 +258,9 @@ Employee::WorkPosition Employee::getWorkPositionFromUint(unsigned workPosition)
         break;
     case 9:
         result = WorkPosition::SefSmene;
+        break;
+    case 10:
+        result = WorkPosition::KnjigovodjaFakture;
         break;
     default:
         qDebug() << "**************************NE postoji ova opcija**************************";
@@ -297,6 +304,9 @@ QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition workPo
     case WorkPosition::SefSmene:
         result = "ssm";
         break;
+    case WorkPosition::KnjigovodjaFakture:
+        result = "kfa";
+        break;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";
         break;
@@ -338,6 +348,9 @@ unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition work
         break;
     case WorkPosition::SefSmene:
         result = 9;
+        break;
+    case WorkPosition::KnjigovodjaFakture:
+        result = 10;
         break;
     default:
         qDebug() << "***************************Greska nema tog enuma!************************";

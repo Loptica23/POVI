@@ -53,6 +53,7 @@ public:
     virtual bool updateTask(TaskPtr task);
     virtual bool deleteTask(TaskPtr task);
 
+    virtual InvoicePtrVtr getInvoices(CommandPtr command);
     virtual InvoicePtrVtr getInvoices(TaskPtr task);
     virtual bool createNewInvoice(InvoicePtr invoice);
     virtual bool updateInvoice(InvoicePtr invoice);

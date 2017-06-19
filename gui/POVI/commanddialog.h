@@ -50,8 +50,10 @@ protected:
     virtual void storeKeeperDescriptionChanged();
     virtual void taskTemplateChanged(int i);
     virtual void backToDefaultScreen();
+    virtual void showContinueToWorkButtonByWorkPosition();
 
     void ifFalseShowDbError(bool b);
+
 
     Ui::CommandDialog *ui;
 

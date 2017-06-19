@@ -27,10 +27,9 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
     ui->commandNumber->setEnabled(false);
     ui->comercialistDescription->setEnabled(false);
     ui->designer->setEnabled(false);
-    //nalog je preuzet
+
     if (m_edit)
     {
-        //this->showMaximized();
         ui->buttonBox->button(QDialogButtonBox::Ok)->setText("Posalji nalog u zavrseno stanje!");
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setText("Ostavi nalog!");
     }

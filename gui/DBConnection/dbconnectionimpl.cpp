@@ -678,6 +678,12 @@ bool DBConnectionImpl::deleteTask(TaskPtr task)
     return true;
 }
 
+InvoicePtrVtr DBConnectionImpl::getInvoices(CommandPtr command)
+{
+    InvoicePtrVtr invoices(new InvoiceVtr());
+    return invoices;
+}
+
 InvoicePtrVtr DBConnectionImpl::getInvoices(TaskPtr task)
 {
     InvoicePtrVtr invoices(new InvoiceVtr());

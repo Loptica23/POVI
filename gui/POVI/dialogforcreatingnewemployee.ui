@@ -120,6 +120,11 @@
             <string>Sef Smene</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Knjigovodja Fakture</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

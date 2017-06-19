@@ -5,6 +5,7 @@
 #include "commanddialogdesigner.h"
 #include "commanddialogstorekeeper.h"
 #include "commanddialogworker.h"
+#include "commanddialoginvoice.h"
 
 CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID) :
     QWidget(parent),
@@ -138,6 +139,10 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
         break;
     case Employee::WorkPosition::Proizvodnja:
         commanddialog = new CommandDialogWorker(this, m_db, command, edit);
+        commanddialog->show();
+        break;
+    case Employee::WorkPosition::KnjigovodjaFakture:
+        commanddialog = new CommandDialogInvoice(this, m_db, command, edit);
         commanddialog->show();
         break;
     default:

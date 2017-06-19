@@ -68,11 +68,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     }
     else
     {
-        auto cont = new QPushButton("Nastavi rad na nalogu!");
-        ui->buttonBox->addButton(cont, QDialogButtonBox::DestructiveRole);
-        connect(cont, SIGNAL(clicked(bool)), this, SLOT(continueToWorkOnCommand()));
+        showContinueToWorkButtonByWorkPosition();
     }
-    qDebug() << "false!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 }
 
 CommandDialog::~CommandDialog()
@@ -135,6 +132,7 @@ void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {}
 void CommandDialog::backToDefaultScreen() {}
+void CommandDialog::showContinueToWorkButtonByWorkPosition() {}
 
 void CommandDialog::changeTaskType(int index)
 {

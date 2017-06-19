@@ -65,6 +65,7 @@ public:
     virtual bool updateTask(TaskPtr task) = 0;
     virtual bool deleteTask(TaskPtr task) = 0;
 
+    virtual InvoicePtrVtr getInvoices(CommandPtr command) = 0;
     virtual InvoicePtrVtr getInvoices(TaskPtr task) = 0;
     virtual bool createNewInvoice(InvoicePtr invoice) = 0;
     virtual bool updateInvoice(InvoicePtr invoice) = 0;

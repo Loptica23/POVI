@@ -40,6 +40,11 @@ CREATE USER 'sefsmene'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'sefsmene'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
+insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Knjigovodjaf', 'Knjigovodjaf', '5555', 'knjigovodjaf', 'kfa', true);
+CREATE USER 'knjigovodjaf'@'%'  IDENTIFIED BY '5555';
+GRANT ALL PRIVILEGES ON *.* TO 'knjigovodjaf'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje1', 'RadnikProizvodnje1', '0000', 'radnikproizvodnje1', 'pro', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje2', 'RadnikProizvodnje2', '0000', 'radnikproizvodnje2', 'pro', true);
 insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje3', 'RadnikProizvodnje3', '0000', 'radnikproizvodnje3', 'pro', true);

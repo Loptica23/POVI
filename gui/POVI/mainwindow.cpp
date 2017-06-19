@@ -99,6 +99,11 @@ void MainWindow::setUpGuiByWorkPosition()
     case Employee::WorkPosition::SefSmene:
         qDebug() << "Sef smene";
         setView(new ShiftManagerView(this, m_dbConnection));
+    case Employee::WorkPosition::KnjigovodjaFakture:
+        qDebug() << "Knjigovodja fakture";
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Faktura");
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
+        break;
     default:
         break;
     }

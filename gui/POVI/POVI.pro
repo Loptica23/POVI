@@ -50,7 +50,8 @@ SOURCES +=  main.cpp\
     shiftmanagerview.cpp \
     tasksinproductionview.cpp \
     workerview.cpp \
-    commanddialogworker.cpp
+    commanddialogworker.cpp \
+    commanddialoginvoice.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -77,7 +78,8 @@ HEADERS +=  mainwindow.h\
     shiftmanagerview.h \
     tasksinproductionview.h \
     workerview.h \
-    commanddialogworker.h
+    commanddialogworker.h \
+    commanddialoginvoice.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
