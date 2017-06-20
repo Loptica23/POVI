@@ -24,6 +24,7 @@ void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
     ui->commandNumber->setEnabled(false);
     ui->storekeeperDescription->setEnabled(false);
     removeWidget(ui->invoice);
+    removeWidget(ui->comboBox);
 }
 
 void CommandDialogChieOfProduction::fillTaskTable()
