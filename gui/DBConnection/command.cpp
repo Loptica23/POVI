@@ -70,12 +70,14 @@ unsigned Command::getStateInt() const
     {
     case State::New:
         return 1;
-    case State::InProgress:
+    case State::WaitForProduction:
         return 2;
-    case State::Complited:
+    case State::InProgress:
         return 3;
-    case State::Stopped:
+    case State::Complited:
         return 4;
+    case State::Stopped:
+        return 5;
     default:
         qDebug() << "***************Ne postoji to stanje**********";
         return 0;
@@ -146,6 +148,8 @@ void Command::setState(const QString &state)
 {
     if (state == "nov")
         setState(State::New);
+    else if (state == "cek")
+        setState(State::WaitForProduction);
     else if (state == "izr")
         setState(State::InProgress);
     else if (state == "zav")
@@ -164,12 +168,15 @@ void Command::setState(const unsigned state)
         setState(State::New);
         break;
     case 2:
-        setState(State::InProgress);
+        setState(State::WaitForProduction);
         break;
     case 3:
-        setState(State::Complited);
+        setState(State::InProgress);
         break;
     case 4:
+        setState(State::Complited);
+        break;
+    case 5:
         setState(State::Stopped);
         break;
     default:
@@ -283,6 +290,9 @@ QString Command::convertStateToString(const State & state)
     {
     case State::New:
         result = "nov";
+        break;
+    case State::WaitForProduction:
+        result = "cek";
         break;
     case State::InProgress:
         result = "izr";

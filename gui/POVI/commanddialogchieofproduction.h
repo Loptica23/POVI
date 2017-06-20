@@ -13,6 +13,7 @@ protected:
     virtual void setUpWindowByWorkPosition();
     void fillTaskTable();
     virtual void updateCommand();
+    virtual void acceptButtonClicked();
 
     void clearButtonsAndSetHeaders();
     void insertTaskType(TaskPtr task, unsigned i, unsigned j);

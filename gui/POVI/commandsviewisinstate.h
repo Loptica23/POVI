@@ -14,7 +14,7 @@ class CommandsViewIsInState : public QWidget
     Q_OBJECT
 
 public:
-    CommandsViewIsInState(QWidget *parent, DBConnectionPtr db);
+    CommandsViewIsInState(QWidget *parent, DBConnectionPtr db, Command::State state);
     virtual ~CommandsViewIsInState();
 
     void setCommands(CommandPtrVtr commands);

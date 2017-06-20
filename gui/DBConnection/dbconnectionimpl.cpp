@@ -476,6 +476,12 @@ bool DBConnectionImpl::deleteCommand(CommandPtr command)
     return true;
 }
 
+bool DBConnectionImpl::sendToProduction(CommandPtr command)
+{
+    command->setState(Command::State::WaitForProduction);
+    return updateCommand(command);
+}
+
 bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
 {
     TaskPtrVtr tasks = getTasks(command);

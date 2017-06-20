@@ -8,10 +8,10 @@
 #include "TimeSimulator/task.h"
 #include "machine.h"
 
-CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db) :
+CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db, Command::State state) :
     QWidget(parent),
     ui(new Ui::CommandsViewIsInState),
-    m_state(Command::State::InProgress),
+    m_state(state),
     m_db(db)
 {
     ui->setupUi(this);

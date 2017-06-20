@@ -22,14 +22,20 @@ TabView::~TabView()
 void TabView::setUpTabViewByWorkPosition()
 {
     MachinesView* machinesview;
-    CommandsViewIsInState * commandsview;
+    CommandsViewIsInState * commandsviewInProgress;
+    CommandsViewIsInState * commandsviewWaitingOnProduction;
     switch (MainWindow::getLogedUser()->getWorkPosition()) {
     case Employee::WorkPosition::SefProizvodnje:
 
-        commandsview = new CommandsViewIsInState(this, m_db);
-        ui->tabWidget->addTab(commandsview, "Nalozi u izradi");
+        commandsviewInProgress = new CommandsViewIsInState(this, m_db, Command::State::InProgress);
+        ui->tabWidget->addTab(commandsviewInProgress, "Nalozi u izradi:");
+
+        commandsviewWaitingOnProduction = new CommandsViewIsInState(this, m_db, Command::State::WaitForProduction);
+        ui->tabWidget->addTab(commandsviewWaitingOnProduction, "Nalozi koji cekaju na potvrdu:");
+
         machinesview = new MachinesView(this, m_db);
-        ui->tabWidget->addTab(machinesview, "Masine");
+        ui->tabWidget->addTab(machinesview, "Masine:");
+
         break;
     default:
         break;

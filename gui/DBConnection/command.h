@@ -14,7 +14,7 @@ typedef std::shared_ptr<CommandVtr> CommandPtrVtr;
 class DBCONNECTIONSHARED_EXPORT Command{
 
 public:
-    enum class State{New, InProgress, Complited, Stopped};
+    enum class State{New, WaitForProduction, InProgress, Complited, Stopped};
 
     Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand);
     virtual ~Command();

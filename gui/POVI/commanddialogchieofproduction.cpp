@@ -79,6 +79,11 @@ void CommandDialogChieOfProduction::updateCommand()
 
 }
 
+void CommandDialogChieOfProduction::acceptButtonClicked()
+{
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+}
+
 void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
 {
     m_comboBoxes.clear();

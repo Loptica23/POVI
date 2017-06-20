@@ -143,7 +143,7 @@ void CommandsView::sendToProduction()
     {
         auto index = std::find(m_finishButtons.begin(), m_finishButtons.end(), buttonSender) - m_finishButtons.begin();
         qDebug() << index;
-        if (!m_db->completeCurrentTask(m_commands->at(index)))
+        if (!m_db->sendToProduction(m_commands->at(index)))
         {
             QString error = m_db->getLastError();
             QMessageBox messageBox;

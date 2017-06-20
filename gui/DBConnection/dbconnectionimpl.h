@@ -43,6 +43,7 @@ public:
     virtual bool createNewCommand(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);
     virtual bool deleteCommand(CommandPtr command);
+    virtual bool sendToProduction(CommandPtr command);
     virtual bool completeCurrentTask(CommandPtr command);
     virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee);
     virtual bool startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee);
