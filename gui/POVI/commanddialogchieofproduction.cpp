@@ -10,6 +10,7 @@ CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DB
     m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
+    qDebug() << "Sef proizvodnje";
 }
 
 CommandDialogChieOfProduction::~CommandDialogChieOfProduction()
@@ -19,10 +20,10 @@ CommandDialogChieOfProduction::~CommandDialogChieOfProduction()
 
 void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
 {
-    ui->comercialistDescription->setEnabled(false);
-    ui->designerDescription->setEnabled(false);
+    ui->comercialistDescription->setReadOnly(true);
+    ui->designerDescription->setReadOnly(true);
     ui->commandNumber->setEnabled(false);
-    ui->storekeeperDescription->setEnabled(false);
+    ui->storekeeperDescription->setReadOnly(true);
     removeWidget(ui->invoice);
     removeWidget(ui->comboBox);
 }

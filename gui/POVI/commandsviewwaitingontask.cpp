@@ -10,12 +10,23 @@
 CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID) :
     QWidget(parent),
     ui(new Ui::CommandsViewWaitingOnTask),
+    m_db(db)
+{
+    m_taskTypeIDs.push_back(taskTypeID);
+    ui->setupUi(this);
+    openDialogIfThereIsTaskOnWhichUserWorkingOn();
+}
+
+CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs) :
+    QWidget(parent),
+    ui(new Ui::CommandsViewWaitingOnTask),
     m_db(db),
-    m_taskTypeID(taskTypeID)
+    m_taskTypeIDs(taskTypeIDs)
 {
     ui->setupUi(this);
     openDialogIfThereIsTaskOnWhichUserWorkingOn();
 }
+
 
 CommandsViewWaitingOnTask::~CommandsViewWaitingOnTask()
 {
@@ -24,7 +35,7 @@ CommandsViewWaitingOnTask::~CommandsViewWaitingOnTask()
 
 void CommandsViewWaitingOnTask::on_Refresh_clicked()
 {
-    m_commands = m_db->getCommandWhichWaitingOnTask(m_taskTypeID);
+    m_commands = m_db->getCommandWhichWaitingOnTasks(m_taskTypeIDs);
     fillTable();
 }
 
@@ -124,7 +135,8 @@ void CommandsViewWaitingOnTask::openDialogIfThereIsTaskOnWhichUserWorkingOn()
 void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr command, bool edit)
 {
     QWidget* commanddialog;
-    auto mainWindow = MainWindow::getMainWindow();
+    qDebug() << MainWindow::getWorker()->getWorkPositionQString();
+    qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     switch(MainWindow::getWorker()->getWorkPosition())
     {
     case Employee::WorkPosition::DizajnerLastis:
@@ -138,6 +150,7 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
         commanddialog->show();
         break;
     case Employee::WorkPosition::Proizvodnja:
+        qDebug() << "WORKER!!!!";
         commanddialog = new CommandDialogWorker(this, m_db, command, edit);
         commanddialog->show();
         break;

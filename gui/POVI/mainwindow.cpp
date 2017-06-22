@@ -62,6 +62,7 @@ MainWindow::~MainWindow()
 void MainWindow::setUpGuiByWorkPosition()
 {
     unsigned type = 0;
+    std::vector<unsigned> types;
     switch(getLogedUser()->getWorkPosition())
     {
     case Employee::WorkPosition::Komercijalista:
@@ -89,8 +90,11 @@ void MainWindow::setUpGuiByWorkPosition()
         break;
     case Employee::WorkPosition::Magacioner:
         qDebug() << "Magacioner";
-        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Magacin");
-        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Magacin Zaduzivanje");
+        types.push_back(type);
+        type = m_dbConnection->getTaskTypes()->getTypeIdByString("Magacin Razduzivanje");
+        types.push_back(type);
+        setView(new CommandsViewWaitingOnTask(this, m_dbConnection, types));
         break;
     case Employee::WorkPosition::SefProizvodnje:
         qDebug() << "Sef Proizvodnje";

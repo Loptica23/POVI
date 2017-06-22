@@ -13,7 +13,6 @@ protected:
     virtual void updateCommand();
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
-    virtual void showContinueToWorkButtonByWorkPosition();
 
     void initializeInvoiceDescription();
 };

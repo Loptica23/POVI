@@ -13,6 +13,8 @@ class CommandsViewWaitingOnTask : public QWidget
 
 public:
     CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID);
+    CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs);
+
     ~CommandsViewWaitingOnTask();
 
 private slots:
@@ -35,7 +37,7 @@ private:
 
     Ui::CommandsViewWaitingOnTask *ui;
     DBConnectionPtr m_db;
-    unsigned m_taskTypeID;
+    std::vector<unsigned> m_taskTypeIDs;
     CommandPtrVtr m_commands;
 
     std::vector<QPushButton *> m_detailsButtons;

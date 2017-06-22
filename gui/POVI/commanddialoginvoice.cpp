@@ -6,6 +6,7 @@ CommandDialogInvoice::CommandDialogInvoice(QWidget *parent, std::shared_ptr<DBCo
     CommandDialog(parent, db, command, edit)
 {
     setUpWindowByWorkPosition();
+    qDebug() << "Knjigovodja za Fakturu";
 }
 
 CommandDialogInvoice::~CommandDialogInvoice()
@@ -19,9 +20,9 @@ void CommandDialogInvoice::setUpWindowByWorkPosition()
     removeWidget(ui->priorityWidget);
 
     ui->commandNumber->setEnabled(false);
-    ui->comercialistDescription->setEnabled(false);
-    ui->designer->setEnabled(false);
-    ui->invoiceDescription->setEnabled(false);
+    ui->comercialistDescription->setReadOnly(true);
+    ui->designerDescription->setReadOnly(true);
+    ui->invoiceDescription->setReadOnly(true);
 
     if (m_edit)
     {
@@ -47,13 +48,6 @@ void CommandDialogInvoice::acceptButtonClicked()
 void CommandDialogInvoice::rejectButtonClicked()
 {
     ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
-}
-
-void CommandDialogInvoice::showContinueToWorkButtonByWorkPosition()
-{
-    auto cont = new QPushButton("Nastavi rad na nalogu!");
-    ui->buttonBox->addButton(cont, QDialogButtonBox::DestructiveRole);
-    connect(cont, SIGNAL(clicked(bool)), this, SLOT(continueToWorkOnCommand()));
 }
 
 void CommandDialogInvoice::initializeInvoiceDescription()

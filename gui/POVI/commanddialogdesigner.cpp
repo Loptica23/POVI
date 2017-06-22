@@ -9,6 +9,7 @@ CommandDialogDesigner::CommandDialogDesigner(QWidget *parent, std::shared_ptr<DB
 {
     setUpWindowByWorkPosition();
     designerDescriptionChanged();
+    qDebug() << "Dizajner";
 }
 
 CommandDialogDesigner::~CommandDialogDesigner()
@@ -24,7 +25,7 @@ void CommandDialogDesigner::setUpWindowByWorkPosition()
     removeWidget(ui->invoice);
 
     ui->commandNumber->setEnabled(false);
-    ui->comercialistDescription->setEnabled(false);
+    ui->comercialistDescription->setReadOnly(true);
     //nalog je preuzet
     if (m_edit)
     {

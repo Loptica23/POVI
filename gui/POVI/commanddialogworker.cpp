@@ -6,8 +6,7 @@
 #include "tasktypes.h"
 
 CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit):
-    CommandDialog(parent, db, command, edit),
-    m_haveItInvoice(false)
+    CommandDialog(parent, db, command, edit)
 {
     setUpWindowByWorkPosition();
 }
@@ -25,13 +24,14 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
     removeInvoiceWidgetIfTaskDontNeedIt();
 
     ui->commandNumber->setEnabled(false);
-    ui->comercialistDescription->setEnabled(false);
-    ui->designer->setEnabled(false);
+    ui->comercialistDescription->setReadOnly(true);
+    ui->designerDescription->setReadOnly(true);
 
     if (m_edit)
     {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setText("Posalji nalog u zavrseno stanje!");
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setText("Ostavi nalog!");
+        showContinueToWorkButton();
     }
 
     this->repaint();
@@ -60,18 +60,4 @@ void CommandDialogWorker::backToDefaultScreen()
 {
     auto mainWindow = MainWindow::getMainWindow();
     mainWindow->backToDefaultScreen();
-}
-
-void CommandDialogWorker::removeInvoiceWidgetIfTaskDontNeedIt()
-{
-    m_haveItInvoice = true;
-    if (m_currentTask)
-    {
-        TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(m_currentTask->getTaskTypeId());
-        if (!taskType->isVirtual())
-        {
-            removeWidget(ui->invoice);
-            m_haveItInvoice = false;
-        }
-    }
 }

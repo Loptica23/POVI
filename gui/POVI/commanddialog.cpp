@@ -21,7 +21,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_comercialistDescriptionEmpty(true),
     m_designerDescriptionEmpty(true),
     m_storeKeeperDescriptionEmpty(true),
-    m_currentTask(nullptr)
+    m_currentTask(nullptr),
+    m_haveItInvoice(false)
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
@@ -41,7 +42,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_comercialistDescriptionEmpty(true),
     m_designerDescriptionEmpty(true),
     m_storeKeeperDescriptionEmpty(true),
-    m_currentTask(nullptr)
+    m_currentTask(nullptr),
+    m_haveItInvoice(false)
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
@@ -58,17 +60,13 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         ui->commandNumber->setEnabled(false);
-        ui->comercialistDescription->setEnabled(false);
-        ui->designerDescription->setEnabled(false);
-        ui->storekeeperDescription->setEnabled(false);
-        ui->invoiceDescription->setEnabled(false);
+        ui->comercialistDescription->setReadOnly(true);
+        ui->designerDescription->setReadOnly(true);
+        ui->storekeeperDescription->setReadOnly(true);
+        ui->invoiceDescription->setReadOnly(true);
         ui->Priority->setEnabled(false);
         ui->comboBox->setVisible(false);
         //ostali su ti taskovi
-    }
-    else
-    {
-        showContinueToWorkButtonByWorkPosition();
     }
 }
 
@@ -132,7 +130,13 @@ void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {}
 void CommandDialog::backToDefaultScreen() {}
-void CommandDialog::showContinueToWorkButtonByWorkPosition() {}
+
+void CommandDialog::showContinueToWorkButton()
+{
+    auto cont = new QPushButton("Nastavi rad na nalogu!");
+    ui->buttonBox->addButton(cont, QDialogButtonBox::DestructiveRole);
+    connect(cont, SIGNAL(clicked(bool)), this, SLOT(continueToWorkOnCommand()));
+}
 
 void CommandDialog::changeTaskType(int index)
 {
@@ -281,5 +285,19 @@ void CommandDialog::ifFalseShowDbError(bool b)
         QString error = m_db->getLastError();
         QMessageBox messageBox;
         messageBox.critical(0,"Error",error);
+    }
+}
+
+void CommandDialog::removeInvoiceWidgetIfTaskDontNeedIt()
+{
+    m_haveItInvoice = true;
+    if (m_currentTask)
+    {
+        TaskTypePtr taskType = m_db->getTaskTypes()->getTaskTypeById(m_currentTask->getTaskTypeId());
+        if (!taskType->isVirtual())
+        {
+            removeWidget(ui->invoice);
+            m_haveItInvoice = false;
+        }
     }
 }

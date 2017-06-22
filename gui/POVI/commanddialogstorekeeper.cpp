@@ -8,6 +8,7 @@ CommandDialogStoreKeeper::CommandDialogStoreKeeper(QWidget *parent, std::shared_
 {
     setUpWindowByWorkPosition();
     storeKeeperDescriptionChanged();
+    qDebug() << "Magacioner";
 }
 
 CommandDialogStoreKeeper::~CommandDialogStoreKeeper()
@@ -19,10 +20,11 @@ void CommandDialogStoreKeeper::setUpWindowByWorkPosition()
 {
     removeWidget(ui->tasks);
     removeWidget(ui->priorityWidget);
+    removeInvoiceWidgetIfTaskDontNeedIt();
 
     ui->commandNumber->setEnabled(false);
-    ui->comercialistDescription->setEnabled(false);
-    ui->designerDescription->setEnabled(false);
+    ui->comercialistDescription->setReadOnly(true);
+    ui->designerDescription->setReadOnly(true);
 
     if (m_edit)
     {
@@ -50,6 +52,11 @@ void CommandDialogStoreKeeper::updateCommand()
 void CommandDialogStoreKeeper::acceptButtonClicked()
 {
     ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    if (m_haveItInvoice)
+    {
+        InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
+        ifFalseShowDbError(m_db->createNewInvoice(invoice));
+    }
 }
 
 void CommandDialogStoreKeeper::rejectButtonClicked()

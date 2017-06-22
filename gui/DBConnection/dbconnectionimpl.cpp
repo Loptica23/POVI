@@ -415,6 +415,51 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId
     return commands;
 }
 
+CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTasks(std::vector<unsigned> taskTypeIds)
+{
+    CommandPtrVtr commands;
+    QSqlQuery queryGetTasks;
+    QSqlQuery queryGetCommands;
+    QString stm("select Nalog_idNalog from zadatak where (TipoviZadatka_idTipoviZadatka = ");
+    for (auto iter = taskTypeIds.begin(); iter != taskTypeIds.end(); ++iter)
+    {
+        QString id = QString::number(*iter);
+        stm += id;
+        stm += " or TipoviZadatka_idTipoviZadatka = ";
+    }
+    stm.chop(36);
+    stm += ") and Stanje = 'cek';";
+    qDebug() << stm;
+
+    queryGetTasks.prepare(stm);
+    if (!queryGetTasks.exec())
+    {
+        qDebug() << "neuspesno!";
+        m_lastError = queryGetTasks.lastError().text();
+        return commands;
+    }
+
+    stm = "select * from Nalog where idNalog in (";
+    while (queryGetTasks.next())
+    {
+        stm += queryGetTasks.value("Nalog_idNalog").toString() + ",";
+    }
+    stm.chop(1);
+    stm += ");";
+    qDebug() << stm;
+
+    queryGetCommands.prepare(stm);
+    if (!queryGetCommands.exec())
+    {
+        qDebug() << "neuspesno!";
+        m_lastError = queryGetCommands.lastError().text();
+        return commands;
+    }
+
+    commands = Command::createCommandsFromQuery(queryGetCommands);
+    return commands;
+}
+
 bool DBConnectionImpl::isThereCommandWhichWaitingOnTask(unsigned taskTypeId)
 {
     QSqlQuery queryGetTasks;

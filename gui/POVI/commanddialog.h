@@ -50,15 +50,16 @@ protected:
     virtual void storeKeeperDescriptionChanged();
     virtual void taskTemplateChanged(int i);
     virtual void backToDefaultScreen();
-    virtual void showContinueToWorkButtonByWorkPosition();
 
+    void showContinueToWorkButton();
     void ifFalseShowDbError(bool b);
-
+    void removeInvoiceWidgetIfTaskDontNeedIt();
 
     Ui::CommandDialog *ui;
 
     bool m_edit;
     bool m_create;
+    bool m_haveItInvoice;
     OrderPtr m_order;
     CommandPtr m_command;
     TaskPtrVtr m_tasks;
