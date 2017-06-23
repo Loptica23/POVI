@@ -140,7 +140,7 @@ void CommandsViewIsInState::initializeTimeEngine()
     initializeTimeMachines();
 
     //dohvatanje komandi
-    auto commands = m_db->getCommands(m_state);
+    auto commands = m_db->getCommands(m_state);//ovde je mozda bolje da navedes konkretno stanje
     setCommands(commands);
 
     for (auto iter = m_commands->begin(); iter != m_commands->end(); ++iter)

@@ -59,8 +59,6 @@ insert into klijent (Ime) values ('Znam d.o.o');
 
 insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (1, 55.20, 'Ovo je opis!', 'Ovo je naslov!', '2013-08-05 18:19:03');
 
-insert into nalog (idNarudzbina, idKlijent, BrojNaloga, Stanje) values (1, 1, 100, 'nov');
-
 insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Lastis', False); 			#1
 insert into TipoviZadatka (Naziv, Faktura) values ('Snovanje', False);					#2
 insert into TipoviZadatka (Naziv, Faktura) values ('Tkanje Lastis', True);				#3
