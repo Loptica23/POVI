@@ -2,10 +2,11 @@
 #include "machine.h"
 #include "command.h"
 
-TimeSimulator::Machine::Machine(unsigned id):
+TimeSimulator::Machine::Machine(QString & name, bool isVirtual):
+    m_name(name),
+    m_isVirtual(isVirtual),
     m_currentCommand(nullptr),
-    m_id(id),
-    m_commandsInQueue(new TimeSimulator::CommandVtr())
+    m_commandsInQueue(new CommandVtr())
 {
 
 }

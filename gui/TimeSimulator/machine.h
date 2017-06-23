@@ -1,16 +1,16 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "timesimulator_global.h"
+#include <QString>
 #include "types.h"
 
 namespace TimeSimulator
 {
 
-class TIMESIMULATORSHARED_EXPORT Machine
+class Machine
 {
 public:
-    Machine(unsigned id);
+    Machine(QString & name, bool isVirtual);
     virtual ~Machine();
 
     bool checkIsEverythingSetUp();
@@ -22,12 +22,15 @@ public:
     void putCommandIntoQueue(CommandPtr command);
     void putCurrentCommand(CommandPtr command);
     void eliminateCommandFromCalculation(CommandPtr command);
+
 private:
     CommandPtr getFirstFromQueue();
     void sortCommandsByPriority();
     static bool compareFunction(CommandPtr command1, CommandPtr command2);
 
-    unsigned m_id;
+    QString m_name;
+    bool m_isVirtual;
+
     CommandVtrPtr m_commandsInQueue;
     CommandPtr m_currentCommand;
 };

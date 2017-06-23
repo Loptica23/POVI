@@ -17,6 +17,13 @@ using MachinePtr = std::shared_ptr<Machine>;
 using MachineVtr = std::vector<MachinePtr>;
 using MachineVtrPtr = std::shared_ptr<MachineVtr>;
 
+class MachineManager;
+using MachineManagerPtr = std::shared_ptr<MachineManager>;
+
+class TimeEngine;
+using TimeEnginePtr = std::shared_ptr<TimeEngine>;
+
+
 class CommandTerminationTimeEngine;
 using CommandTerminationTimeEnginePtr = std::shared_ptr<CommandTerminationTimeEngine>;
 using ResultVector = std::vector<std::pair<unsigned, unsigned>>;

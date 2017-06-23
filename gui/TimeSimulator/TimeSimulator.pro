@@ -26,7 +26,9 @@ SOURCES += timesimulator.cpp \
     commandterminationtimeengine.cpp \
     machine.cpp \
     command.cpp \
-    task.cpp
+    task.cpp \
+    timeengine.cpp \
+    machinemanager.cpp
 
 HEADERS += timesimulator.h\
         timesimulator_global.h \
@@ -34,7 +36,9 @@ HEADERS += timesimulator.h\
     machine.h \
     command.h \
     task.h \
-    types.h
+    types.h \
+    timeengine.h \
+    machinemanager.h
 
 unix {
     target.path = /usr/lib

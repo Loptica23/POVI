@@ -58,6 +58,9 @@ void CommandDialogWorker::rejectButtonClicked()
 
 void CommandDialogWorker::backToDefaultScreen()
 {
-    auto mainWindow = MainWindow::getMainWindow();
-    mainWindow->backToDefaultScreen();
+    if (m_edit)
+    {
+        auto mainWindow = MainWindow::getMainWindow();
+        mainWindow->backToDefaultScreen();
+    }
 }
