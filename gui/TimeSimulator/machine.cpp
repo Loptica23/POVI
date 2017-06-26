@@ -2,7 +2,7 @@
 #include "machine.h"
 #include "command.h"
 
-TimeSimulator::Machine::Machine(QString & name, bool isVirtual):
+TimeSimulator::Machine::Machine(const QString &name, bool isVirtual):
     m_name(name),
     m_isVirtual(isVirtual),
     m_currentCommand(nullptr),

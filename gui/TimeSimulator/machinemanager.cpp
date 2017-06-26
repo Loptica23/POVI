@@ -1,6 +1,7 @@
 #include "machinemanager.h"
 #include "types.h"
 #include "machine.h"
+#include "command.h"
 #include <QDebug>
 
 TimeSimulator::MachineManager::MachineManager() :
@@ -14,7 +15,23 @@ TimeSimulator::MachineManager::~MachineManager()
 
 }
 
-void TimeSimulator::MachineManager::addMachine(QString &name, bool isVirtual)
+bool TimeSimulator::MachineManager::decrementTime()
+{
+    //iteriras kroz masine i dekrementiras..
+    //ako ti masina javi da je zavrsila sa nekim nalogom, taj nalog bacas u red sledece masine..
+    //kada ti sve masine bace false vracas false i na taj nacin javljas dalje da je zavrseno sa obradom.
+    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
+    {
+        MachinePtr machine = *iter;
+        CommandPtr command = machine->decrementTime();
+        if (command != nullptr)
+        {
+            QString machine = command->getCurrentTaskMachine();
+        }
+    }
+}
+
+void TimeSimulator::MachineManager::addMachine(const QString &name, bool isVirtual)
 {
     if (isMachineExists(name))
     {
@@ -27,7 +44,7 @@ void TimeSimulator::MachineManager::addMachine(QString &name, bool isVirtual)
     }
 }
 
-bool TimeSimulator::MachineManager::isMachineExists(QString & name)
+bool TimeSimulator::MachineManager::isMachineExists(const QString & name)
 {
     bool result = false;
     if (getMachine(name) != nullptr)
@@ -37,7 +54,7 @@ bool TimeSimulator::MachineManager::isMachineExists(QString & name)
     return result;
 }
 
-TimeSimulator::MachinePtr TimeSimulator::MachineManager::getMachine(QString & name)
+TimeSimulator::MachinePtr TimeSimulator::MachineManager::getMachine(const QString &name)
 {
     MachinePtr result = nullptr;
     auto iter = std::find_if(m_machines->begin(), m_machines->end(), [&](MachinePtr const& p) {

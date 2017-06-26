@@ -14,7 +14,7 @@ TimeSimulator::TimeSimulator::TimeSimulator() :
 
 TimeSimulator::TimeSimulator::~TimeSimulator()
 {
-
+    //vidi kako ces da stopiras zadatke
 }
 
 void TimeSimulator::TimeSimulator::execute()

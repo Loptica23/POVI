@@ -2,11 +2,12 @@
 #include "timeengine.h"
 #include "machinemanager.h"
 #include "commandmanager.h"
+#include "machine.h"
 
 TimeSimulator::TimeEngine::TimeEngine() :
     m_machineManager(new MachineManager()),
-    m_commandManager(new CommandManager())
-
+    m_commandManager(new CommandManager()),
+    m_running(true)
 {
 
 }
@@ -18,7 +19,16 @@ TimeSimulator::TimeEngine::~TimeEngine()
 
 void TimeSimulator::TimeEngine::run()
 {
+    //mozda ovde da isproveravas masine i naloge, da li su dati svi podaci i tako to.
+    while(m_running)
+    {
+        m_running = m_machineManager->decrementTime();
+    }
+}
 
+void TimeSimulator::TimeEngine::stopEngine()
+{
+    m_running = false;
 }
 
 bool TimeSimulator::TimeEngine::checkIsEverythingSetUp()
@@ -37,11 +47,24 @@ void TimeSimulator::TimeEngine::addCommand(unsigned id, unsigned commandNumber, 
     m_commandManager->addCommand(id,commandNumber, priority);
 }
 
-void TimeSimulator::TimeEngine::addTask(QString & machin, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state)
+void TimeSimulator::TimeEngine::addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state)
 {
-    if (m_machineManager->isMachineExists(machin))
+    if (m_machineManager->isMachineExists(machine))
     {
-        m_commandManager->addTask(machin, idCommand, serilaNumber, prediction, state);
+        m_commandManager->addTask(machine, idCommand, serialNumber, prediction, state);
+        CommandPtr command = m_commandManager->getCommand(idCommand);
+        switch(state)
+        {
+        case TaskState::InProgress:
+            m_machineManager->getMachine(machine)->putCurrentCommand(command);
+            break;
+        case TaskState::Waiting:
+            m_machineManager->getMachine(machine)->putCommandIntoQueue(command);
+            break;
+        default :
+            break;
+        }
+
     }
     else
     {

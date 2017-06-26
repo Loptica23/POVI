@@ -10,7 +10,7 @@ namespace TimeSimulator
 class Machine
 {
 public:
-    Machine(QString & name, bool isVirtual);
+    Machine(const QString & name, bool isVirtual);
     virtual ~Machine();
 
     bool checkIsEverythingSetUp();

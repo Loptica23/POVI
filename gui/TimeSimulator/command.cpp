@@ -60,17 +60,13 @@ unsigned TimeSimulator::Command::getId() const
     return m_id;
 }
 
-void TimeSimulator::Command::setTasks(TaskVtrPtr tasks)
-{
-    m_tasks = tasks;
-    std::sort(m_tasks->begin(), m_tasks->end(), Task::compareFunction);
-    m_iterator = m_tasks->begin();
-    m_currentTask = *m_iterator;
-}
-
 void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)
 {
-
+    TaskPtr task(new Task(machine, serilaNumber, prediction, state));
+    if ((task->getState() == TaskState::New) || (task->getState() == TaskState::Waiting) || (task->getState() == TaskState::InProgress))
+    {
+        m_tasks->push_back(task);
+    }
 }
 
 bool TimeSimulator::Command::changeCurrentTask()
