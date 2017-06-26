@@ -17,6 +17,9 @@ using MachinePtr = std::shared_ptr<Machine>;
 using MachineVtr = std::vector<MachinePtr>;
 using MachineVtrPtr = std::shared_ptr<MachineVtr>;
 
+class CommandManager;
+using CommandManagerPtr = std::shared_ptr<CommandManager>;
+
 class MachineManager;
 using MachineManagerPtr = std::shared_ptr<MachineManager>;
 
@@ -32,4 +35,7 @@ class Task;
 using TaskPtr = std::shared_ptr<Task>;
 using TaskVtr = std::vector<TaskPtr>;
 using TaskVtrPtr = std::shared_ptr<TaskVtr>;
+
+enum class TaskState {New, Waiting, InProgress, Complited, Leaved, Stopped};
+
 }

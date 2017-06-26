@@ -97,23 +97,6 @@ bool TimeSimulator::CommandTerminationTimeEngine::checkIsFinished()
     return result;
 }
 
-TimeSimulator::MachinePtr TimeSimulator::CommandTerminationTimeEngine::getMachineWithId(unsigned id)
-{
-    MachinePtr resultMachine = nullptr;
-    //refactor ovo zameni funkcijom stdfind!
-    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
-    {
-        MachinePtr machine = *iter;
-        if (machine->getId() == id)
-        {
-            resultMachine = machine;
-            break;
-        }
-    }
-
-    return resultMachine;
-}
-
 void TimeSimulator::CommandTerminationTimeEngine::stopEngine()
 {
     m_keepRunning = false;

@@ -1,4 +1,6 @@
 #include "machinemanager.h"
+#include "types.h"
+#include "machine.h"
 #include <QDebug>
 
 TimeSimulator::MachineManager::MachineManager() :
@@ -25,7 +27,26 @@ void TimeSimulator::MachineManager::addMachine(QString &name, bool isVirtual)
     }
 }
 
+bool TimeSimulator::MachineManager::isMachineExists(QString & name)
+{
+    bool result = false;
+    if (getMachine(name) != nullptr)
+    {
+        result = true;
+    }
+    return result;
+}
+
 TimeSimulator::MachinePtr TimeSimulator::MachineManager::getMachine(QString & name)
 {
-    //ovde ti treba neka find funkcija
+    MachinePtr result = nullptr;
+    auto iter = std::find_if(m_machines->begin(), m_machines->end(), [&](MachinePtr const& p) {
+        return p->getName() == name;
+    });
+
+    if (iter != m_machines->end())
+    {
+        result = *iter;
+    }
+    return result;
 }

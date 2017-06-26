@@ -50,6 +50,16 @@ bool TimeSimulator::Machine::checkIsFinished()
     return  result;
 }
 
+const QString& TimeSimulator::Machine::getName() const
+{
+    return m_name;
+}
+
+bool TimeSimulator::Machine::isVirtual() const
+{
+    return m_isVirtual;
+}
+
 TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
 {
     CommandPtr command = nullptr;
@@ -57,7 +67,7 @@ TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
     {
         command = m_commandsInQueue->at(0);
         m_commandsInQueue->erase(m_commandsInQueue->begin());
-        qDebug() << "Nalog sa idjem: " + QString::number(command->getId()) + " je poceo da se izvrsava na masini " + QString::number(m_id);
+        qDebug() << "Nalog sa idjem: " + QString::number(command->getId()) + " je poceo da se izvrsava na masini ";
     }
     return command;
 }
@@ -70,11 +80,6 @@ void TimeSimulator::Machine::sortCommandsByPriority()
 bool TimeSimulator::Machine::compareFunction(CommandPtr command1, CommandPtr command2)
 {
     return command1->getPriority() < command2->getPriority();
-}
-
-unsigned TimeSimulator::Machine::getId() const
-{
-    return m_id;
 }
 
 void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)

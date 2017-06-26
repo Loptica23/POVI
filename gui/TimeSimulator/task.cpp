@@ -1,10 +1,11 @@
 #include <QDebug>
 #include "task.h"
 
-TimeSimulator::Task::Task(unsigned machine, unsigned serialNumber):
+TimeSimulator::Task::Task(const QString & machine, unsigned serialNumber, unsigned prediction, TaskState state):
     m_machine(machine),
     m_serialNumber(serialNumber),
-    m_prediction(0)
+    m_prediction(prediction),
+    m_state(state)
 {
 
 }
@@ -14,7 +15,7 @@ TimeSimulator::Task::~Task()
 
 }
 
-unsigned TimeSimulator::Task::getMachine() const
+const QString& TimeSimulator::Task::getMachine() const
 {
     return m_machine;
 }
@@ -24,12 +25,12 @@ unsigned TimeSimulator::Task::getPrediction() const
     return m_prediction;
 }
 
-TimeSimulator::Task::State TimeSimulator::Task::getState() const
+TimeSimulator::TaskState TimeSimulator::Task::getState() const
 {
     return m_state;
 }
 
-void TimeSimulator::Task::setState(const State & state)
+void TimeSimulator::Task::setState(const TaskState & state)
 {
     m_state = state;
 }

@@ -17,7 +17,8 @@ public:
     CommandPtr decrementTime();
     bool checkIsFinished();
 
-    unsigned getId() const;
+    const QString& getName() const;
+    bool isVirtual() const;
 
     void putCommandIntoQueue(CommandPtr command);
     void putCurrentCommand(CommandPtr command);

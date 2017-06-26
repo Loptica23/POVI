@@ -16,10 +16,7 @@ public:
     void setMachines(MachineVtrPtr machines);
     void run();
     bool checkIsEverythingSetUp();
-
     void eliminateCommandFromCalculation(CommandPtr command);
-    MachinePtr getMachineWithId(unsigned id);
-
     void stopEngine();
 private:
     bool  checkIsFinished();

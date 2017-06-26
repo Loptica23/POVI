@@ -10,16 +10,14 @@ namespace TimeSimulator
 class TIMESIMULATORSHARED_EXPORT Task
 {
 public:
-    enum class State{New, InProgress, Complited};
-
-    Task(unsigned machine, unsigned serialNumber);
+    Task(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
     virtual ~Task();
 
-    unsigned getMachine() const;
+    const QString &getMachine() const;
     unsigned getPrediction() const;
 
-    State getState() const;
-    void setState(const State & state);
+    TaskState getState() const;
+    void setState(const TaskState & state);
     void setPrediction(unsigned prediction);
 
     bool checkIsEverythingSetUp();
@@ -28,10 +26,10 @@ public:
     static bool compareFunction(TaskPtr task1, TaskPtr task2);
 private:
 
-    unsigned m_machine;
-    unsigned m_prediction;
+    QString m_machine;
     unsigned m_serialNumber;
-    State m_state;
+    unsigned m_prediction;
+    TaskState m_state;
 };
 
 }

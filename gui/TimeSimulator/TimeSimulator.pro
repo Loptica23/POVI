@@ -23,22 +23,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += timesimulator.cpp \
-    commandterminationtimeengine.cpp \
     machine.cpp \
     command.cpp \
     task.cpp \
     timeengine.cpp \
-    machinemanager.cpp
+    machinemanager.cpp \
+    commandmanager.cpp
 
 HEADERS += timesimulator.h\
         timesimulator_global.h \
-    commandterminationtimeengine.h \
     machine.h \
     command.h \
     task.h \
     types.h \
     timeengine.h \
-    machinemanager.h
+    machinemanager.h \
+    commandmanager.h
 
 unix {
     target.path = /usr/lib

@@ -1,5 +1,6 @@
 #pragma once;
 #include <vector>
+#include <QString>
 #include "types.h"
 
 namespace TimeSimulator

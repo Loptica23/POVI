@@ -10,27 +10,29 @@ namespace TimeSimulator
 class TIMESIMULATORSHARED_EXPORT Command
 {
 public:
-    Command(unsigned id, unsigned priority);
+    Command(unsigned id, unsigned commandNumber, unsigned priority);
     virtual ~Command();
 
     bool checkIsEverythingSetUp();
     bool decrementTimeOfCurrentTask();
 
-    unsigned getIdOfNextMachine();
+    const QString getCurrentTaskMachine();
     TaskPtr getCurrentTask();
     unsigned getPriority();
     unsigned getId() const;
 
     void setTasks(TaskVtrPtr tasks);
+    void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
 
 private:
-    TaskPtr changeCurrentTask();
+    bool changeCurrentTask();
 
     unsigned m_id;
-    TaskVtrPtr m_tasks;
-    TaskVtr::iterator m_iterator;
-    unsigned m_priority;
     unsigned m_commandNumber;
+    unsigned m_priority;
+    TaskVtrPtr m_tasks;
+    TaskPtr m_currentTask;
+    TaskVtr::iterator m_iterator;
 };
 
 }
