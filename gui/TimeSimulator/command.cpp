@@ -35,7 +35,7 @@ bool TimeSimulator::Command::decrementTimeOfCurrentTask()
 }
 
 //ako se vrati prazan string to znaci da ne postoji sledeci zadatak!
-const QString TimeSimulator::Command::getCurrentTaskMachine()
+const QString TimeSimulator::Command::getNextTaskMachine()
 {
     QString machine = "";
     if (changeCurrentTask())

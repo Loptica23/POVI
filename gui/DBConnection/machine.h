@@ -21,6 +21,7 @@ public:
     unsigned getId() const;
     unsigned getTaskTypeId() const;
     const QString& getName() const;
+    bool isVirtual() const;
 
     //seters
     void setName(const QString& name);

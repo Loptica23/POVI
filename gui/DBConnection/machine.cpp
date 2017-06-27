@@ -36,6 +36,11 @@ const QString& Machine::getName() const
     return m_name;
 }
 
+bool Machine::isVirtual() const
+{
+    return false;
+}
+
 //seters
 void Machine::setName(const QString &name)
 {

@@ -34,9 +34,9 @@ private:
     void insertDetailsButton(unsigned i, unsigned j);
     void insertEditButton(unsigned i, unsigned j);
 
-    void initializeTimeEngine();
     void initializeTimeMachines();
-    void initializeTimeTasksForCommand(CommandPtr command);
+    void initializeCommands();
+    void initializeTasksForCommand(CommandPtr command);
 
     Ui::CommandsViewIsInState *ui;
     DBConnectionPtr m_db;

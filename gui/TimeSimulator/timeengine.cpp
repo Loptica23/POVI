@@ -4,6 +4,9 @@
 #include "commandmanager.h"
 #include "machine.h"
 
+
+unsigned TimeSimulator::TimeEngine::moment = 0;
+
 TimeSimulator::TimeEngine::TimeEngine() :
     m_machineManager(new MachineManager()),
     m_commandManager(new CommandManager()),
@@ -23,6 +26,7 @@ void TimeSimulator::TimeEngine::run()
     while(m_running)
     {
         m_running = m_machineManager->decrementTime();
+        ++moment;
     }
 }
 
@@ -37,7 +41,7 @@ bool TimeSimulator::TimeEngine::checkIsEverythingSetUp()
     return result;
 }
 
-void TimeSimulator::TimeEngine::addMachine(QString & name, bool isVirtual)
+void TimeSimulator::TimeEngine::addMachine(const QString & name, bool isVirtual)
 {
     m_machineManager->addMachine(name, isVirtual);
 }

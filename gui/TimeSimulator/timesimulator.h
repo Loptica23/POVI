@@ -14,9 +14,9 @@ public:
     void execute();
 
 
-    void addMachine(QString & name, bool isVirtual);
+    void addMachine(const QString & name, bool isVirtual);
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
-    void addTask(QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state);
+    void addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state);
 
 private:
     QThreadPool *m_threadPool;

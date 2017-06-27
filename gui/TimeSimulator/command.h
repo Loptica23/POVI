@@ -16,12 +16,11 @@ public:
     bool checkIsEverythingSetUp();
     bool decrementTimeOfCurrentTask();
 
-    const QString getCurrentTaskMachine();
+    const QString getNextTaskMachine();
     TaskPtr getCurrentTask();
     unsigned getPriority();
     unsigned getId() const;
 
-    void setTasks(TaskVtrPtr tasks);
     void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
 
 private:

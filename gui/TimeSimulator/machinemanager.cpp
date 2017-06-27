@@ -17,18 +17,27 @@ TimeSimulator::MachineManager::~MachineManager()
 
 bool TimeSimulator::MachineManager::decrementTime()
 {
-    //iteriras kroz masine i dekrementiras..
-    //ako ti masina javi da je zavrsila sa nekim nalogom, taj nalog bacas u red sledece masine..
-    //kada ti sve masine bace false vracas false i na taj nacin javljas dalje da je zavrseno sa obradom.
+    bool managerFinised = true;
     for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
     {
         MachinePtr machine = *iter;
         CommandPtr command = machine->decrementTime();
         if (command != nullptr)
         {
-            QString machine = command->getCurrentTaskMachine();
+            QString machineName = command->getNextTaskMachine();
+            if (!machineName.isEmpty())
+            {
+                MachinePtr machine = getMachine(machineName);
+                machine->putCommandIntoQueue(command);
+            }
+        }
+
+        if (!machine->checkIsFinished())
+        {
+            managerFinised = false;
         }
     }
+    return !managerFinised;
 }
 
 void TimeSimulator::MachineManager::addMachine(const QString &name, bool isVirtual)

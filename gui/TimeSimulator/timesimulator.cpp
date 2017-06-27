@@ -23,7 +23,7 @@ void TimeSimulator::TimeSimulator::execute()
     m_threadPool->start(m_timeEngine.get());
 }
 
-void TimeSimulator::TimeSimulator::addMachine(QString & name, bool isVirtual)
+void TimeSimulator::TimeSimulator::addMachine(const QString & name, bool isVirtual)
 {
     m_timeEngine->addMachine(name, isVirtual);
 }
@@ -33,7 +33,7 @@ void TimeSimulator::TimeSimulator::addCommand(unsigned id, unsigned commandNumbe
     m_timeEngine->addCommand(id, commandNumber, priority);
 }
 
-void TimeSimulator::TimeSimulator::addTask(QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state)
+void TimeSimulator::TimeSimulator::addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state)
 {
     m_timeEngine->addTask(machine, idCommand, serilaNumber, prediction, state);
 }

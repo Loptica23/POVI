@@ -7,6 +7,8 @@
 #include "TimeSimulator/command.h"
 #include "TimeSimulator/task.h"
 #include "machine.h"
+#include "command.h"
+#include "dbconnection.h"
 
 CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db, Command::State state) :
     QWidget(parent),
@@ -123,105 +125,69 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
 void CommandsViewIsInState::on_pushButton_2_clicked()
 {
     m_timeSimulator.reset(new TimeSimulator::TimeSimulator());
-
-    initializeTimeEngine();
-
+    initializeTimeMachines();
+    initializeCommands();
+/*
     qDebug() << "initialization is finished!";
     if (m_engine->checkIsEverythingSetUp())
     {
         qDebug() << "starting engine from main thread!";
-        m_timeSimulator->execute(m_engine);
+        m_timeSimulator->execute();
     }
-}
-
-void CommandsViewIsInState::initializeTimeEngine()
-{
-    m_engine = new TimeSimulator::CommandTerminationTimeEngine();
-    initializeTimeMachines();
-
-    //dohvatanje komandi
-    auto commands = m_db->getCommands(m_state);//ovde je mozda bolje da navedes konkretno stanje
-    setCommands(commands);
-
-    for (auto iter = m_commands->begin(); iter != m_commands->end(); ++iter)
-    {
-        CommandPtr command = *iter;
-        initializeTimeTasksForCommand(command);
-    }
+*/
 }
 
 void CommandsViewIsInState::initializeTimeMachines()
 {
-    //pravim masine
-    m_timeMachines.reset(new TimeSimulator::MachineVtr());
-    MachinePtrVtr AllMachines = m_db->getMachines();
-    for (auto iter = AllMachines->begin(); iter != AllMachines->end(); ++iter)
+    MachinePtrVtr machines = m_db->getMachines();
+    for (auto iter = machines->begin(); iter != machines->end(); ++iter)
     {
         MachinePtr machine = *iter;
-        TimeSimulator::MachinePtr newTimeMachine(new TimeSimulator::Machine(machine->getId()));
-        m_timeMachines->push_back(newTimeMachine);
+        m_timeSimulator->addMachine(machine->getName(), machine->isVirtual());
     }
-    //setujem masine simulatoru
-    m_engine->setMachines(m_timeMachines);
 }
 
-void CommandsViewIsInState::initializeTimeTasksForCommand(CommandPtr command)
+void CommandsViewIsInState::initializeCommands()
 {
-    bool wrongCommand = false;
-    TimeSimulator::CommandPtr timeCommand(new TimeSimulator::Command(command->getID(), command->getPriority()));
-    TaskPtrVtr tasks = m_db->getTasks(command);
-    TimeSimulator::TaskVtrPtr timeTasks(new TimeSimulator::TaskVtr());
-    for (auto taskIter = tasks->begin(); taskIter != tasks->end(); ++taskIter)
+    Command::State state = Command::State::InProgress;
+    CommandPtrVtr commands = m_db->getCommands(state);
+    for (auto iter = commands->begin(); iter != commands->end(); ++iter)
     {
-        TaskPtr task = *taskIter;
-        TimeSimulator::TaskPtr timeTask(new TimeSimulator::Task(task->getMachineId(), task->getSerialNumber()));
-        TimeSimulator::MachinePtr timeMachine = m_engine->getMachineWithId(task->getMachineId());
+        CommandPtr command = *iter;
+        m_timeSimulator->addCommand(command->getID(), command->getCommandNumber(), command->getPriority());
+        initializeTasksForCommand(command);
+    }
+}
+
+void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
+{
+    TaskPtrVtr tasks = m_db->getTasks(command);
+    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    {
+        TaskPtr task = *iter;
+        QString machineName = "";
+        TimeSimulator::TaskState state;
         switch(task->getState())
         {
         case Task::State::Complited:
-            break;
-        case Task::State::Leaved:
+            state = TimeSimulator::TaskState::Complited;
             break;
         case Task::State::InProgress:
-            timeTask->setPrediction(task->getPrediction());
-            timeMachine->putCurrentCommand(timeCommand);
-            timeTasks->push_back(timeTask);
-            if (!task->getMachineId())
-            {
-                wrongCommand = true;
-            }
+            state = TimeSimulator::TaskState::InProgress;
             break;
-        case Task::State::Waiting:
-            timeTask->setPrediction(task->getPrediction());
-            timeMachine->putCommandIntoQueue(timeCommand);
-            timeTasks->push_back(timeTask);
-            if (!task->getMachineId())
-            {
-                wrongCommand = true;
-            }
+        case Task::State::Leaved:
+            state = TimeSimulator::TaskState::Leaved;
             break;
         case Task::State::New:
-            timeTask->setPrediction(task->getPrediction());
-            timeTasks->push_back(timeTask);
-            if (!task->getMachineId())
-            {
-                wrongCommand = true;
-            }
+            state = TimeSimulator::TaskState::New;
             break;
         case Task::State::Stopped:
-            wrongCommand = true;
+            state = TimeSimulator::TaskState::Stopped;
+            break;
+        case Task::State::Waiting:
+            state = TimeSimulator::TaskState::Waiting;
             break;
         }
-    }
-
-    if (wrongCommand)
-    {
-        qDebug() << "nalog id = " << command->getID() << "nema sve informacije za izracunavanje i zbog toga ispada iz kalkulacije!";
-        m_engine->eliminateCommandFromCalculation(timeCommand);
-    }
-    else
-    {
-        qDebug() << "setting tasks";
-        timeCommand->setTasks(timeTasks);
+        m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), task->getPrediction(), state);
     }
 }

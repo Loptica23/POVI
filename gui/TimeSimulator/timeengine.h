@@ -18,10 +18,12 @@ public:
 
     bool checkIsEverythingSetUp();
 
-    void addMachine(QString & name, bool isVirtual);
+    void addMachine(const QString & name, bool isVirtual);
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
     void addTask(const QString &machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state);
 
+
+    static unsigned moment;
 private:
     MachineManagerPtr m_machineManager;
     CommandManagerPtr m_commandManager;
