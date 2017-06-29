@@ -22,9 +22,11 @@ TimeSimulator::TimeEngine::~TimeEngine()
 
 void TimeSimulator::TimeEngine::run()
 {
-    //mozda ovde da isproveravas masine i naloge, da li su dati svi podaci i tako to.
+    //refactor: mozda ovde da isproveravas masine i naloge, da li su dati svi podaci i tako to.
+    moment = 0;
     while(m_running)
     {
+        qDebug() << "MOMENT: " + moment;
         m_running = m_machineManager->decrementTime();
         ++moment;
     }
@@ -37,7 +39,12 @@ void TimeSimulator::TimeEngine::stopEngine()
 
 bool TimeSimulator::TimeEngine::checkIsEverythingSetUp()
 {
-    bool result = false;
+    bool result = true;
+    CommandVtrPtr commandsForRemoving = m_commandManager->checkIsEverythingSetUp();
+    for (auto & command : *commandsForRemoving)
+    {
+        m_machineManager->removeCommand(command);
+    }
     return result;
 }
 
@@ -72,6 +79,6 @@ void TimeSimulator::TimeEngine::addTask(const QString & machine, unsigned idComm
     }
     else
     {
-        qDebug() << "WARNING: Ne postoji takva masina!";
+        qDebug() << "WARNING: Ne postoji takva masina!" + machine;
     }
 }

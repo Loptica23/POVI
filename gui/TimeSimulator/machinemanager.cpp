@@ -19,17 +19,16 @@ TimeSimulator::MachineManager::~MachineManager()
 bool TimeSimulator::MachineManager::decrementTime()
 {
     bool managerFinised = true;
-    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
+    for (auto & machine : *m_machines)
     {
-        MachinePtr machine = *iter;
         CommandPtr command = machine->decrementTime();
         if (command != nullptr)
         {
             QString machineName = command->getNextTaskMachine();
             if (!machineName.isEmpty())
             {
-                MachinePtr machine = getMachine(machineName);
-                machine->putCommandIntoQueue(command);
+                MachinePtr newMachine = getMachine(machineName);
+                newMachine->putCommandIntoQueue(command);
             }
         }
 
@@ -67,4 +66,12 @@ bool TimeSimulator::MachineManager::isMachineExists(const QString & name)
 TimeSimulator::MachinePtr TimeSimulator::MachineManager::getMachine(const QString &name)
 {
     return Utils::findElementInVectorPtr(m_machines, name, &Machine::getName);
+}
+
+void TimeSimulator::MachineManager::removeCommand(CommandPtr command)
+{
+    for (auto & machine : *m_machines)
+    {
+        machine->eliminateCommandFromCalculation(command);
+    }
 }

@@ -13,7 +13,6 @@ public:
     Machine(const QString & name, bool isVirtual);
     virtual ~Machine();
 
-    bool checkIsEverythingSetUp();
     CommandPtr decrementTime();
     bool checkIsFinished();
 

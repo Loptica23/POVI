@@ -23,6 +23,11 @@ void TimeSimulator::TimeSimulator::execute()
     m_threadPool->start(m_timeEngine.get());
 }
 
+bool TimeSimulator::TimeSimulator::checkIsEverythingSetUp()
+{
+    return m_timeEngine->checkIsEverythingSetUp();
+}
+
 void TimeSimulator::TimeSimulator::addMachine(const QString & name, bool isVirtual)
 {
     m_timeEngine->addMachine(name, isVirtual);

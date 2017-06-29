@@ -11,8 +11,9 @@ class TIMESIMULATORSHARED_EXPORT TimeSimulator
 public:
     TimeSimulator();
     virtual ~TimeSimulator();
-    void execute();
 
+    void execute();
+    bool checkIsEverythingSetUp();
 
     void addMachine(const QString & name, bool isVirtual);
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);

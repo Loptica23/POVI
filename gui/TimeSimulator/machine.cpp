@@ -16,18 +16,6 @@ TimeSimulator::Machine::~Machine()
 
 }
 
-bool TimeSimulator::Machine::checkIsEverythingSetUp()
-{
-    for (auto iter = m_commandsInQueue->begin(); iter != m_commandsInQueue->end(); ++iter)
-    {
-        CommandPtr command = *iter;
-        if (!command->checkIsEverythingSetUp())
-            return false;
-    }
-
-    return true;
-}
-
 TimeSimulator::CommandPtr TimeSimulator::Machine::decrementTime()
 {
     CommandPtr command = nullptr;

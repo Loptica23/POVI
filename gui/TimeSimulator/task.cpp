@@ -42,7 +42,7 @@ void TimeSimulator::Task::setPrediction(unsigned prediction)
 
 bool TimeSimulator::Task::checkIsEverythingSetUp()
 {
-    if (m_machine == 0)
+    if (m_machine.isEmpty())
     {
         qDebug() << "zadatak nije lepo inicijalizovan masina: " << m_serialNumber;
         return false;

@@ -18,9 +18,8 @@ TimeSimulator::Command::~Command()
 
 bool TimeSimulator::Command::checkIsEverythingSetUp()
 {
-    for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
+    for (const auto & task : *m_tasks)
     {
-        TaskPtr task = *iter;
         if (!task->checkIsEverythingSetUp())
             return false;
     }

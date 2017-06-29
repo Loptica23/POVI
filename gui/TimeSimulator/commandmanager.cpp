@@ -54,3 +54,16 @@ TimeSimulator::CommandPtr TimeSimulator::CommandManager::getCommand(unsigned id)
 {
     return Utils::findElementInVectorPtr(m_commands, id, &Command::getId);
 }
+
+TimeSimulator::CommandVtrPtr TimeSimulator::CommandManager::checkIsEverythingSetUp()
+{
+    CommandVtrPtr commandsWhichIsNotSetUp(new CommandVtr());
+    for (const auto & command: *m_commands)
+    {
+        if (!command->checkIsEverythingSetUp())
+        {
+            commandsWhichIsNotSetUp->push_back(command);
+        }
+    }
+    return commandsWhichIsNotSetUp;
+}

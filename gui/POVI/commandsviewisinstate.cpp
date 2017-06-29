@@ -127,14 +127,12 @@ void CommandsViewIsInState::on_pushButton_2_clicked()
     m_timeSimulator.reset(new TimeSimulator::TimeSimulator());
     initializeTimeMachines();
     initializeCommands();
-/*
     qDebug() << "initialization is finished!";
-    if (m_engine->checkIsEverythingSetUp())
+    if (m_timeSimulator->checkIsEverythingSetUp())
     {
         qDebug() << "starting engine from main thread!";
         m_timeSimulator->execute();
     }
-*/
 }
 
 void CommandsViewIsInState::initializeTimeMachines()
