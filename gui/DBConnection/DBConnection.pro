@@ -46,6 +46,9 @@ HEADERS += dbconnection.h\
     employee.h \
     invoice.h
 
+
+INCLUDEPATH += $$PWD/../utils
+
 #unix {
 #    target.path = /usr/lib
 #    INSTALLS += target

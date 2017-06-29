@@ -1,4 +1,5 @@
 #include "tasktypes.h"
+#include "utils.h"
 
 //--------------------------------------------------------------
 //TaskType
@@ -14,7 +15,7 @@ TaskType::~TaskType()
 
 }
 
-int TaskType::getId() const
+unsigned TaskType::getId() const
 {
     return m_id;
 }
@@ -54,48 +55,17 @@ TaskTypePtrVtr TaskTypes::getTypes() const
 
 TaskTypePtr TaskTypes::getTaskTypeById(unsigned type) const
 {
-    TaskTypePtr result;
-
-    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
-            {
-                return taskType->getId() == type;
-            });
-
-    if (it != m_types->end())
-    {
-        result = *it;
-    }
-    return result;
+    return Utils::findElementInVectorPtr(m_types, type, &TaskType::getId);
 }
 
-unsigned TaskTypes::getTypeIdByString(QString type) const
+unsigned TaskTypes::getTypeIdByString(const QString & type) const
 {
-    unsigned result = 0;
-    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
-            {
-                return taskType->getName() == type;
-            });
-
-    if (it != m_types->end())
-    {
-        TaskTypePtr taskType = *it;
-        result = taskType->getId();
-    }
-    return result;
+    TaskTypePtr taskType = Utils::findElementInVectorPtr(m_types, type, &TaskType::getName);
+    return taskType->getId();
 }
 
 QString TaskTypes::getStringById(unsigned type) const
 {
-    QString result = 0;
-    auto it = std::find_if(m_types->begin(), m_types->end(), [&](TaskTypePtr const & taskType)
-            {
-                return taskType->getId() == type;
-            });
-
-    if (it != m_types->end())
-    {
-        TaskTypePtr taskType = *it;
-        result = taskType->getName();
-    }
-    return result;
+    TaskTypePtr taskType = Utils::findElementInVectorPtr(m_types, type, &TaskType::getId);
+    return taskType->getName();
 }

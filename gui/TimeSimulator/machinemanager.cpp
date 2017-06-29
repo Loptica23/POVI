@@ -2,6 +2,7 @@
 #include "types.h"
 #include "machine.h"
 #include "command.h"
+#include "utils.h"
 #include <QDebug>
 
 TimeSimulator::MachineManager::MachineManager() :
@@ -65,14 +66,5 @@ bool TimeSimulator::MachineManager::isMachineExists(const QString & name)
 
 TimeSimulator::MachinePtr TimeSimulator::MachineManager::getMachine(const QString &name)
 {
-    MachinePtr result = nullptr;
-    auto iter = std::find_if(m_machines->begin(), m_machines->end(), [&](MachinePtr const& p) {
-        return p->getName() == name;
-    });
-
-    if (iter != m_machines->end())
-    {
-        result = *iter;
-    }
-    return result;
+    return Utils::findElementInVectorPtr(m_machines, name, &Machine::getName);
 }

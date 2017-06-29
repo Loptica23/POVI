@@ -19,6 +19,7 @@ public:
 
     const QString& getName() const;
     bool isVirtual() const;
+    const QString & getCompareMember() const;
 
     void putCommandIntoQueue(CommandPtr command);
     void putCurrentCommand(CommandPtr command);

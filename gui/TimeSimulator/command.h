@@ -20,6 +20,7 @@ public:
     TaskPtr getCurrentTask();
     unsigned getPriority();
     unsigned getId() const;
+    unsigned getCompareMember() const;
 
     void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
 

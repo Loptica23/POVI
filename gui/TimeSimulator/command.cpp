@@ -60,6 +60,11 @@ unsigned TimeSimulator::Command::getId() const
     return m_id;
 }
 
+unsigned TimeSimulator::Command::getCompareMember() const
+{
+    return getId();
+}
+
 void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)
 {
     TaskPtr task(new Task(machine, serilaNumber, prediction, state));

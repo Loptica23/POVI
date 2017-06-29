@@ -40,6 +40,8 @@ HEADERS += timesimulator.h\
     machinemanager.h \
     commandmanager.h
 
+INCLUDEPATH += $$PWD/../utils
+
 unix {
     target.path = /usr/lib
     INSTALLS += target

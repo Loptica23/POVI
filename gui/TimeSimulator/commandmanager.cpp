@@ -1,5 +1,6 @@
 #include "commandmanager.h"
 #include "command.h"
+#include "utils.h"
 #include <QDebug>
 
 TimeSimulator::CommandManager::CommandManager() :
@@ -51,14 +52,5 @@ bool TimeSimulator::CommandManager::isCommandExists(unsigned id)
 
 TimeSimulator::CommandPtr TimeSimulator::CommandManager::getCommand(unsigned id)
 {
-    CommandPtr result = nullptr;
-    auto iter = std::find_if(m_commands->begin(), m_commands->end(), [&](CommandPtr const& p) {
-        return p->getId() == id;
-    });
-
-    if (iter != m_commands->end())
-    {
-        result = *iter;
-    }
-    return result;
+    return Utils::findElementInVectorPtr(m_commands, id, &Command::getId);
 }

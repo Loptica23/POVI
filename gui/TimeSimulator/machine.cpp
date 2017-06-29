@@ -60,6 +60,11 @@ bool TimeSimulator::Machine::isVirtual() const
     return m_isVirtual;
 }
 
+const QString & TimeSimulator::Machine::getCompareMember() const
+{
+    return getName();
+}
+
 TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
 {
     CommandPtr command = nullptr;

@@ -19,12 +19,12 @@ public:
     TaskType(int id, QString name, bool isVirtual);
     virtual ~TaskType();
 
-    int getId() const;
+    unsigned getId() const;
     QString getName() const;
     bool isVirtual() const;
 
 private:
-    int m_id;
+    unsigned m_id;
     QString m_name;
     bool m_isVirtual;
 };
@@ -37,7 +37,7 @@ public:
 
     TaskTypePtrVtr getTypes() const;
     TaskTypePtr getTaskTypeById(unsigned type) const;
-    unsigned getTypeIdByString(QString type) const;
+    unsigned getTypeIdByString(const QString & type) const;
     QString getStringById(unsigned type) const;
 
 private:
