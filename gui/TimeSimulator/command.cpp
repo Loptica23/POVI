@@ -64,6 +64,16 @@ unsigned TimeSimulator::Command::getCompareMember() const
     return getId();
 }
 
+unsigned TimeSimulator::Command::getFinishMoment() const
+{
+    return m_finishMoment;
+}
+
+void TimeSimulator::Command::setFinishMoment(unsigned moment)
+{
+    m_finishMoment = moment;
+}
+
 void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)
 {
     TaskPtr task(new Task(machine, serilaNumber, prediction, state));
@@ -71,15 +81,29 @@ void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNum
     {
         m_tasks->push_back(task);
     }
+    if ((task->getState() == TaskState::Waiting) || (task->getState() == TaskState::InProgress))
+    {
+        m_currentTask = task;
+    }
 }
 
 bool TimeSimulator::Command::changeCurrentTask()
 {
-    ++m_iterator;
-    if (m_iterator != m_tasks->end())
+    //refactor
+    bool result = false;
+    bool  find = false;
+    for (auto & task : *m_tasks)
     {
-        m_currentTask = *m_iterator;
-        return true;
+        if (find)
+        {
+            m_currentTask = task;
+            result = true;
+            break;
+        }
+        if (task->getSerialNumber() == m_currentTask->getSerialNumber())
+        {
+            find = true;
+        }
     }
-    return false;
+    return result;
 }

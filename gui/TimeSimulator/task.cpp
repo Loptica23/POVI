@@ -25,6 +25,11 @@ unsigned TimeSimulator::Task::getPrediction() const
     return m_prediction;
 }
 
+unsigned TimeSimulator::Task::getSerialNumber() const
+{
+    return m_serialNumber;
+}
+
 TimeSimulator::TaskState TimeSimulator::Task::getState() const
 {
     return m_state;

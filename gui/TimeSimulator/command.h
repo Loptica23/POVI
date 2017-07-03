@@ -21,7 +21,9 @@ public:
     unsigned getPriority();
     unsigned getId() const;
     unsigned getCompareMember() const;
+    unsigned getFinishMoment() const;
 
+    void setFinishMoment(unsigned moment);
     void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
 
 private:
@@ -30,9 +32,9 @@ private:
     unsigned m_id;
     unsigned m_commandNumber;
     unsigned m_priority;
+    unsigned m_finishMoment;
     TaskVtrPtr m_tasks;
     TaskPtr m_currentTask;
-    TaskVtr::iterator m_iterator;
 };
 
 }

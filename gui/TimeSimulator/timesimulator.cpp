@@ -14,12 +14,12 @@ TimeSimulator::TimeSimulator::TimeSimulator() :
 
 TimeSimulator::TimeSimulator::~TimeSimulator()
 {
-    //vidi kako ces da stopiras zadatke
+    m_timeEngine->stopEngine();
 }
 
 void TimeSimulator::TimeSimulator::execute()
 {
-    //commandTerminationTimeEngine->setAutoDelete(false);
+    m_timeEngine->setAutoDelete(false);
     m_threadPool->start(m_timeEngine.get());
 }
 

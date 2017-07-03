@@ -9,6 +9,7 @@
 #include "machine.h"
 #include "command.h"
 #include "dbconnection.h"
+#include "utils.h"
 
 CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db, Command::State state) :
     QWidget(parent),
@@ -137,8 +138,8 @@ void CommandsViewIsInState::on_pushButton_2_clicked()
 
 void CommandsViewIsInState::initializeTimeMachines()
 {
-    MachinePtrVtr machines = m_db->getMachines();
-    for (auto iter = machines->begin(); iter != machines->end(); ++iter)
+    m_machines = m_db->getMachines();
+    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
     {
         MachinePtr machine = *iter;
         m_timeSimulator->addMachine(machine->getName(), machine->isVirtual());
@@ -163,7 +164,7 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
     for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
     {
         TaskPtr task = *iter;
-        QString machineName = "";
+        QString machineName = getMachineName(task->getMachineId());
         TimeSimulator::TaskState state;
         switch(task->getState())
         {
@@ -188,4 +189,15 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
         }
         m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), task->getPrediction(), state);
     }
+}
+
+QString CommandsViewIsInState::getMachineName(unsigned machineId)
+{
+    QString result = "";
+    MachinePtr machine = Utils::findElementInVectorPtr(m_machines, machineId, &Machine::getId);
+    if (machine != nullptr)
+    {
+        result = machine->getName();
+    }
+    return result;
 }

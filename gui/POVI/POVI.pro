@@ -119,3 +119,5 @@ else:unix: LIBS += -L$$OUT_PWD/../TimeSimulator/ -lTimeSimulator
 
 INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/../TimeSimulator
+
+INCLUDEPATH += $$PWD/../utils

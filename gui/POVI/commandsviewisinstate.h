@@ -1,6 +1,7 @@
 #pragma once
 #include <QWidget>
 #include <QPushButton>
+#include <QString>
 #include "dbconnection.h"
 #include "TimeSimulator/types.h"
 #include "TimeSimulator/timesimulator.h"
@@ -38,8 +39,11 @@ private:
     void initializeCommands();
     void initializeTasksForCommand(CommandPtr command);
 
+    QString getMachineName(unsigned machineId);
+
     Ui::CommandsViewIsInState *ui;
     DBConnectionPtr m_db;
+    MachinePtrVtr m_machines;
     CommandPtrVtr m_commands;
     Command::State m_state;
 

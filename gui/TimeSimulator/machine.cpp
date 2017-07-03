@@ -60,7 +60,7 @@ TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
     {
         command = m_commandsInQueue->at(0);
         m_commandsInQueue->erase(m_commandsInQueue->begin());
-        qDebug() << "Nalog sa idjem: " + QString::number(command->getId()) + " je poceo da se izvrsava na masini ";
+        qDebug() << "Nalog sa idjem: " + QString::number(command->getId()) + " je poceo da se izvrsava na masini " + getName();
     }
     return command;
 }

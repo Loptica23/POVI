@@ -15,6 +15,7 @@ public:
 
     const QString &getMachine() const;
     unsigned getPrediction() const;
+    unsigned getSerialNumber() const;
 
     TaskState getState() const;
     void setState(const TaskState & state);
