@@ -139,9 +139,8 @@ void CommandsViewIsInState::on_pushButton_2_clicked()
 void CommandsViewIsInState::initializeTimeMachines()
 {
     m_machines = m_db->getMachines();
-    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
+    for (auto & machine : *m_machines)
     {
-        MachinePtr machine = *iter;
         m_timeSimulator->addMachine(machine->getName(), machine->isVirtual());
     }
 }

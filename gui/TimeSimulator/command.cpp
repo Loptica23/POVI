@@ -6,7 +6,8 @@ TimeSimulator::Command::Command(unsigned id, unsigned commandNumber, unsigned pr
     m_id(id),
     m_commandNumber(commandNumber),
     m_priority(priority),
-    m_tasks(new TaskVtr())
+    m_tasks(new TaskVtr()),
+    m_finishMoment(0)
 {
 
 }
@@ -57,6 +58,11 @@ unsigned TimeSimulator::Command::getPriority()
 unsigned TimeSimulator::Command::getId() const
 {
     return m_id;
+}
+
+unsigned TimeSimulator::Command::getCommandNumber() const
+{
+    return m_commandNumber;
 }
 
 unsigned TimeSimulator::Command::getCompareMember() const

@@ -20,6 +20,7 @@ public:
     TaskPtr getCurrentTask();
     unsigned getPriority();
     unsigned getId() const;
+    unsigned getCommandNumber() const;
     unsigned getCompareMember() const;
     unsigned getFinishMoment() const;
 

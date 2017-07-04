@@ -25,6 +25,7 @@ public:
 
     //seters
     void setName(const QString& name);
+    void setVirtuality(bool isVirtual);
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
@@ -43,4 +44,7 @@ private:
 
     QString m_name;
     bool m_nameChanged;
+
+    bool m_isVirtual;
+    bool m_isVirtualChanged;
 };

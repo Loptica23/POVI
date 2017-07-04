@@ -27,7 +27,7 @@ void TimeSimulator::TimeEngine::run()
     while(m_running)
     {
         qDebug() << "MOMENT: " + QString::number(moment);
-        m_running = m_machineManager->decrementTime();
+        m_running = m_machineManager->decrementTime(moment);
         ++moment;
     }
 }

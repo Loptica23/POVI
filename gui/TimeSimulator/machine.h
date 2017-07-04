@@ -13,7 +13,7 @@ public:
     Machine(const QString & name, bool isVirtual);
     virtual ~Machine();
 
-    CommandPtr decrementTime();
+    CommandVtrPtr decrementTime();
     bool checkIsFinished();
 
     const QString& getName() const;
@@ -25,6 +25,8 @@ public:
     void eliminateCommandFromCalculation(CommandPtr command);
 
 private:
+    CommandVtrPtr decrementTimeForVirtualMachine();
+    CommandPtr decrementTimeForNormalMachine();
     CommandPtr getFirstFromQueue();
     void sortCommandsByPriority();
     static bool compareFunction(CommandPtr command1, CommandPtr command2);

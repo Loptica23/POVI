@@ -38,7 +38,7 @@ const QString& Machine::getName() const
 
 bool Machine::isVirtual() const
 {
-    return false;
+    return m_isVirtual;
 }
 
 //seters
@@ -48,6 +48,15 @@ void Machine::setName(const QString &name)
     {
         m_nameChanged = true;
         m_name = name;
+    }
+}
+
+void Machine::setVirtuality(bool isVirtual)
+{
+    if (m_isVirtual != isVirtual)
+    {
+        m_isVirtualChanged = true;
+        m_isVirtual = isVirtual;
     }
 }
 
@@ -81,7 +90,7 @@ QString Machine::statemantForUpdating() const
 
 bool Machine::isModified() const
 {
-    return m_nameChanged;
+    return (m_nameChanged || m_isVirtualChanged);
 }
 
 void Machine::resetChangeTracking()
@@ -96,6 +105,7 @@ MachinePtrVtr Machine::createMachineFromQuery(QSqlQuery& query)
     {
         MachinePtr machine(new Machine(query.value("idMasina").toUInt(), query.value("TipoviZadatka_idTipoviZadatka").toUInt()));
         machine->setName(query.value("Naziv").toString());
+        machine->setVirtuality(query.value("Virtuelna").toBool());
         machines->push_back(machine);
     }
     return machines;

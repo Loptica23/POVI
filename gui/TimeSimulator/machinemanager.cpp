@@ -16,19 +16,26 @@ TimeSimulator::MachineManager::~MachineManager()
 
 }
 
-bool TimeSimulator::MachineManager::decrementTime()
+bool TimeSimulator::MachineManager::decrementTime(unsigned moment)
 {
     bool managerFinised = true;
     for (auto & machine : *m_machines)
     {
-        CommandPtr command = machine->decrementTime();
-        if (command != nullptr)
+        CommandVtrPtr commands = machine->decrementTime();
+        for (auto & command : *commands)
         {
-            QString machineName = command->getNextTaskMachine();
-            if (!machineName.isEmpty())
+            if (command != nullptr)
             {
-                MachinePtr newMachine = getMachine(machineName);
-                newMachine->putCommandIntoQueue(command);
+                QString machineName = command->getNextTaskMachine();
+                if (!machineName.isEmpty())
+                {
+                    MachinePtr newMachine = getMachine(machineName);
+                    newMachine->putCommandIntoQueue(command);
+                }
+                else
+                {
+                    command->setFinishMoment(moment);
+                }
             }
         }
 

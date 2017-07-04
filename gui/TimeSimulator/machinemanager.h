@@ -12,7 +12,7 @@ public:
     MachineManager();
     virtual ~MachineManager();
 
-    bool decrementTime();
+    bool decrementTime(unsigned moment);
 
     void addMachine(const QString & name, bool isVirtual);
     bool isMachineExists(const QString & name);
