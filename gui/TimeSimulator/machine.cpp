@@ -59,15 +59,6 @@ const QString & TimeSimulator::Machine::getCompareMember() const
 TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTimeForVirtualMachine()
 {
     CommandVtrPtr result (new CommandVtr());
-    /*for (auto iter = m_commandsInQueue->begin(); iter != m_commandsInQueue->end(); ++iter)
-    {
-        CommandPtr command = *iter;
-        if (command->decrementTimeOfCurrentTask())
-        {
-            result->push_back(command);
-            m_commandsInQueue->erase(iter);
-        }
-    }*/
     m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(), [&](auto & command)
     {
         if (!command->decrementTimeOfCurrentTask())
@@ -82,15 +73,28 @@ TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTimeForVirtualMach
 
 TimeSimulator::CommandPtr TimeSimulator::Machine::decrementTimeForNormalMachine()
 {
+    //refactor
     CommandPtr command = nullptr;
     if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
     {
         command = m_currentCommand;
         m_currentCommand = getFirstFromQueue();
+        if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
+        {
+            command = m_currentCommand;
+            m_currentCommand = getFirstFromQueue();
+        }
     }
 
     if (!m_currentCommand)
+    {
         m_currentCommand = getFirstFromQueue();
+        if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
+        {
+            command = m_currentCommand;
+            m_currentCommand = getFirstFromQueue();
+        }
+    }
 
     return command;
 }

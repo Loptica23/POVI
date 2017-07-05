@@ -78,6 +78,7 @@ unsigned TimeSimulator::Command::getFinishMoment() const
 void TimeSimulator::Command::setFinishMoment(unsigned moment)
 {
     m_finishMoment = moment;
+    qDebug() << "Nalog sa brojem: " + QString::number(getCommandNumber()) + " je zavrsen u momentu " + QString::number(moment);
 }
 
 void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)
