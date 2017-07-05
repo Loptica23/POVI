@@ -18,6 +18,8 @@ public:
     CommandPtr getCommand(unsigned id);
     CommandVtrPtr checkIsEverythingSetUp();
 
+    TimeSimulatorResultMapPtr getResultMapPtr() const;
+
 private:
     CommandVtrPtr m_commands;
 };

@@ -2,10 +2,11 @@
 #include "ui_commandsviewisinstate.h"
 #include "commanddialogchieofproduction.h"
 #include "TimeSimulator/timesimulator.h"
-#include "TimeSimulator/commandterminationtimeengine.h"
+#include "TimeSimulator/timeengine.h"
 #include "TimeSimulator/machine.h"
 #include "TimeSimulator/command.h"
 #include "TimeSimulator/task.h"
+#include "TimeSimulator/types.h"
 #include "machine.h"
 #include "command.h"
 #include "dbconnection.h"
@@ -35,6 +36,11 @@ void CommandsViewIsInState::on_refresh_clicked()
 void CommandsViewIsInState::setCommands(CommandPtrVtr commands)
 {
     m_commands = commands;
+}
+
+void CommandsViewIsInState::timeEngineFinish()
+{
+    qDebug() << "Pozvan slot! " + QString::number(m_timeSimulator->getResult()->size());
 }
 
 void CommandsViewIsInState::details()
@@ -126,6 +132,10 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
 void CommandsViewIsInState::on_pushButton_2_clicked()
 {
     m_timeSimulator.reset(new TimeSimulator::TimeSimulator());
+    connect(  m_timeSimulator->getSender()
+            , SIGNAL(sendResult())
+            , this
+            , SLOT(timeEngineFinish()));
     initializeTimeMachines();
     initializeCommands();
     qDebug() << "initialization is finished!";

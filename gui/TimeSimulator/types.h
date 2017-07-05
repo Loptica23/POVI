@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <queue>
+#include <map>
 
 namespace TimeSimulator
 {
@@ -35,6 +36,9 @@ class Task;
 using TaskPtr = std::shared_ptr<Task>;
 using TaskVtr = std::vector<TaskPtr>;
 using TaskVtrPtr = std::shared_ptr<TaskVtr>;
+
+using TimeSimulatorResultMap = std::map<unsigned, unsigned>;
+using TimeSimulatorResultMapPtr = std::shared_ptr<TimeSimulatorResultMap>;
 
 enum class TaskState {New, Waiting, InProgress, Complited, Leaved, Stopped};
 

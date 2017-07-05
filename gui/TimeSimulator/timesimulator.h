@@ -19,6 +19,8 @@ public:
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
     void addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state);
 
+    const TimeEngine *getSender() const;
+    TimeSimulatorResultMapPtr getResult() const;
 private:
     QThreadPool *m_threadPool;
     TimeEnginePtr m_timeEngine;

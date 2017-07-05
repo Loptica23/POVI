@@ -42,3 +42,14 @@ void TimeSimulator::TimeSimulator::addTask(const QString & machine, unsigned idC
 {
     m_timeEngine->addTask(machine, idCommand, serilaNumber, prediction, state);
 }
+
+
+const TimeSimulator::TimeEngine* TimeSimulator::TimeSimulator::getSender() const
+{
+    return m_timeEngine.get();
+}
+
+TimeSimulator::TimeSimulatorResultMapPtr TimeSimulator::TimeSimulator::getResult() const
+{
+    return m_timeEngine->getResult();
+}

@@ -70,7 +70,7 @@ TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTimeForVirtualMach
     }*/
     m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(), [&](auto & command)
     {
-        if (command->decrementTimeOfCurrentTask())
+        if (!command->decrementTimeOfCurrentTask())
         {
             result->push_back(command);
             return true;
@@ -119,6 +119,7 @@ bool TimeSimulator::Machine::compareFunction(CommandPtr command1, CommandPtr com
 
 void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)
 {
+    qDebug() << "Nalog sa brojem: " + QString::number(command->getCommandNumber()) + " je dodat u red na masini " + getName();
     m_commandsInQueue->push_back(command);
     sortCommandsByPriority();
 }
@@ -127,10 +128,12 @@ void TimeSimulator::Machine::putCurrentCommand(CommandPtr command)
 {
     if (m_isVirtual)
     {
+        qDebug() << "Nalog sa brojem: " + QString::number(command->getCommandNumber()) + " je dodat u red na masini " + getName();
         putCommandIntoQueue(command);
     }
     else
     {
+        qDebug() << "Nalog sa brojem :" + QString::number(command->getCommandNumber()) + " je postavljen kao trenutni zadatak na masini " + getName();
         m_currentCommand = command;
     }
 }

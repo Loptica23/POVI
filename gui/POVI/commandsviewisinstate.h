@@ -19,6 +19,10 @@ public:
     virtual ~CommandsViewIsInState();
 
     void setCommands(CommandPtrVtr commands);
+    void showTimeSimulatorResults(TimeSimulator::TimeSimulatorResultMapPtr timeSimulatorMap);
+
+public slots:
+    void timeEngineFinish();
 
 private slots:
     void on_refresh_clicked();

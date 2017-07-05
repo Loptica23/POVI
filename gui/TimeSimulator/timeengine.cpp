@@ -7,7 +7,8 @@
 
 unsigned TimeSimulator::TimeEngine::moment = 0;
 
-TimeSimulator::TimeEngine::TimeEngine() :
+TimeSimulator::TimeEngine::TimeEngine(QObject* parent) :
+    QObject(parent),
     m_machineManager(new MachineManager()),
     m_commandManager(new CommandManager()),
     m_running(true)
@@ -30,6 +31,10 @@ void TimeSimulator::TimeEngine::run()
         m_running = m_machineManager->decrementTime(moment);
         ++moment;
     }
+
+    //ovde moras da notifajerujes glavnu nit! vidi kako ces to!
+    //potrebna su ti dva flega a ne jedan, kako bi znao da li je nasilno zavrsen task ili je izvrsen normalno!
+    emit sendResult();
 }
 
 void TimeSimulator::TimeEngine::stopEngine()
@@ -81,4 +86,9 @@ void TimeSimulator::TimeEngine::addTask(const QString & machine, unsigned idComm
     {
         qDebug() << "WARNING: Ne postoji takva masina!" + machine;
     }
+}
+
+TimeSimulator::TimeSimulatorResultMapPtr TimeSimulator::TimeEngine::getResult() const
+{
+    return m_commandManager->getResultMapPtr();
 }

@@ -2,15 +2,20 @@
 #include <QRunnable>
 #include <atomic>
 #include <QString>
+#include <QObject>
 #include "types.h"
+#include "timesimulator_global.h"
 
 namespace TimeSimulator
 {
 
-class TimeEngine : public QRunnable
+class TIMESIMULATORSHARED_EXPORT TimeEngine : public QObject, public QRunnable
 {
+
+    Q_OBJECT
+
 public:
-    TimeEngine();
+    TimeEngine(QObject *parent = 0);
     virtual ~TimeEngine();
 
     void run();
@@ -22,8 +27,13 @@ public:
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
     void addTask(const QString &machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state);
 
+    TimeSimulatorResultMapPtr getResult() const;
 
     static unsigned moment;
+
+signals:
+    void sendResult();
+
 private:
     MachineManagerPtr m_machineManager;
     CommandManagerPtr m_commandManager;

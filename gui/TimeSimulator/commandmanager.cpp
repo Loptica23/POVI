@@ -67,3 +67,13 @@ TimeSimulator::CommandVtrPtr TimeSimulator::CommandManager::checkIsEverythingSet
     }
     return commandsWhichIsNotSetUp;
 }
+
+TimeSimulator::TimeSimulatorResultMapPtr TimeSimulator::CommandManager::getResultMapPtr() const
+{
+    TimeSimulatorResultMapPtr resultMap(new TimeSimulatorResultMap());
+    for (const auto & command: *m_commands)
+    {
+        (*resultMap)[command->getId()] = command->getFinishMoment();
+    }
+    return resultMap;
+}
