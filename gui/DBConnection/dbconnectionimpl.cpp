@@ -542,7 +542,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
     {
         task = *iter;
         //ako je ovaj uslov ispunjen radi se o prvom zadatku
-        if (task->getState() == Task::State::New)
+        if (task->getState() == Task::State::New && iter == tasks->begin())
         {
             qDebug() << "postavljnje zadatka na cekanje!";
             task->setState(Task::State::Waiting);

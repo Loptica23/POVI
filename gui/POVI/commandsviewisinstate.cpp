@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include "commandsviewisinstate.h"
 #include "ui_commandsviewisinstate.h"
 #include "commanddialogchieofproduction.h"
@@ -223,12 +224,16 @@ QString CommandsViewIsInState::getMachineName(unsigned machineId)
 QString CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr command)
 {
     QString result;
+    QDateTime currentDateTime = QDateTime::currentDateTime();
     if (m_resultMap != nullptr)
     {
         auto prediction = m_resultMap->find(command->getID());
         if (prediction != m_resultMap->end())
             if (prediction->second != 0)
-                result = QString::number(prediction->second);
+            {
+                qint64 seconds = prediction->second * 60;
+                result = currentDateTime.addSecs(seconds).toString("  hh:mm   dd.MM.yyyy");
+            }
     }
     return result;
 }
