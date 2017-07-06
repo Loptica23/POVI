@@ -38,12 +38,14 @@ private:
     void insertPriority(CommandPtr command, unsigned i, unsigned j);
     void insertDetailsButton(unsigned i, unsigned j);
     void insertEditButton(unsigned i, unsigned j);
+    void insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j);
 
     void initializeTimeMachines();
     void initializeCommands();
     void initializeTasksForCommand(CommandPtr command);
 
     QString getMachineName(unsigned machineId);
+    QString getPredictionFromTimeSimulatorResult(CommandPtr command);
 
     Ui::CommandsViewIsInState *ui;
     DBConnectionPtr m_db;
@@ -57,4 +59,5 @@ private:
     TimeSimulator::CommandTerminationTimeEngine* m_engine;
     std::shared_ptr<TimeSimulator::TimeSimulator> m_timeSimulator;
     TimeSimulator::MachineVtrPtr m_timeMachines;
+    TimeSimulator::TimeSimulatorResultMapPtr m_resultMap;
 };

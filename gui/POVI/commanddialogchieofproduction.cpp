@@ -82,6 +82,7 @@ void CommandDialogChieOfProduction::updateCommand()
 
 void CommandDialogChieOfProduction::acceptButtonClicked()
 {
+    // OVO NE SMES UVEK!!!!!!!!!! MAMLAE
     ifFalseShowDbError(m_db->completeCurrentTask(m_command));
 }
 

@@ -16,7 +16,8 @@ CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db
     QWidget(parent),
     ui(new Ui::CommandsViewIsInState),
     m_state(state),
-    m_db(db)
+    m_db(db),
+    m_resultMap(nullptr)
 {
     ui->setupUi(this);
 }
@@ -41,6 +42,7 @@ void CommandsViewIsInState::setCommands(CommandPtrVtr commands)
 void CommandsViewIsInState::timeEngineFinish()
 {
     qDebug() << "Pozvan slot! " + QString::number(m_timeSimulator->getResult()->size());
+    m_resultMap = m_timeSimulator->getResult();
 }
 
 void CommandsViewIsInState::details()
@@ -83,6 +85,7 @@ void CommandsViewIsInState::fillTable()
         insertPriority(command, i, 1);
         insertDetailsButton(i, 2);
         insertEditButton(i, 3);
+        insertTimeSimulatorPrediction(command, i , 4);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -92,10 +95,10 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_editButtons.clear();
     m_detailsButtons.clear();
 
-    ui->tableWidget->setRowCount(0);
-    ui->tableWidget->setColumnCount(4);
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni";
+    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme zavrsetka";
+    ui->tableWidget->setRowCount(0);
+    ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
 }
 
@@ -127,6 +130,12 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
     m_editButtons.push_back(btn_edit);
     connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+}
+
+void CommandsViewIsInState::insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j)
+{
+    auto *item = new QTableWidgetItem(getPredictionFromTimeSimulatorResult(command));
+    ui->tableWidget->setItem(i, j, item);
 }
 
 void CommandsViewIsInState::on_pushButton_2_clicked()
@@ -207,6 +216,19 @@ QString CommandsViewIsInState::getMachineName(unsigned machineId)
     if (machine != nullptr)
     {
         result = machine->getName();
+    }
+    return result;
+}
+
+QString CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr command)
+{
+    QString result;
+    if (m_resultMap != nullptr)
+    {
+        auto prediction = m_resultMap->find(command->getID());
+        if (prediction != m_resultMap->end())
+            if (prediction->second != 0)
+                result = QString::number(prediction->second);
     }
     return result;
 }
