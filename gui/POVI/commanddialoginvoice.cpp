@@ -20,6 +20,8 @@ void CommandDialogInvoice::setUpWindowByWorkPosition()
     removeWidget(ui->priorityWidget);
 
     ui->commandNumber->setEnabled(false);
+    ui->specification->setReadOnly(true);
+    ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
     ui->invoiceDescription->setReadOnly(true);

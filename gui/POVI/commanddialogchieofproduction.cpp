@@ -20,6 +20,8 @@ CommandDialogChieOfProduction::~CommandDialogChieOfProduction()
 
 void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
 {
+    ui->specification->setReadOnly(true);
+    ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
     ui->commandNumber->setEnabled(false);

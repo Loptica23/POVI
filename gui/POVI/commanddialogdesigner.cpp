@@ -25,6 +25,8 @@ void CommandDialogDesigner::setUpWindowByWorkPosition()
     removeWidget(ui->invoice);
 
     ui->commandNumber->setEnabled(false);
+    ui->specification->setReadOnly(true);
+    ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     //nalog je preuzet
     if (m_edit)

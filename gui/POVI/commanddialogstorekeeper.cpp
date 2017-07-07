@@ -23,6 +23,8 @@ void CommandDialogStoreKeeper::setUpWindowByWorkPosition()
     removeInvoiceWidgetIfTaskDontNeedIt();
 
     ui->commandNumber->setEnabled(false);
+    ui->specification->setReadOnly(true);
+    ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
 
