@@ -19,13 +19,15 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_edit(true),
     m_serialNumberEmpty(true),
     m_comercialistDescriptionEmpty(true),
+    m_specificationEmpty(true),
+    m_quantityEmpty(true),
     m_designerDescriptionEmpty(true),
     m_storeKeeperDescriptionEmpty(true),
     m_currentTask(nullptr),
     m_haveItInvoice(false)
 {
     ui->setupUi(this);
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
+    connectSignalsAndSlots();
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -40,18 +42,22 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_deletedTasks(new TaskVtr()),
     m_serialNumberEmpty(true),
     m_comercialistDescriptionEmpty(true),
+    m_specificationEmpty(true),
+    m_quantityEmpty(true),
     m_designerDescriptionEmpty(true),
     m_storeKeeperDescriptionEmpty(true),
     m_currentTask(nullptr),
     m_haveItInvoice(false)
 {
     ui->setupUi(this);
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
+    connectSignalsAndSlots();
     initializeTasks();
 
     ui->commandNumber->setText(QString::number(command->getCommandNumber()));
     ui->Priority->setText(QString::number(command->getPriority()));
     ui->comercialistDescription->setText(command->getComercialistDescription());
+    ui->specification->setText(command->getSpecification());
+    ui->quantity->setText(QString::number(command->getQuantity()));
     ui->designerDescription->setText(command->getDesignerDescription());
     ui->storekeeperDescription->setText(command->getStoreKeeperDescription());
     //ostali su ti taskovi
@@ -61,6 +67,8 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         ui->commandNumber->setEnabled(false);
         ui->comercialistDescription->setReadOnly(true);
+        ui->specification->setReadOnly(true);
+        ui->quantity->setReadOnly(true);
         ui->designerDescription->setReadOnly(true);
         ui->storekeeperDescription->setReadOnly(true);
         ui->invoiceDescription->setReadOnly(true);
@@ -74,6 +82,13 @@ CommandDialog::~CommandDialog()
 {
     qDebug() << "Destrukcija naloga!";
     delete ui;
+}
+
+void CommandDialog::connectSignalsAndSlots()
+{
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(templateChanged(int)));
+    connect(ui->specification, SIGNAL(textChanged()), this, SLOT(on_specification_textChanged()));
+    connect(ui->quantity, SIGNAL(textChanged(QString)), this, SLOT(on_quantity_textChanged()));
 }
 
 void CommandDialog::initializeTasks()
@@ -126,6 +141,8 @@ void CommandDialog::acceptButtonClicked() {}
 void CommandDialog::rejectButtonClicked() {}
 void CommandDialog::serialNumberChanged() {}
 void CommandDialog::comercialistDescriptionChanged() {}
+void CommandDialog::specificationChanged() {}
+void CommandDialog::quantityChanged() {}
 void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {}
@@ -167,6 +184,14 @@ void CommandDialog::deleteTask() {}
 void CommandDialog::createCommand()
 {
     CommandPtr command(new Command(m_order->getCustomerId(), m_order->getID(), 0));
+    if (!ui->specification->toPlainText().isEmpty())
+    {
+        command->setSpecification(ui->specification->toPlainText());
+    }
+    if (!ui->quantity->text().isEmpty())
+    {
+        command->setQuantity(ui->quantity->text().toUInt());
+    }
     if (!ui->comercialistDescription->toPlainText().isEmpty())
     {
         command->setComercialistDescription(ui->comercialistDescription->toPlainText());
@@ -203,7 +228,7 @@ void CommandDialog::createCommand()
 void CommandDialog::updateCommand()
 {
     //ova funkcija bi trebalo da je overajdovana! i da je ovaj kod ispod mrtav kod
-    switch(MainWindow::getWorker()->getWorkPosition())
+    /*switch(MainWindow::getWorker()->getWorkPosition())
     {
     case Employee::WorkPosition::Administrator:
         if (!ui->commandNumber->text().isEmpty())
@@ -227,7 +252,7 @@ void CommandDialog::updateCommand()
             QMessageBox messageBox;
             messageBox.critical(0,"Error",error);
         }
-    }
+    }*/
 }
 
 
@@ -240,6 +265,27 @@ void CommandDialog::on_storekeeperDescription_textChanged()
 
     storeKeeperDescriptionChanged();
 }
+
+void CommandDialog::on_specification_textChanged()
+{
+    if (ui->specification->toPlainText().isEmpty())
+        m_specificationEmpty = true;
+    else
+        m_specificationEmpty = false;
+
+    specificationChanged();
+}
+
+void CommandDialog::on_quantity_textChanged()
+{
+    if (ui->quantity->text().isEmpty())
+        m_quantityEmpty = true;
+    else
+        m_quantityEmpty = false;
+
+    quantityChanged();
+}
+
 
 void CommandDialog::on_designerDescription_textChanged()
 {

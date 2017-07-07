@@ -302,6 +302,10 @@ void CommandDialogKomercialist::updateCommand()
     //refaktor
     if (!ui->commandNumber->text().isEmpty())
         m_command->setCommandNumber(ui->commandNumber->text().toUInt());
+    if (!ui->quantity->text().isEmpty())
+        m_command->setQuantity(ui->quantity->text().toUInt());
+    if (!ui->specification->toPlainText().isEmpty())
+        m_command->setSpecification(ui->specification->toPlainText());
     if (!ui->comercialistDescription->toPlainText().isEmpty())
         m_command->setComercialistDescription(ui->comercialistDescription->toPlainText());
     if (m_command->isModified())

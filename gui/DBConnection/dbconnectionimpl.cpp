@@ -232,6 +232,31 @@ OrderPtrVtr DBConnectionImpl::getOrders(CustomerPtr customer)
     return orders;
 }
 
+OrderPtr DBConnectionImpl::getOrder(unsigned id)
+{
+    OrderPtr order;
+    OrderPtrVtr orders;
+    QSqlQuery query;
+    QString stm = "select * from narudzbina where idNarudzbina = " + QString::number(id);
+    qDebug() << stm;
+    query.prepare(stm);
+    if(query.exec())
+    {
+        orders = Order::createOrdersFromQuery(query);
+    }
+    else
+    {
+        m_lastError = query.lastError().text();
+        qDebug() << "nije uspeo query!";
+    }
+    if (!orders->empty())
+    {
+        order = *(orders->begin());
+
+    }
+    return order;
+}
+
 bool DBConnectionImpl::createNewOrder(OrderPtr order)
 {
     QSqlQuery query;

@@ -22,6 +22,8 @@ public:
 
     virtual void setUpWindowByWorkPosition() = 0;
 
+    void connectSignalsAndSlots();
+
 protected slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
@@ -46,6 +48,8 @@ protected:
 
     virtual void serialNumberChanged();
     virtual void comercialistDescriptionChanged();
+    virtual void specificationChanged();
+    virtual void quantityChanged();
     virtual void designerDescriptionChanged();
     virtual void storeKeeperDescriptionChanged();
     virtual void taskTemplateChanged(int i);
@@ -74,10 +78,14 @@ protected:
 
     bool m_serialNumberEmpty;
     bool m_comercialistDescriptionEmpty;
+    bool m_specificationEmpty;
+    bool m_quantityEmpty;
     bool m_designerDescriptionEmpty;
     bool m_storeKeeperDescriptionEmpty;
 private slots:
     void on_storekeeperDescription_textChanged();
+    void on_specification_textChanged();
+    void on_quantity_textChanged();
     void on_designerDescription_textChanged();
     void on_comercialistDescription_textChanged();
     void on_commandNumber_textChanged(const QString &arg1);

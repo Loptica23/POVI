@@ -7,6 +7,7 @@ Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand):
     m_id(idCommand),
     m_idCustomer(idCustomer),
     m_idOrder(idOrder),
+    m_quantity(00),
     m_priority(100)
 {
     resetChangeTracking();
@@ -42,6 +43,16 @@ unsigned Command::getIdOrder() const
 unsigned Command::getIdCustomer() const
 {
     return m_idCustomer;
+}
+
+const QString& Command::getSpecification() const
+{
+    return m_specification;
+}
+
+unsigned Command::getQuantity() const
+{
+    return m_quantity;
 }
 
 const QString& Command::getComercialistDescription() const
@@ -107,6 +118,25 @@ void Command::setPriority(int priority)
         m_priority = priority;
     }
 }
+
+void Command::setSpecification(const QString & specification)
+{
+    if (m_specification != specification)
+    {
+        m_specificationChanged = true;
+        m_specification = specification;
+    }
+}
+
+void Command::setQuantity(unsigned quantity)
+{
+    if (m_quantity != quantity)
+    {
+        m_quantityChanged = true;
+        m_quantity = quantity;
+    }
+}
+
 
 void Command::setComercialistDescription(const QString & description)
 {
@@ -187,7 +217,7 @@ void Command::setState(const unsigned state)
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, OpisKomercijaliste, BrojNaloga, Prioritet, "
-                  "OpisDizajnera, OpisMagacionera, Stanje) values (";
+                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += "'" + m_comercialistDescription + "', ";
@@ -195,7 +225,9 @@ QString Command::statemantForCreating() const
     stm += QString::number(m_priority) + ", ";
     stm += "'" + m_designerDescription + "', ";
     stm += "'" + m_storeKeeperDescription + "', ";
-    stm += "'nov')";
+    stm += "'nov', ";
+    stm += "'" + m_specification + "', ";
+    stm += QString::number(m_quantity) + ");";
     qDebug() << stm;
     return stm;
 }
@@ -206,6 +238,14 @@ QString Command::statemantForUpdating() const
     if (isModified())
     {
         stm = "update nalog set ";
+        if (m_specificationChanged)
+        {
+            stm += "Specifikacija = '" + getSpecification() + "', ";
+        }
+        if (m_quantityChanged)
+        {
+            stm += "Kolicina = " + QString::number(getQuantity()) + ", ";
+        }
         if (m_comercialistDescriptionChanged)
         {
             stm += "OpisKomercijaliste = '" + getComercialistDescription() + "', ";
@@ -252,7 +292,9 @@ bool Command::isModified() const
             m_designerDescriptionChanged ||
             m_storeKeeperDescriptionChanged ||
             m_stateChanged ||
-            m_commandNumberChanged);
+            m_commandNumberChanged ||
+            m_specificationChanged ||
+            m_quantityChanged);
 }
 
 void Command::resetChangeTracking()
@@ -263,6 +305,8 @@ void Command::resetChangeTracking()
     m_designerDescriptionChanged        = false;
     m_storeKeeperDescriptionChanged     = false;
     m_stateChanged                      = false;
+    m_specificationChanged              = false;
+    m_quantityChanged                   = false;
 }
 
 CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
@@ -272,6 +316,8 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
     {
         CommandPtr command(new Command(query.value("idKlijent").toUInt(), query.value("idNarudzbina").toUInt(), query.value("idNalog").toUInt()));
         command->setCommandNumber(query.value("BrojNaloga").toInt());
+        command->setSpecification(query.value("Specifikacija").toString());
+        command->setQuantity(query.value("Kolicina").toInt());
         command->setComercialistDescription(query.value("OpisKomercijaliste").toString());
         command->setDesignerDescription(query.value("OpisDizajnera").toString());
         command->setStoreKeeperDescription(query.value("OpisMagacionera").toString());

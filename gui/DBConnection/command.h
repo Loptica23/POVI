@@ -25,6 +25,8 @@ public:
     unsigned getID() const;
     unsigned getIdOrder() const;
     unsigned getIdCustomer() const;
+    const QString& getSpecification() const;
+    unsigned getQuantity() const;
     const QString& getComercialistDescription() const;
     const QString& getDesignerDescription() const;
     const QString& getStoreKeeperDescription() const;
@@ -35,6 +37,8 @@ public:
     //seters
     void setCommandNumber(int commandNumber);
     void setPriority(int priority);
+    void setSpecification(const QString & specification);
+    void setQuantity(unsigned quantity);
     void setComercialistDescription(const QString & description);
     void setDesignerDescription(const QString & description);
     void setStoreKeeperDescription(const QString & description);
@@ -66,6 +70,12 @@ private:
 
     int m_commandNumber;
     bool m_commandNumberChanged;
+
+    QString m_specification;
+    bool m_specificationChanged;
+
+    unsigned m_quantity;
+    bool m_quantityChanged;
 
     QString m_comercialistDescription;
     bool m_comercialistDescriptionChanged;

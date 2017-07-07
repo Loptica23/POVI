@@ -42,6 +42,7 @@ public:
 
     virtual OrderPtrVtr getOrders() = 0;
     virtual OrderPtrVtr getOrders(CustomerPtr customer) = 0;
+    virtual OrderPtr getOrder(unsigned id) = 0;
     virtual bool createNewOrder(OrderPtr order) = 0;
     virtual bool updateOrder(OrderPtr order) = 0;
 

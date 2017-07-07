@@ -30,6 +30,7 @@ public:
 
     virtual OrderPtrVtr getOrders();
     virtual OrderPtrVtr getOrders(CustomerPtr customer);
+    virtual OrderPtr getOrder(unsigned id);
     virtual bool createNewOrder(OrderPtr order);
     virtual bool updateOrder(OrderPtr order);
 
