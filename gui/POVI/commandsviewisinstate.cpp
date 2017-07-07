@@ -87,6 +87,7 @@ void CommandsViewIsInState::fillTable()
         insertDetailsButton(i, 2);
         insertEditButton(i, 3);
         insertTimeSimulatorPrediction(command, i , 4);
+        insertDeathLine(command, i, 5);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -97,7 +98,7 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_detailsButtons.clear();
 
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme zavrsetka";
+    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -136,6 +137,13 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
 void CommandsViewIsInState::insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j)
 {
     auto *item = new QTableWidgetItem(getPredictionFromTimeSimulatorResult(command));
+    ui->tableWidget->setItem(i, j, item);
+}
+
+void CommandsViewIsInState::insertDeathLine(CommandPtr command, unsigned i , unsigned j)
+{
+    OrderPtr order = m_db->getOrder(command->getIdOrder());
+    auto *item = new QTableWidgetItem(order->getTimeLimitDateTime().toString("hh:mm dd.MM.yyyy"));
     ui->tableWidget->setItem(i, j, item);
 }
 
@@ -232,7 +240,7 @@ QString CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr c
             if (prediction->second != 0)
             {
                 qint64 seconds = prediction->second * 60;
-                result = currentDateTime.addSecs(seconds).toString("  hh:mm   dd.MM.yyyy");
+                result = currentDateTime.addSecs(seconds).toString("hh:mm dd.MM.yyyy");
             }
     }
     return result;

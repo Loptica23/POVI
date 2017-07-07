@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <memory>
 #include <vector>
+#include <QDateTime>
 
 class Order;
 typedef std::shared_ptr<Order> OrderPtr;
@@ -30,6 +31,8 @@ public:
     //unsigned getStateInt() const;
     //QString getStateQString() const;
     QString getTimeLimit() const;
+    QDateTime getTimeLimitDateTime() const;
+
     unsigned getID() const;
 
     //seters

@@ -88,6 +88,12 @@ QString Order::getTimeLimit() const
     return m_timeLimit;
 }
 
+QDateTime Order::getTimeLimitDateTime() const
+{
+    QDateTime time = QDateTime::fromString(m_timeLimit, "yyyy-MM-ddThh:mm:ss");
+    return time;
+}
+
 unsigned Order::getID() const
 {
     return m_id;
