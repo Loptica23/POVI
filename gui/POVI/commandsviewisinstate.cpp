@@ -91,6 +91,7 @@ void CommandsViewIsInState::fillTable()
         insertEditButton(i, 3);
         insertTimeSimulatorPrediction(command, i , 4);
         insertDeathLine(command, i, 5);
+        insertKomercialist(command, i, 6);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -101,7 +102,7 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_detailsButtons.clear();
 
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka";
+    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Komercijalista";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -147,6 +148,13 @@ void CommandsViewIsInState::insertDeathLine(CommandPtr command, unsigned i , uns
 {
     OrderPtr order = m_db->getOrder(command->getIdOrder());
     auto *item = new QTableWidgetItem(order->getTimeLimit().toString(timeFormat));
+    ui->tableWidget->setItem(i, j, item);
+}
+
+void CommandsViewIsInState::insertKomercialist(CommandPtr command, unsigned i, unsigned j)
+{
+    EmployeePtr employee = m_db->getEmployee(command->getKomercialistID());
+    auto *item = new QTableWidgetItem(employee->getUserName());
     ui->tableWidget->setItem(i, j, item);
 }
 

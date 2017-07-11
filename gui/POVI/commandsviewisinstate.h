@@ -40,6 +40,7 @@ private:
     void insertEditButton(unsigned i, unsigned j);
     void insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j);
     void insertDeathLine(CommandPtr command, unsigned i , unsigned j);
+    void insertKomercialist(CommandPtr command, unsigned i, unsigned j);
 
     void initializeTimeMachines();
     void initializeCommands();

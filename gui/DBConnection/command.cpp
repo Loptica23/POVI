@@ -3,10 +3,11 @@
 #include "command.h"
 
 
-Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand):
+Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand, unsigned idKomercialist):
     m_id(idCommand),
     m_idCustomer(idCustomer),
     m_idOrder(idOrder),
+    m_idKomercialist(idKomercialist),
     m_quantity(00),
     m_priority(100)
 {
@@ -43,6 +44,11 @@ unsigned Command::getIdOrder() const
 unsigned Command::getIdCustomer() const
 {
     return m_idCustomer;
+}
+
+unsigned Command::getKomercialistID() const
+{
+    return m_idKomercialist;
 }
 
 const QString& Command::getSpecification() const
@@ -216,10 +222,11 @@ void Command::setState(const unsigned state)
 
 QString Command::statemantForCreating() const
 {
-    QString stm = "insert into nalog (idNarudzbina, idKlijent, OpisKomercijaliste, BrojNaloga, Prioritet, "
+    QString stm = "insert into nalog (idNarudzbina, idKlijent, Radnik_idRadnik, OpisKomercijaliste, BrojNaloga, Prioritet, "
                   "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
+    stm += QString::number(m_idKomercialist) + ", ";
     stm += "'" + m_comercialistDescription + "', ";
     stm += QString::number(m_commandNumber) + ", ";
     stm += QString::number(m_priority) + ", ";
@@ -314,7 +321,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
     CommandPtrVtr commands(new CommandVtr());
     while(query.next())
     {
-        CommandPtr command(new Command(query.value("idKlijent").toUInt(), query.value("idNarudzbina").toUInt(), query.value("idNalog").toUInt()));
+        CommandPtr command(new Command(query.value("idKlijent").toUInt(), query.value("idNarudzbina").toUInt(), query.value("idNalog").toUInt(), query.value("Radnik_idRadnik").toUInt()));
         command->setCommandNumber(query.value("BrojNaloga").toInt());
         command->setSpecification(query.value("Specifikacija").toString());
         command->setQuantity(query.value("Kolicina").toInt());

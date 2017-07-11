@@ -130,6 +130,32 @@ EmployeePtr DBConnectionImpl::getEmployee(QString username)
     return employee;
 }
 
+EmployeePtr DBConnectionImpl::getEmployee(unsigned id)
+{
+    EmployeePtr employee = nullptr;
+    EmployeePtrVtr employees = nullptr;
+    QSqlQuery query;
+    QString stm = "select * from radnik where idRadnik = '" + QString::number(id) + "';";
+    qDebug() << stm;
+    query.prepare(stm);
+    if(query.exec())
+    {
+        employees = Employee::createEmployeesFromQuery(query);
+    }
+    else
+    {
+        m_lastError = query.lastError().text();
+        qDebug() << "nije uspeo query!";
+        qDebug() << m_lastError;
+    }
+    if (employees && !employees->empty())
+    {
+        employee = employees->at(0);
+    }
+
+    return employee;
+}
+
 bool DBConnectionImpl::createNewEmployee(EmployeePtr employee)
 {
     QSqlQuery query;

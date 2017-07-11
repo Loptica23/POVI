@@ -183,7 +183,7 @@ void CommandDialog::deleteTask() {}
 
 void CommandDialog::createCommand()
 {
-    CommandPtr command(new Command(m_order->getCustomerId(), m_order->getID(), 0));
+    CommandPtr command(new Command(m_order->getCustomerId(), m_order->getID(), 0, MainWindow::getLogedUser()->getId()));
     if (!ui->specification->toPlainText().isEmpty())
     {
         command->setSpecification(ui->specification->toPlainText());

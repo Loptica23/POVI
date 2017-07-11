@@ -33,6 +33,7 @@ public:
     virtual EmployeePtrVtr getEmployees() = 0;
     virtual EmployeePtrVtr getEmployees(Employee::WorkPosition workPosition) = 0;
     virtual EmployeePtr getEmployee(QString username) = 0;
+    virtual EmployeePtr getEmployee(unsigned id) = 0;
     virtual bool createNewEmployee(EmployeePtr employee) = 0;
     virtual bool updateEmployee(EmployeePtr employee) = 0;
 

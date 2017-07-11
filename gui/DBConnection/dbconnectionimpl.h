@@ -21,6 +21,7 @@ public:
     virtual EmployeePtrVtr getEmployees();              //bilo bi dobro da moze da se dohvati i kao neki predictive search
     virtual EmployeePtrVtr getEmployees(Employee::WorkPosition workPosition);
     virtual EmployeePtr getEmployee(QString username);
+    virtual EmployeePtr getEmployee(unsigned id);
     virtual bool createNewEmployee(EmployeePtr employee);
     virtual bool updateEmployee(EmployeePtr employee);
 

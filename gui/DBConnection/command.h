@@ -16,7 +16,7 @@ class DBCONNECTIONSHARED_EXPORT Command{
 public:
     enum class State{New, WaitForProduction, InProgress, Complited, Stopped};
 
-    Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand);
+    Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand, unsigned idKomercialist);
     virtual ~Command();
 
     //gethers
@@ -25,6 +25,7 @@ public:
     unsigned getID() const;
     unsigned getIdOrder() const;
     unsigned getIdCustomer() const;
+    unsigned getKomercialistID() const;
     const QString& getSpecification() const;
     unsigned getQuantity() const;
     const QString& getComercialistDescription() const;
@@ -61,6 +62,7 @@ private:
     unsigned m_id;
     unsigned m_idOrder;
     unsigned m_idCustomer;
+    unsigned m_idKomercialist;
 
     State m_state;
     bool m_stateChanged;
