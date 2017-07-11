@@ -15,6 +15,7 @@ TimeSimulator::TimeSimulator::TimeSimulator() :
 TimeSimulator::TimeSimulator::~TimeSimulator()
 {
     m_timeEngine->stopEngine();
+    m_threadPool->waitForDone();
 }
 
 void TimeSimulator::TimeSimulator::execute()

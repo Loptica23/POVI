@@ -23,6 +23,7 @@ public:
     void putCommandIntoQueue(CommandPtr command);
     void putCurrentCommand(CommandPtr command);
     void eliminateCommandFromCalculation(CommandPtr command);
+    void lockNLoadMachine();
 
 private:
     CommandVtrPtr decrementTimeForVirtualMachine();

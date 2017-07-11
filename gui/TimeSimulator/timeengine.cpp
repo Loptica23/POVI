@@ -24,7 +24,7 @@ TimeSimulator::TimeEngine::~TimeEngine()
 void TimeSimulator::TimeEngine::run()
 {
     //refactor: mozda ovde da isproveravas masine i naloge, da li su dati svi podaci i tako to.
-    moment = 0;
+    moment = 1;
     while(m_running)
     {
         qDebug() << "MOMENT: " + QString::number(moment);

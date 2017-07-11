@@ -44,6 +44,7 @@ void CommandsViewIsInState::timeEngineFinish()
 {
     qDebug() << "Pozvan slot! " + QString::number(m_timeSimulator->getResult()->size());
     m_resultMap = m_timeSimulator->getResult();
+    fillTable();
 }
 
 void CommandsViewIsInState::details()
