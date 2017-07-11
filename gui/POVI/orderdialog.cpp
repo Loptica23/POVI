@@ -28,9 +28,7 @@ OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, Orde
     ui->Description->setText(order->getDescription());
     qDebug() << order->getTimeLimit();
 
-    QString str = order->getTimeLimit().left(10);
-    QDate date = QDate::fromString(str, "yyyy-MM-dd");
-    ui->calendarWidget->setSelectedDate(date);
+    ui->calendarWidget->setSelectedDate(order->getTimeLimit().date());
 
     if (!edit)
     {
@@ -56,9 +54,9 @@ void OrderDialog::createOrder()
         order->setDescription(ui->Description->toPlainText());
     }
 
-    QString date = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
-    QString timeLimit = date + " 00:00:00";
-    order->setTimeLimit(timeLimit);
+    QDateTime dateTime;
+    dateTime.setDate(ui->calendarWidget->selectedDate());
+    order->setTimeLimit(dateTime);
 
     //order->setState(Order::State::New);
 
@@ -81,9 +79,9 @@ void OrderDialog::updateOrder()
         m_order->setDescription(ui->Description->toPlainText());
     }
 
-    QString date = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
-    QString timeLimit = date + " 00:00:00";
-    m_order->setTimeLimit(timeLimit);
+    QDateTime dateTime;
+    dateTime.setDate(ui->calendarWidget->selectedDate());
+    m_order->setTimeLimit(dateTime);
 
     if (m_order->isModified())
     {

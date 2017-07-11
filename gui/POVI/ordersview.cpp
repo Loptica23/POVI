@@ -50,7 +50,7 @@ void OrdersView::on_Refresh_clicked()
             ui->tableWidget->setItem(i, 0,item);
         }
         {
-            auto *item = new QTableWidgetItem((*iter)->getTimeLimit());
+            auto *item = new QTableWidgetItem((*iter)->getTimeLimitString());
             ui->tableWidget->setItem(i, 1,item);
         }
         {

@@ -30,8 +30,8 @@ public:
     //const State getState() const;
     //unsigned getStateInt() const;
     //QString getStateQString() const;
-    QString getTimeLimit() const;
-    QDateTime getTimeLimitDateTime() const;
+    const QDateTime& getTimeLimit() const;
+    QString getTimeLimitString() const;
 
     unsigned getID() const;
 
@@ -42,7 +42,7 @@ public:
     //void setState(const State& state);
     //void setState(const QString& state);
     //void setState(const unsigned state);
-    void setTimeLimit(const QString & timeLimit);
+    void setTimeLimit(const QDateTime &timeLimit);
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
@@ -65,6 +65,6 @@ private:
     bool m_descriptionChanged;
     //State m_state;
     //bool m_stateChanged;
-    QString m_timeLimit;
+    QDateTime m_timeLimit;
     bool m_timeLimitChanged;
 };

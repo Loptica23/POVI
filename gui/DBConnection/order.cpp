@@ -1,6 +1,9 @@
 #include "order.h"
 #include <QDebug>
 
+#define dateTimeFormat "dd-MM-yyyy hh:mm:ss"
+#define dateTimeFormatForDB "yyyy-MM-dd hh:mm:ss"
+
 Order::Order(unsigned idCustomer):
     m_id((unsigned)-1),
     m_idCustomer(idCustomer),
@@ -83,15 +86,14 @@ unsigned Order::getCustomerId() const
 //    }
 //}
 
-QString Order::getTimeLimit() const
+const QDateTime &Order::getTimeLimit() const
 {
     return m_timeLimit;
 }
 
-QDateTime Order::getTimeLimitDateTime() const
+QString Order::getTimeLimitString() const
 {
-    QDateTime time = QDateTime::fromString(m_timeLimit, "yyyy-MM-ddThh:mm:ss");
-    return time;
+    return m_timeLimit.toString(dateTimeFormat);
 }
 
 unsigned Order::getID() const
@@ -168,7 +170,7 @@ void Order::setDescription(const QString & description)
 //    }
 //}
 
-void Order::setTimeLimit(const QString & timeLimit)
+void Order::setTimeLimit(const QDateTime & timeLimit)
 {
     if (m_timeLimit != timeLimit)
     {
@@ -186,7 +188,7 @@ QString Order::statemantForCreating() const
     stm += "'" + m_description + "', ";
     stm += "'" + m_header + "', ";
     //stm += "'" + getStateQString() + "', ";
-    stm += "'" + m_timeLimit + "')";
+    stm += "'" + m_timeLimit.toString(dateTimeFormatForDB) + "')";
     qDebug() << stm;
     return stm;
 }
@@ -211,7 +213,7 @@ QString Order::statemantForUpdating() const
         }
         if(m_timeLimitChanged)
         {
-            stm += "Rok = '" + getTimeLimit() + "', ";
+            stm += "Rok = '" + m_timeLimit.toString(dateTimeFormatForDB) + "', ";
         }
         stm.chop(2);
         stm += "where idNarudzbina = " + QString::number(m_id);
@@ -247,7 +249,7 @@ OrderPtrVtr Order::createOrdersFromQuery(QSqlQuery& query)
         order->setPrice((query.value("Cena").toDouble()));
         order->setDescription(query.value("Opis").toString());
         //order->setState(query.value("Stanje").toString());
-        order->setTimeLimit(query.value("Rok").toString());
+        order->setTimeLimit(query.value("Rok").toDateTime());
         order->resetChangeTracking();
         orders->push_back(order);
     }

@@ -13,6 +13,8 @@
 #include "dbconnection.h"
 #include "utils.h"
 
+#define timeFormat "hh:mm dd.MM.yyyy"
+
 CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db, Command::State state) :
     QWidget(parent),
     ui(new Ui::CommandsViewIsInState),
@@ -144,7 +146,7 @@ void CommandsViewIsInState::insertTimeSimulatorPrediction(CommandPtr command, un
 void CommandsViewIsInState::insertDeathLine(CommandPtr command, unsigned i , unsigned j)
 {
     OrderPtr order = m_db->getOrder(command->getIdOrder());
-    auto *item = new QTableWidgetItem(order->getTimeLimitDateTime().toString("hh:mm dd.MM.yyyy"));
+    auto *item = new QTableWidgetItem(order->getTimeLimit().toString(timeFormat));
     ui->tableWidget->setItem(i, j, item);
 }
 
