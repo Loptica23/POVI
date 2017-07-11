@@ -92,6 +92,7 @@ void CommandsViewIsInState::fillTable()
         insertTimeSimulatorPrediction(command, i , 4);
         insertDeathLine(command, i, 5);
         insertKomercialist(command, i, 6);
+        insertHealth(command, i , 7);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -102,7 +103,7 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_detailsButtons.clear();
 
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Komercijalista";
+    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Komercijalista" << "Status";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -140,7 +141,7 @@ void CommandsViewIsInState::insertEditButton(unsigned i, unsigned j)
 
 void CommandsViewIsInState::insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j)
 {
-    auto *item = new QTableWidgetItem(getPredictionFromTimeSimulatorResult(command));
+    auto *item = new QTableWidgetItem(getPredictionFromTimeSimulatorResultString(command));
     ui->tableWidget->setItem(i, j, item);
 }
 
@@ -156,6 +157,29 @@ void CommandsViewIsInState::insertKomercialist(CommandPtr command, unsigned i, u
     EmployeePtr employee = m_db->getEmployee(command->getKomercialistID());
     auto *item = new QTableWidgetItem(employee->getUserName());
     ui->tableWidget->setItem(i, j, item);
+}
+
+void CommandsViewIsInState::insertHealth(CommandPtr command, unsigned i, unsigned j)
+{
+    QDateTime predictedTime = getPredictionFromTimeSimulatorResult(command);
+    QDateTime deatheLine = m_db->getOrder(command->getIdOrder())->getTimeLimit();
+    if (!predictedTime.isNull())
+    {
+        QLabel* label = new QLabel();
+        if (deatheLine < predictedTime) // kasni
+        {
+            label->setText("Kasni");
+        }
+        else if (deatheLine < predictedTime.addDays(3))
+        {
+            label->setText("Paznja");
+        }
+        else
+        {
+            label->setText("U redu");
+        }
+        ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), label);
+    }
 }
 
 void CommandsViewIsInState::on_pushButton_2_clicked()
@@ -240,9 +264,9 @@ QString CommandsViewIsInState::getMachineName(unsigned machineId)
     return result;
 }
 
-QString CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr command)
+QDateTime CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr command)
 {
-    QString result;
+    QDateTime result;
     QDateTime currentDateTime = QDateTime::currentDateTime();
     if (m_resultMap != nullptr)
     {
@@ -251,8 +275,19 @@ QString CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr c
             if (prediction->second != 0)
             {
                 qint64 seconds = prediction->second * 60;
-                result = currentDateTime.addSecs(seconds).toString("hh:mm dd.MM.yyyy");
+                result = currentDateTime.addSecs(seconds);
             }
+    }
+    return result;
+}
+
+QString CommandsViewIsInState::getPredictionFromTimeSimulatorResultString(CommandPtr command)
+{
+    QString result;
+    QDateTime dateTime = getPredictionFromTimeSimulatorResult(command);
+    if (!dateTime.isNull())
+    {
+        result = dateTime.toString("hh:mm dd.MM.yyyy");
     }
     return result;
 }

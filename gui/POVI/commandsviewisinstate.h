@@ -41,13 +41,15 @@ private:
     void insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j);
     void insertDeathLine(CommandPtr command, unsigned i , unsigned j);
     void insertKomercialist(CommandPtr command, unsigned i, unsigned j);
+    void insertHealth(CommandPtr command, unsigned i, unsigned j);
 
     void initializeTimeMachines();
     void initializeCommands();
     void initializeTasksForCommand(CommandPtr command);
 
     QString getMachineName(unsigned machineId);
-    QString getPredictionFromTimeSimulatorResult(CommandPtr command);
+    QDateTime getPredictionFromTimeSimulatorResult(CommandPtr command);
+    QString getPredictionFromTimeSimulatorResultString(CommandPtr command);
 
     Ui::CommandsViewIsInState *ui;
     DBConnectionPtr m_db;
