@@ -51,7 +51,8 @@ SOURCES +=  main.cpp\
     tasksinproductionview.cpp \
     workerview.cpp \
     commanddialogworker.cpp \
-    commanddialoginvoice.cpp
+    commanddialoginvoice.cpp \
+    dialogsetprediction.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -79,7 +80,8 @@ HEADERS +=  mainwindow.h\
     tasksinproductionview.h \
     workerview.h \
     commanddialogworker.h \
-    commanddialoginvoice.h
+    commanddialoginvoice.h \
+    dialogsetprediction.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -101,7 +103,8 @@ FORMS   +=  mainwindow.ui \
     changepassworddialog.ui \
     shiftmanagerview.ui \
     tasksinproductionview.ui \
-    workerview.ui
+    workerview.ui \
+    dialogsetprediction.ui
 
 RESOURCES += resource.qrc
 

@@ -28,6 +28,7 @@ private slots:
     void on_refresh_clicked();
     void details();
     void edit();
+    void predict();
 
     void on_pushButton_2_clicked();
 
@@ -42,7 +43,8 @@ private:
     void insertDeathLine(CommandPtr command, unsigned i , unsigned j);
     void insertKomercialist(CommandPtr command, unsigned i, unsigned j);
     void insertHealth(CommandPtr command, unsigned i, unsigned j);
-
+    void insertPrediction(CommandPtr command, unsigned i, unsigned j);
+    void insertPredictionButton(unsigned i, unsigned j);
     void initializeTimeMachines();
     void initializeCommands();
     void initializeTasksForCommand(CommandPtr command);
@@ -59,6 +61,7 @@ private:
 
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_editButtons;
+    std::vector<QPushButton*> m_predictionButtons;
 
     TimeSimulator::CommandTerminationTimeEngine* m_engine;
     std::shared_ptr<TimeSimulator::TimeSimulator> m_timeSimulator;

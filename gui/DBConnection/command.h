@@ -3,6 +3,7 @@
 #include <vector>
 #include <QSqlQuery>
 #include <QString>
+#include <QdateTime>
 
 class Command;
 typedef std::shared_ptr<Command> CommandPtr;
@@ -34,6 +35,7 @@ public:
     const State getState() const;
     unsigned getStateInt() const;
     QString getStateQString() const;
+    const QDateTime& getDateTimePrediction() const;
 
     //seters
     void setCommandNumber(int commandNumber);
@@ -46,6 +48,7 @@ public:
     void setState(const State& state);
     void setState(const QString& state);
     void setState(const unsigned state);
+    void setDateTimePrediction(const QDateTime & prediction);
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
@@ -87,4 +90,7 @@ private:
 
     QString m_storeKeeperDescription;
     bool m_storeKeeperDescriptionChanged;
+
+    QDateTime m_dateTimePrediction;
+    bool m_dateTimePredictionChanged;
 };

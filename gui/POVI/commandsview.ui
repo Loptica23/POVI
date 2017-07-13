@@ -53,6 +53,16 @@
        <string>Obrisi</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Komercijalista</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Predvidjanje</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

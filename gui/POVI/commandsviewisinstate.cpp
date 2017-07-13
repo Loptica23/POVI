@@ -12,6 +12,7 @@
 #include "command.h"
 #include "dbconnection.h"
 #include "utils.h"
+#include "dialogsetprediction.h"
 
 #define timeFormat "hh:mm dd.MM.yyyy"
 
@@ -73,6 +74,18 @@ void CommandsViewIsInState::edit()
     }
 }
 
+void CommandsViewIsInState::predict()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_predictionButtons.begin(), m_predictionButtons.end(), buttonSender) != m_predictionButtons.end())
+    {
+        auto index = std::find(m_predictionButtons.begin(), m_predictionButtons.end(), buttonSender) - m_predictionButtons.begin();
+        qDebug() << index;
+        auto dialogSetPrediction = new DialogSetPrediction(this, m_db, m_commands->at(index));
+        dialogSetPrediction->show();
+    }
+}
+
 void CommandsViewIsInState::fillTable()
 {
     clearBuutonsAndInitializeHeaders();
@@ -91,8 +104,10 @@ void CommandsViewIsInState::fillTable()
         insertEditButton(i, 3);
         insertTimeSimulatorPrediction(command, i , 4);
         insertDeathLine(command, i, 5);
-        insertKomercialist(command, i, 6);
-        insertHealth(command, i , 7);
+        insertPrediction(command, i, 6);
+        insertKomercialist(command, i, 7);
+        insertHealth(command, i , 8);
+        insertPredictionButton(i, 9);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -101,9 +116,10 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
 {
     m_editButtons.clear();
     m_detailsButtons.clear();
+    m_predictionButtons.clear();
 
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Komercijalista" << "Status";
+    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Predvidjanje" << "Komercijalista" << "Status" << "Predvidi";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -180,6 +196,25 @@ void CommandsViewIsInState::insertHealth(CommandPtr command, unsigned i, unsigne
         }
         ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), label);
     }
+}
+
+void CommandsViewIsInState::insertPrediction(CommandPtr command, unsigned i, unsigned j)
+{
+    QDateTime prediction = command->getDateTimePrediction();
+    if (!prediction.isNull())
+    {
+        auto *item = new QTableWidgetItem(prediction.toString(timeFormat));
+        ui->tableWidget->setItem(i, j, item);
+    }
+}
+
+void CommandsViewIsInState::insertPredictionButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_predict = new QPushButton();
+    btn_predict->setText("Predvidi");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_predict);
+    m_predictionButtons.push_back(btn_predict);
+    connect(btn_predict, SIGNAL(clicked()), this, SLOT(predict()));
 }
 
 void CommandsViewIsInState::on_pushButton_2_clicked()

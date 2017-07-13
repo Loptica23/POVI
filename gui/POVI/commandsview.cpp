@@ -30,11 +30,12 @@ void CommandsView::on_NewCommand_clicked()
 
 void CommandsView::on_Refresh_clicked()
 {
-    //refaktorisi malo ovu funkciju
+    //refactor
     m_editButtons.clear();
     m_detailsButtons.clear();
     m_finishButtons.clear();
     m_deleteButtons.clear();
+
     qDebug() << "user refreshing commands view!";
     ui->tableWidget->setRowCount(0);
     auto commands = m_db->getCommands(m_order);
@@ -94,6 +95,19 @@ void CommandsView::on_Refresh_clicked()
             if ((*iter)->getState() != Command::State::New)
             {
                 btn_delete->setEnabled(false);
+            }
+        }
+        {
+            //komecijalista
+            auto *item = new QTableWidgetItem(m_db->getEmployee((*iter)->getKomercialistID())->getUserName());
+            ui->tableWidget->setItem(i, 6,item);
+        }
+        {
+            QDateTime prediction = (*iter)->getDateTimePrediction();
+            if (!prediction.isNull())
+            {
+                auto *item = new QTableWidgetItem(prediction.toString("hh:mm dd.MM.yyyy"));
+                ui->tableWidget->setItem(i, 7, item);
             }
         }
     }

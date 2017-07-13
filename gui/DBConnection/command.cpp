@@ -106,6 +106,11 @@ QString Command::getStateQString() const
     return convertStateToString(m_state);
 }
 
+const QDateTime& Command::getDateTimePrediction() const
+{
+    return m_dateTimePrediction;
+}
+
 //seters
 void Command::setCommandNumber(int commandNumber)
 {
@@ -220,6 +225,15 @@ void Command::setState(const unsigned state)
     }
 }
 
+void Command::setDateTimePrediction(const QDateTime & prediction)
+{
+    if (m_dateTimePrediction != prediction)
+    {
+        m_dateTimePredictionChanged = true;
+        m_dateTimePrediction = prediction;
+    }
+}
+
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, Radnik_idRadnik, OpisKomercijaliste, BrojNaloga, Prioritet, "
@@ -277,6 +291,10 @@ QString Command::statemantForUpdating() const
         {
             stm += "Stanje = '" + getStateQString() + "', ";
         }
+        if (m_dateTimePredictionChanged)
+        {
+            stm += "Predvidjanje = '" + getDateTimePrediction().toString("yyyy-MM-dd hh:mm:ss") + "', ";
+        }
         stm.chop(2);
         stm += " where idNalog = " + QString::number(m_id);
         qDebug() << stm;
@@ -301,7 +319,8 @@ bool Command::isModified() const
             m_stateChanged ||
             m_commandNumberChanged ||
             m_specificationChanged ||
-            m_quantityChanged);
+            m_quantityChanged ||
+            m_dateTimePredictionChanged);
 }
 
 void Command::resetChangeTracking()
@@ -314,6 +333,7 @@ void Command::resetChangeTracking()
     m_stateChanged                      = false;
     m_specificationChanged              = false;
     m_quantityChanged                   = false;
+    m_dateTimePredictionChanged         = false;
 }
 
 CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
@@ -330,6 +350,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setStoreKeeperDescription(query.value("OpisMagacionera").toString());
         command->setState(query.value("Stanje").toString());
         command->setPriority(query.value("Prioritet").toInt());
+        command->setDateTimePrediction(query.value("Predvidjanje").toDateTime());
         command->resetChangeTracking();
         commands->push_back(command);
     }
