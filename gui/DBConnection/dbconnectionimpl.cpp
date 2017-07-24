@@ -875,6 +875,30 @@ MachinePtrVtr DBConnectionImpl::getMachines()
     return machines;
 }
 
+MachinePtr DBConnectionImpl::getMachine(unsigned id)
+{
+    MachinePtr result = nullptr;
+    MachinePtrVtr machines = nullptr;
+    QSqlQuery query;
+    QString stm = "select * from masina where idMasina = " + QString::number(id) + ";";
+    qDebug() << stm;
+    query.prepare(stm);
+    if(query.exec())
+    {
+        machines = Machine::createMachineFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+        m_lastError = query.lastError().text();
+    }
+    if (machines && machines->size() > 0)
+    {
+        result = *(machines->begin());
+    }
+    return result;
+}
+
 bool DBConnectionImpl::createMachine(MachinePtr machine)
 {
     QSqlQuery query;

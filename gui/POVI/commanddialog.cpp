@@ -97,7 +97,7 @@ void CommandDialog::initializeTasks()
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
     {
         TaskPtr task = *iter;
-        if(task->getState() == Task::State::InProgress)
+        if((task->getState() == Task::State::InProgress) || (task->getState() == Task::State::Waiting))
         {
             m_currentTask = task;
         }

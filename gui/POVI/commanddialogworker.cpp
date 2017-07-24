@@ -28,6 +28,9 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
     ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
+    auto machine = m_db->getMachine(m_currentTask->getMachineId());
+    if (machine)
+        ui->machine->setText(machine->getName());
 
     if (m_edit)
     {
