@@ -115,6 +115,16 @@ unsigned Task::getSerialNumber() const
     return m_serialNumber;
 }
 
+const QDateTime& Task::getStartTime() const
+{
+    return m_startTime;
+}
+
+const QDateTime& Task::getEndTime() const
+{
+    return m_endTime;
+}
+
 //seters
 void Task::setCommand(CommandPtr command)
 {
@@ -192,6 +202,16 @@ void Task::setCurrentTimeForStarted()
 void Task::setCurrentTimeForComplited()
 {
     m_setComplitedTime = true;
+}
+
+void Task::setStartTime(const QDateTime& start)
+{
+    m_startTime = start;
+}
+
+void Task::setEndTime(const QDateTime& end)
+{
+    m_endTime = end;
 }
 
 QString Task::statemantForCreating(unsigned employeeID) const
@@ -299,6 +319,8 @@ TaskPtrVtr Task::createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr comm
         task->setMachineId(query.value("Masina_idMasina").toUInt()); //imaj u vidu da ova informacija ne mora da postoji
         task->setState(query.value("Stanje").toString());
         task->setSerialNumber(query.value("RedniBroj").toUInt());
+        task->setStartTime(query.value("Poceo").toDateTime());
+        task->setEndTime(query.value("Zavrsen").toDateTime());
         task->resetChangeTracking();
         tasks->push_back(task);
     }

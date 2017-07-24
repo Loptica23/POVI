@@ -3,6 +3,8 @@
 #include "commanddialogchieofproduction.h"
 #include "ui_commanddialog.h"
 
+#define timeFormat "hh:mm dd.MM.yyyy"
+
 CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit):
     CommandDialog(parent, db, command, edit)
 {
@@ -43,6 +45,9 @@ void CommandDialogChieOfProduction::fillTaskTable()
         insertTaskState(task, i, 1);
         insertTaskPrediction(task, i ,2);
         insertMachineComboBox(task, i, 3);
+        insertWorker(task, i, 4);
+        insertStartTime(task, i , 5);
+        insertEndTime(task, i , 6);
     }
 
     ui->taskTable->resizeColumnsToContents();
@@ -92,11 +97,12 @@ void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
 {
     m_comboBoxes.clear();
 
+    QStringList headers;
+    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina" << "Radnik" << "Poceo" << "Zavrsen";
+
     m_machines = m_db->getMachines();
     ui->taskTable->setRowCount(0);
-    ui->taskTable->setColumnCount(4);
-    QStringList headers;
-    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina";
+    ui->taskTable->setColumnCount(headers.size());
     ui->taskTable->setHorizontalHeaderLabels(headers);
 }
 
@@ -146,4 +152,25 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
         taskComboBox->setEnabled(false);
     }
     m_comboBoxes.push_back(taskComboBox);
+}
+
+void CommandDialogChieOfProduction::insertWorker(TaskPtr task, unsigned i , unsigned j)
+{
+    QString str = m_db->getEmployee(task->getWorkerId())->getUserName();
+    auto *item = new QTableWidgetItem(str);
+    ui->taskTable->setItem(i, j, item);
+}
+
+void CommandDialogChieOfProduction::insertStartTime(TaskPtr task, unsigned i , unsigned j)
+{
+    QString str = task->getStartTime().toString(timeFormat);
+    auto *item = new QTableWidgetItem(str);
+    ui->taskTable->setItem(i, j, item);
+}
+
+void CommandDialogChieOfProduction::insertEndTime(TaskPtr task, unsigned i , unsigned j)
+{
+    QString str = task->getEndTime().toString(timeFormat);
+    auto *item = new QTableWidgetItem(str);
+    ui->taskTable->setItem(i, j, item);
 }

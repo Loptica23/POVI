@@ -2,6 +2,7 @@
 #include <QSqlQuery>
 #include <QString>
 #include <vector>
+#include <QDateTime>
 #include "dbconnection_global.h"
 #include "command.h"
 
@@ -34,6 +35,8 @@ public:
     const State& getState() const;
     QString getStateString() const;
     unsigned getSerialNumber() const;
+    const QDateTime& getStartTime() const;
+    const QDateTime& getEndTime() const;
 
     //seters
     void setCommand(CommandPtr command);
@@ -59,6 +62,9 @@ public:
     static TaskPtrVtr createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr command);
 
 private:
+    void setStartTime(const QDateTime& start);
+    void setEndTime(const QDateTime& end);
+
     unsigned m_id;
     bool m_created; //task je upravo kreiran; ne postoji u bazi podataka;
 
@@ -84,4 +90,7 @@ private:
 
     bool m_setStartedTime;
     bool m_setComplitedTime;
+
+    QDateTime m_startTime;
+    QDateTime m_endTime;
 };
