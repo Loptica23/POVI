@@ -5,7 +5,7 @@
 class CommandDialogDesigner : public CommandDialog
 {
 public:
-    CommandDialogDesigner(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit);
+    CommandDialogDesigner(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable);
     virtual ~CommandDialogDesigner();
 
     virtual void setUpWindowByWorkPosition();

@@ -24,6 +24,7 @@ CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db
     m_resultMap(nullptr)
 {
     ui->setupUi(this);
+    refresh();
 }
 
 CommandsViewIsInState::~CommandsViewIsInState()
@@ -31,11 +32,16 @@ CommandsViewIsInState::~CommandsViewIsInState()
     delete ui;
 }
 
-void CommandsViewIsInState::on_refresh_clicked()
+void CommandsViewIsInState::refresh()
 {
     auto commands = m_db->getCommands(m_state);
     setCommands(commands);
     fillTable();
+}
+
+void CommandsViewIsInState::on_refresh_clicked()
+{
+    refresh();
 }
 
 void CommandsViewIsInState::setCommands(CommandPtrVtr commands)
@@ -57,7 +63,7 @@ void CommandsViewIsInState::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        auto commandDialog = new CommandDialogChieOfProduction(this, m_db, m_commands->at(index), false);
+        auto commandDialog = new CommandDialogChieOfProduction(this, m_db, m_commands->at(index), false, this);
         commandDialog->show();
     }
 }
@@ -69,7 +75,7 @@ void CommandsViewIsInState::edit()
     {
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
-        auto commandDialog = new CommandDialogChieOfProduction(this, m_db, m_commands->at(index), true);
+        auto commandDialog = new CommandDialogChieOfProduction(this, m_db, m_commands->at(index), true, this);
         commandDialog->show();
     }
 }

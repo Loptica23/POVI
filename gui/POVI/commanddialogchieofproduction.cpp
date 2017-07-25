@@ -5,8 +5,8 @@
 
 #define timeFormat "hh:mm dd.MM.yyyy"
 
-CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit):
-    CommandDialog(parent, db, command, edit)
+CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit, Refreshable *refreshable):
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     this->showMaximized();
     m_taskTypes = m_db->getTaskTypes();

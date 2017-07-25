@@ -15,6 +15,7 @@ CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnecti
     m_taskTypeIDs.push_back(taskTypeID);
     ui->setupUi(this);
     openDialogIfThereIsTaskOnWhichUserWorkingOn();
+    refresh();
 }
 
 CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs) :
@@ -25,6 +26,7 @@ CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnecti
 {
     ui->setupUi(this);
     openDialogIfThereIsTaskOnWhichUserWorkingOn();
+    refresh();
 }
 
 
@@ -33,10 +35,15 @@ CommandsViewWaitingOnTask::~CommandsViewWaitingOnTask()
     delete ui;
 }
 
-void CommandsViewWaitingOnTask::on_Refresh_clicked()
+void CommandsViewWaitingOnTask::refresh()
 {
     m_commands = m_db->getCommandWhichWaitingOnTasks(m_taskTypeIDs);
     fillTable();
+}
+
+void CommandsViewWaitingOnTask::on_Refresh_clicked()
+{
+    refresh();
 }
 
 void CommandsViewWaitingOnTask::fillTable()
@@ -142,20 +149,20 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
     case Employee::WorkPosition::DizajnerLastis:
     case Employee::WorkPosition::DizajnerTkanje:
     case Employee::WorkPosition::DizajnerStampa:
-        commanddialog = new CommandDialogDesigner(this, m_db, command, edit);
+        commanddialog = new CommandDialogDesigner(this, m_db, command, edit, this);
         commanddialog->show();
         break;
     case Employee::WorkPosition::Magacioner:
-        commanddialog = new CommandDialogStoreKeeper(this, m_db, command, edit);
+        commanddialog = new CommandDialogStoreKeeper(this, m_db, command, edit, this);
         commanddialog->show();
         break;
     case Employee::WorkPosition::Proizvodnja:
         qDebug() << "WORKER!!!!";
-        commanddialog = new CommandDialogWorker(this, m_db, command, edit);
+        commanddialog = new CommandDialogWorker(this, m_db, command, edit, nullptr);
         commanddialog->show();
         break;
     case Employee::WorkPosition::KnjigovodjaFakture:
-        commanddialog = new CommandDialogInvoice(this, m_db, command, edit);
+        commanddialog = new CommandDialogInvoice(this, m_db, command, edit, this);
         commanddialog->show();
         break;
     default:

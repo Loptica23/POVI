@@ -3,18 +3,21 @@
 #include <QPushButton>
 #include "customer.h"
 #include "dbconnection.h"
+#include "refreshable.h"
 
 namespace Ui {
 class OrdersView;
 }
 
-class OrdersView : public QWidget
+class OrdersView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
 public:
     OrdersView(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer);
     ~OrdersView();
+
+    virtual void refresh();
 
 private slots:
     void on_pushButton_clicked();

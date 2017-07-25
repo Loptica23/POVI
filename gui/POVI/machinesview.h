@@ -5,12 +5,13 @@
 #include "dbconnection.h"
 #include "machine.h"
 #include "tasktypes.h"
+#include "refreshable.h"
 
 namespace Ui {
 class MachinesView;
 }
 
-class MachinesView : public QWidget
+class MachinesView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -18,6 +19,7 @@ public:
     MachinesView(QWidget *parent, DBConnectionPtr db);
     ~MachinesView();
 
+    virtual void refresh();
 private slots:
     void on_NewMachine_clicked();
     void on_refresh_clicked();

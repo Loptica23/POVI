@@ -4,8 +4,8 @@
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 
-CommandDialogDesigner::CommandDialogDesigner(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
-    CommandDialog(parent, db, command, edit)
+CommandDialogDesigner::CommandDialogDesigner(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable* refreshable) :
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     setUpWindowByWorkPosition();
     designerDescriptionChanged();

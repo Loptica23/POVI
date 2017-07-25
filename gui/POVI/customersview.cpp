@@ -17,6 +17,7 @@ CustomersView::CustomersView(QWidget *parent, std::shared_ptr<DBConnection> db):
 {
     ui->setupUi(this);
     ui->tableWidget->resizeColumnsToContents();
+    refresh();
 }
 
 CustomersView::~CustomersView()
@@ -24,15 +25,7 @@ CustomersView::~CustomersView()
     delete ui;
 }
 
-void CustomersView::on_AddNewCustomer_clicked()
-{
-    auto customerDialog = new CustomersDialog(this, m_db);
-    customerDialog->show();
-}
-
-
-
-void CustomersView::on_Refresh_clicked()
+void CustomersView::refresh()
 {
     m_editButtons.clear(); //*****************************************************ovde moras da dodas sve vektore dugmica
     m_viewOrdersButtons.clear();
@@ -78,6 +71,19 @@ void CustomersView::on_Refresh_clicked()
     ui->tableWidget->resizeColumnsToContents();
 }
 
+void CustomersView::on_AddNewCustomer_clicked()
+{
+    auto customerDialog = new CustomersDialog(this, m_db, this);
+    customerDialog->show();
+}
+
+
+
+void CustomersView::on_Refresh_clicked()
+{
+    refresh();
+}
+
 void CustomersView::edit()
 {
     QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
@@ -85,7 +91,7 @@ void CustomersView::edit()
     {
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
-        auto customerDialog = new CustomersDialog(this, m_db, m_customers->at(index));
+        auto customerDialog = new CustomersDialog(this, m_db, m_customers->at(index), this);
         customerDialog->show();
     }
 }
@@ -111,7 +117,7 @@ void CustomersView::createOrderForCustomer()
     {
         auto index = std::find(m_newOrderButtons.begin(), m_newOrderButtons.end(), buttonSender) - m_newOrderButtons.begin();
         qDebug() << index;
-        auto orderdialog = new OrderDialog(this, m_db, m_customers->at(index));
+        auto orderdialog = new OrderDialog(this, m_db, m_customers->at(index), this);
         qDebug() << m_customers->at(index)->getId();
         orderdialog->show();
     }

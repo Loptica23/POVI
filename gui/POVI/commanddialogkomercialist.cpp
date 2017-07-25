@@ -11,8 +11,8 @@ const std::vector<int> CommandDialogKomercialist::LastisTemplate ({1,2,3,4,5,6,7
 const std::vector<int> CommandDialogKomercialist::TkanjeTemplate ({8,9,10,11,12,5,13,14,15,17,6,7});
 const std::vector<int> CommandDialogKomercialist::StampaTemplate ({18,19,20,13,5,21,15,16,17,6,7});
 
-CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
-    CommandDialog(parent, db, order)
+CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable *refreshable) :
+    CommandDialog(parent, db, order, refreshable)
 {
     m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
@@ -21,8 +21,8 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
 }
 
 
-CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
-    CommandDialog(parent, db, command, edit)
+CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable) :
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
@@ -39,7 +39,9 @@ void CommandDialogKomercialist::setUpWindowByWorkPosition()
 {
     removeWidget(ui->designer);
     removeWidget(ui->storekeeper);
-    removeWidget(ui->priorityWidget);
+    removeWidget(ui->label_5);
+    removeWidget(ui->Priority);
+    removeWidget(ui->label_10);
     removeWidget(ui->invoice);
     this->repaint();
 }

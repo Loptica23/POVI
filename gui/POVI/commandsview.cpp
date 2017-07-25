@@ -14,6 +14,7 @@ CommandsView::CommandsView(QWidget *parent, std::shared_ptr<DBConnection> db, Or
     m_order(order)
 {
     ui->setupUi(this);
+    refresh();
 }
 
 CommandsView::~CommandsView()
@@ -21,14 +22,7 @@ CommandsView::~CommandsView()
     delete ui;
 }
 
-void CommandsView::on_NewCommand_clicked()
-{
-    qDebug() << "otvaranje prozora za kreiranje naloga!";
-    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order);
-    commanddialog->show();
-}
-
-void CommandsView::on_Refresh_clicked()
+void CommandsView::refresh()
 {
     //refactor
     m_editButtons.clear();
@@ -114,6 +108,18 @@ void CommandsView::on_Refresh_clicked()
     ui->tableWidget->resizeColumnsToContents();
 }
 
+void CommandsView::on_NewCommand_clicked()
+{
+    qDebug() << "otvaranje prozora za kreiranje naloga!";
+    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order, this);
+    commanddialog->show();
+}
+
+void CommandsView::on_Refresh_clicked()
+{
+    refresh();
+}
+
 void CommandsView::on_Back_clicked()
 {
     auto mainWindow = MainWindow::getMainWindow();
@@ -127,7 +133,7 @@ void CommandsView::edit()
     {
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
-        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), true));
+        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), true, this));
         commanddialog->show();
     }
 }
@@ -139,14 +145,14 @@ void CommandsView::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), false));
+        QWidget* commanddialog(new CommandDialogKomercialist(this, m_db, m_commands->at(index), false, this));
         commanddialog->show();
     }
 }
 
 void CommandsView::createCommand()
 {
-    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order);
+    auto commanddialog = new CommandDialogKomercialist(this, m_db, m_order, this);
     commanddialog->show();
 }
 
@@ -164,6 +170,7 @@ void CommandsView::sendToProduction()
             messageBox.critical(0,"Error",error);
         }
     }
+    refresh();
 }
 
 void CommandsView::deleteCommand()
@@ -180,4 +187,5 @@ void CommandsView::deleteCommand()
             messageBox.critical(0,"Error",error);
         }
     }
+    refresh();
 }

@@ -2,20 +2,21 @@
 
 #include <QDialog>
 #include "dbconnection.h"
+#include "refresher.h"
 
 namespace Ui {
 class MachineDialog;
 }
 
-class MachineDialog : public QDialog
+class MachineDialog : public QDialog, public Refresher
 {
     Q_OBJECT
 
 public:
     //za kreiranje
-    MachineDialog(QWidget *parent, DBConnectionPtr db);
+    MachineDialog(QWidget *parent, DBConnectionPtr db, Refreshable* refreshable);
     //za izmenu i pregled
-    MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr machine, bool edit);
+    MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr machine, bool edit, Refreshable* refreshable);
     ~MachineDialog();
 
 private slots:

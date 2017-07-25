@@ -8,8 +8,9 @@
 #include "dbconnection.h"
 
 //ovaj se koristi za kreiranje naloga
-CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order) :
+CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable* refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::CommandDialog),
     m_db(db),
     m_order(order),
@@ -27,12 +28,14 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_haveItInvoice(false)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
     connectSignalsAndSlots();
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
-CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
+CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::CommandDialog),
     m_db(db),
     m_command(command),
@@ -50,6 +53,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     m_haveItInvoice(false)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
     connectSignalsAndSlots();
     initializeTasks();
 

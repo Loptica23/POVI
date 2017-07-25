@@ -14,6 +14,7 @@ OrdersView::OrdersView(QWidget *parent, std::shared_ptr<DBConnection> db, Custom
     ui->setupUi(this);
     ui->tableWidget->resizeColumnsToContents();
     ui->label->setText("Pregled porudzbina za klijenta " + customer->getName() + ":");
+    refresh();
 }
 
 OrdersView::~OrdersView()
@@ -21,13 +22,7 @@ OrdersView::~OrdersView()
     delete ui;
 }
 
-void OrdersView::on_pushButton_clicked()
-{
-    auto orderdialog = new OrderDialog(this, m_db, m_customer);
-    orderdialog->show();
-}
-
-void OrdersView::on_Refresh_clicked()
+void OrdersView::refresh()
 {
     m_editButtons.clear();
     m_detailsButtons.clear();
@@ -53,10 +48,11 @@ void OrdersView::on_Refresh_clicked()
             auto *item = new QTableWidgetItem((*iter)->getTimeLimitString());
             ui->tableWidget->setItem(i, 1,item);
         }
-        {
+/*        {
             auto *item = new QTableWidgetItem(QString::number((*iter)->getPrice()));
             ui->tableWidget->setItem(i, 2,item);
         }
+*/
 //        {
 //            auto *item = new QTableWidgetItem((*iter)->getStateQString());
 //            ui->tableWidget->setItem(i, 3,item);
@@ -64,33 +60,45 @@ void OrdersView::on_Refresh_clicked()
         {
             QPushButton* btn_details = new QPushButton();
             btn_details->setText("Detalji");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_details);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_details);
             m_detailsButtons.push_back(btn_details);
             connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
         }
         {
             QPushButton* btn_edit = new QPushButton();
             btn_edit->setText("Izmeni");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 4), btn_edit);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_edit);
             m_editButtons.push_back(btn_edit);
             connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
         }
         {
             QPushButton* btn_createCommand = new QPushButton();
             btn_createCommand->setText("Napravi nalog");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 5), btn_createCommand);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 4), btn_createCommand);
             m_createCommandButtons.push_back(btn_createCommand);
             connect(btn_createCommand, SIGNAL(clicked()), this, SLOT(createCommand()));
         }
         {
             QPushButton* btn_viewCommands = new QPushButton();
             btn_viewCommands->setText("Pregled naloga");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 6), btn_viewCommands);
+            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 5), btn_viewCommands);
             m_viewCommands.push_back(btn_viewCommands);
             connect(btn_viewCommands, SIGNAL(clicked()), this, SLOT(viewCommands()));
         }
     }
     ui->tableWidget->resizeColumnsToContents(); //ovo ne smes ovako da radis zato sto je mnogo karaktera u naslovu
+
+}
+
+void OrdersView::on_pushButton_clicked()
+{
+    auto orderdialog = new OrderDialog(this, m_db, m_customer, this);
+    orderdialog->show();
+}
+
+void OrdersView::on_Refresh_clicked()
+{
+    refresh();
 }
 
 void OrdersView::edit()
@@ -101,7 +109,7 @@ void OrdersView::edit()
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
         qDebug() << m_orders->size();
-        auto ordersDialog = new OrderDialog(this, m_db, m_orders->at(index), true);
+        auto ordersDialog = new OrderDialog(this, m_db, m_orders->at(index), true, this);
         ordersDialog->show();
     }
 }
@@ -115,7 +123,7 @@ void OrdersView::details()
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
         qDebug() << m_orders->size();
-        auto ordersDialog = new OrderDialog(this, m_db, m_orders->at(index), false);
+        auto ordersDialog = new OrderDialog(this, m_db, m_orders->at(index), false, this);
         ordersDialog->show();
     }
 }

@@ -5,7 +5,7 @@
 class CommandDialogChieOfProduction : public CommandDialog
 {
 public:
-    CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit);
+    CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit, Refreshable* refreshable);
 
     virtual ~CommandDialogChieOfProduction();
 

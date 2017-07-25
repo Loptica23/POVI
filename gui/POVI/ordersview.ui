@@ -35,11 +35,6 @@
      </column>
      <column>
       <property name="text">
-       <string>Cena</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Detalji</string>
       </property>
      </column>

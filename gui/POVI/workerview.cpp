@@ -17,6 +17,7 @@ WorkerView::WorkerView(QWidget *parent, DBConnectionPtr db, EmployeePtr employee
     ui->setupUi(this);
     m_taskTypes = m_db->getTaskTypes();
     MainWindow::setWorker(employee);
+    refresh();
 }
 
 WorkerView::~WorkerView()

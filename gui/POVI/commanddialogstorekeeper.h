@@ -5,7 +5,7 @@
 class CommandDialogStoreKeeper : public CommandDialog
 {
 public:
-    CommandDialogStoreKeeper(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit);
+    CommandDialogStoreKeeper(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable* refreshable);
     virtual ~CommandDialogStoreKeeper();
 
     virtual void setUpWindowByWorkPosition();

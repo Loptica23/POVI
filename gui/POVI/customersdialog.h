@@ -2,18 +2,19 @@
 #include <QDialog>
 #include "dbconnection.h"
 #include "customer.h"
+#include "refresher.h"
 
 namespace Ui {
 class CustomersDialog;
 }
 
-class CustomersDialog : public QDialog
+class CustomersDialog : public QDialog, public Refresher
 {
     Q_OBJECT
 
 public:
-    CustomersDialog(QWidget *parent, std::shared_ptr<DBConnection> db);
-    CustomersDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer);
+    CustomersDialog(QWidget *parent, std::shared_ptr<DBConnection> db, Refreshable* refreshable);
+    CustomersDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer, Refreshable* refreshable);
     ~CustomersDialog();
 
 private slots:

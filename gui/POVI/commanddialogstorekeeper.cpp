@@ -3,8 +3,8 @@
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 
-CommandDialogStoreKeeper::CommandDialogStoreKeeper(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
-    CommandDialog(parent, db, command, edit)
+CommandDialogStoreKeeper::CommandDialogStoreKeeper(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable) :
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     setUpWindowByWorkPosition();
     storeKeeperDescriptionChanged();

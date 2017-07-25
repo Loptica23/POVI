@@ -3,6 +3,7 @@
 #include <QDialog>
 #include <memory>
 #include "dbconnection.h"
+#include "refresher.h"
 
 namespace Ui {
 class DialogForCreatingNewEmployee;
@@ -10,13 +11,13 @@ class DialogForCreatingNewEmployee;
 
 class DBConnection;
 
-class DialogForCreatingNewEmployee : public QDialog
+class DialogForCreatingNewEmployee : public QDialog, public Refresher
 {
     Q_OBJECT
 
 public:
-    DialogForCreatingNewEmployee(QWidget *parent, std::shared_ptr<DBConnection> db);
-    DialogForCreatingNewEmployee(QWidget *parent, std::shared_ptr<DBConnection> db, EmployeePtr employee);
+    DialogForCreatingNewEmployee(QWidget *parent, std::shared_ptr<DBConnection> db, Refreshable* refreshable);
+    DialogForCreatingNewEmployee(QWidget *parent, std::shared_ptr<DBConnection> db, EmployeePtr employee, Refreshable* refreshable);
     ~DialogForCreatingNewEmployee();
 
 private slots:

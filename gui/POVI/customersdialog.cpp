@@ -4,23 +4,27 @@
 #include "dbconnection.h"
 #include "customer.h"
 
-CustomersDialog::CustomersDialog(QWidget *parent, DBConnectionPtr db):
+CustomersDialog::CustomersDialog(QWidget *parent, DBConnectionPtr db, Refreshable* refreshable):
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::CustomersDialog),
     m_db(db),
     m_create(true)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
-CustomersDialog::CustomersDialog(QWidget *parent, DBConnectionPtr db, CustomerPtr customer):
+CustomersDialog::CustomersDialog(QWidget *parent, DBConnectionPtr db, CustomerPtr customer, Refreshable* refreshable):
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::CustomersDialog),
     m_db(db),
     m_customer(customer),
     m_create(false)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     ui->Name->setText(m_customer->getName());
 

@@ -2,12 +2,13 @@
 #include <QWidget>
 #include <QPushButton>
 #include "dbconnection.h"
+#include "refreshable.h"
 
 namespace Ui {
 class CommandsViewWaitingOnTask;
 }
 
-class CommandsViewWaitingOnTask : public QWidget
+class CommandsViewWaitingOnTask : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -16,6 +17,7 @@ public:
     CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs);
 
     ~CommandsViewWaitingOnTask();
+    virtual void refresh();
 
 private slots:
     void on_Refresh_clicked();

@@ -3,12 +3,13 @@
 #include <QWidget>
 #include <QPushButton>
 #include "dbconnection.h"
+#include "refreshable.h"
 
 namespace Ui {
 class WorkerView;
 }
 
-class WorkerView : public QWidget
+class WorkerView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -16,6 +17,7 @@ public:
     WorkerView(QWidget *parent, DBConnectionPtr db, EmployeePtr employee);
     ~WorkerView();
 
+    virtual void refresh();
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -25,7 +27,6 @@ private slots:
     void on_task_clicked();
 
 private:
-    void refresh();
     void clearTable();
     void insertTaskButton(unsigned id, unsigned column);
 

@@ -4,12 +4,13 @@
 #include "order.h"
 #include "command.h"
 #include "dbconnection.h"
+#include "refreshable.h"
 
 namespace Ui {
 class CommandsView;
 }
 
-class CommandsView : public QWidget
+class CommandsView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -17,6 +18,7 @@ public:
     CommandsView(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order);
     ~CommandsView();
 
+    virtual void refresh();
 private slots:
     void edit();
     void details();

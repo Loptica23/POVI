@@ -2,12 +2,13 @@
 #include <QWidget>
 #include "dbconnection.h"
 #include "qpushbutton.h"
+#include "refreshable.h"
 
 namespace Ui {
 class ShiftManagerView;
 }
 
-class ShiftManagerView : public QWidget
+class ShiftManagerView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -15,8 +16,7 @@ public:
     ShiftManagerView(QWidget *parent, DBConnectionPtr db);
     ~ShiftManagerView();
 
-private:
-    void refreshProductionEmployees();
+    virtual void refresh();
 
 private slots:
     void on_pushButton_clicked();

@@ -2,8 +2,8 @@
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 
-CommandDialogInvoice::CommandDialogInvoice(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit) :
-    CommandDialog(parent, db, command, edit)
+CommandDialogInvoice::CommandDialogInvoice(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable* refreshable) :
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     setUpWindowByWorkPosition();
     qDebug() << "Knjigovodja za Fakturu";

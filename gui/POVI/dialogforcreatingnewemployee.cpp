@@ -4,14 +4,16 @@
 #include "dbconnection.h"
 #include "QMessageBox"
 
-DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBConnectionPtr db, EmployeePtr employee) :
+DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBConnectionPtr db, EmployeePtr employee, Refreshable* refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::DialogForCreatingNewEmployee),
     m_db(db),
     m_employee(employee),
     m_create(false)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     ui->FirstName->setText(m_employee->getFirstName());
     ui->SecondName->setText(m_employee->getSecondName());
@@ -29,13 +31,15 @@ DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBCo
     employee->resetChangeTracking();
 }
 
-DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBConnectionPtr db) :
+DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBConnectionPtr db, Refreshable* refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::DialogForCreatingNewEmployee),
     m_db(db),
     m_create(true)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
 DialogForCreatingNewEmployee::~DialogForCreatingNewEmployee()

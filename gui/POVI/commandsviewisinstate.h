@@ -5,12 +5,13 @@
 #include "dbconnection.h"
 #include "TimeSimulator/types.h"
 #include "TimeSimulator/timesimulator.h"
+#include "refreshable.h"
 
 namespace Ui {
 class CommandsViewIsInState;
 }
 
-class CommandsViewIsInState : public QWidget
+class CommandsViewIsInState : public QWidget, public Refreshable
 {
     Q_OBJECT
 
@@ -20,6 +21,8 @@ public:
 
     void setCommands(CommandPtrVtr commands);
     void showTimeSimulatorResults(TimeSimulator::TimeSimulatorResultMapPtr timeSimulatorMap);
+
+    virtual void refresh();
 
 public slots:
     void timeEngineFinish();

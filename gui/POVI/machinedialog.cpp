@@ -4,18 +4,21 @@
 #include "ui_machinedialog.h"
 #include "mainwindow.h"
 
-MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db) :
+MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, Refreshable *refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::MachineDialog),
     m_db(db),
     m_create(true)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
     initializeComboBox();
 }
 
-MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr machine, bool edit) :
+MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr machine, bool edit, Refreshable *refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::MachineDialog),
     m_db(db),
     m_create(false),
@@ -23,6 +26,7 @@ MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr mac
     m_edit(edit)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     ui->Name->setText(machine->getName());
     initializeComboBox();

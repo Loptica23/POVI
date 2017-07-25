@@ -5,8 +5,8 @@
 class CommandDialogKomercialist : public CommandDialog
 {
 public:
-    CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order);
-    CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit);
+    CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable* refreshable);
+    CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable* refreshable);
 
     virtual ~CommandDialogKomercialist();
 

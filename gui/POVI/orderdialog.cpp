@@ -5,24 +5,28 @@
 #include <QDate>
 #include <QPushButton>
 
-OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer) :
+OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CustomerPtr customer, Refreshable *refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::OrderDialog),
     m_db(db),
     m_create(true),
     m_customer(customer)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
-OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, bool edit) :
+OrderDialog::OrderDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, bool edit, Refreshable *refreshable) :
     QDialog(parent),
+    Refresher(refreshable),
     ui(new Ui::OrderDialog),
     m_db(db),
     m_create(false),
     m_order(order)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     ui->Header->setText(order->getHeader());
     ui->Description->setText(order->getDescription());

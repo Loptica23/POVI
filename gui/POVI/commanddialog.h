@@ -6,18 +6,19 @@
 #include "command.h"
 #include "dbconnection.h"
 #include "task.h"
+#include "refresher.h"
 
 namespace Ui {
 class CommandDialog;
 }
 
-class CommandDialog : public QDialog
+class CommandDialog : public QDialog, public Refresher
 {
     Q_OBJECT
 
 public:
-    CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order);
-    CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit);
+    CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable* refreshable);
+    CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable* refreshable);
     ~CommandDialog();
 
     virtual void setUpWindowByWorkPosition() = 0;

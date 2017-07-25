@@ -14,6 +14,7 @@ EmpoyersView::EmpoyersView(QWidget *parent, std::shared_ptr<DBConnection> db) :
 {
     ui->setupUi(this);
     ui->tableWidget->resizeColumnsToContents();
+    refresh();
 }
 
 EmpoyersView::~EmpoyersView()
@@ -21,12 +22,7 @@ EmpoyersView::~EmpoyersView()
     delete ui;
 }
 
-void EmpoyersView::paintEvent(QPaintEvent *event)
-{
-
-}
-
-void EmpoyersView::on_Refresh_clicked()
+void EmpoyersView::refresh()
 {
     m_buttons.clear();
     ui->tableWidget->setRowCount(0);
@@ -84,9 +80,19 @@ void EmpoyersView::on_Refresh_clicked()
     ui->tableWidget->resizeColumnsToContents();
 }
 
+void EmpoyersView::paintEvent(QPaintEvent *event)
+{
+
+}
+
+void EmpoyersView::on_Refresh_clicked()
+{
+    refresh();
+}
+
 void EmpoyersView::on_CreateEmployee_clicked()
 {
-    auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db);
+    auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db, this);
     creatingNewEmployeeDialog->show();
 }
 
@@ -97,7 +103,7 @@ void EmpoyersView::edit()
     {
         auto index = std::find(m_buttons.begin(), m_buttons.end(), buttonSender) - m_buttons.begin();
         qDebug() << index;
-        auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db, m_employees->at(index));
+        auto creatingNewEmployeeDialog = new DialogForCreatingNewEmployee(this, m_db, m_employees->at(index), this);
         creatingNewEmployeeDialog->show();
     }
 }

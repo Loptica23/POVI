@@ -10,6 +10,7 @@ MachinesView::MachinesView(QWidget *parent, DBConnectionPtr db) :
     m_machines(new MachineVtr())
 {
     ui->setupUi(this);
+    refresh();
 }
 
 MachinesView::~MachinesView()
@@ -17,17 +18,22 @@ MachinesView::~MachinesView()
     delete ui;
 }
 
+void MachinesView::refresh()
+{
+    m_tasktypes = m_db->getTaskTypes();
+    m_machines = m_db->getMachines();
+    fillMachinesTable();
+}
+
 void MachinesView::on_NewMachine_clicked()
 {
-    auto machinedialog = new MachineDialog(this, m_db);
+    auto machinedialog = new MachineDialog(this, m_db, this);
     machinedialog->show();
 }
 
 void MachinesView::on_refresh_clicked()
 {
-    m_tasktypes = m_db->getTaskTypes();
-    m_machines = m_db->getMachines();
-    fillMachinesTable();
+    refresh();
 }
 
 void MachinesView::fillMachinesTable()
@@ -101,7 +107,7 @@ void MachinesView::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), false);
+        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), false, this);
         machinesdialog->show();
     }
 }
@@ -113,7 +119,7 @@ void MachinesView::edit()
     {
         auto index = std::find(m_editButtons.begin(), m_editButtons.end(), buttonSender) - m_editButtons.begin();
         qDebug() << index;
-        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), true);
+        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), true, this);
         machinesdialog->show();
     }
 }

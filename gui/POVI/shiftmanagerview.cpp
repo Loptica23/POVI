@@ -16,6 +16,7 @@ ShiftManagerView::ShiftManagerView(QWidget *parent, DBConnectionPtr db) :
     ui->setupUi(this);
     ui->pushButton->setFocus();
     m_shiftMenager = MainWindow::getLogedUser();
+    //refresh();
 }
 
 ShiftManagerView::~ShiftManagerView()
@@ -23,7 +24,7 @@ ShiftManagerView::~ShiftManagerView()
     delete ui;
 }
 
-void ShiftManagerView::refreshProductionEmployees()
+void ShiftManagerView::refresh()
 {
     //refactor - moras ovo da sredis! Pogotovu ove velicine celjija!
     m_buttons.clear();
@@ -62,13 +63,11 @@ void ShiftManagerView::refreshProductionEmployees()
         ui->tableWidget->setColumnWidth(j, width);
     }
     qDebug() << width;
-
 }
 
 void ShiftManagerView::on_pushButton_clicked()
 {
-    //refresh
-    refreshProductionEmployees();
+    refresh();
 }
 
 void ShiftManagerView::buttonClicked()
@@ -82,7 +81,7 @@ void ShiftManagerView::buttonClicked()
         auto command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
         if (command != nullptr)
         {
-            auto commanddialog = new CommandDialogWorker(this, m_db, command, true);
+            auto commanddialog = new CommandDialogWorker(this, m_db, command, true, this);
             commanddialog->show();
         }
         else

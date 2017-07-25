@@ -5,8 +5,8 @@
 #include "ui_commanddialog.h"
 #include "tasktypes.h"
 
-CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit):
-    CommandDialog(parent, db, command, edit)
+CommandDialogWorker::CommandDialogWorker(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable):
+    CommandDialog(parent, db, command, edit, refreshable)
 {
     setUpWindowByWorkPosition();
 }

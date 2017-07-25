@@ -52,7 +52,9 @@ SOURCES +=  main.cpp\
     workerview.cpp \
     commanddialogworker.cpp \
     commanddialoginvoice.cpp \
-    dialogsetprediction.cpp
+    dialogsetprediction.cpp \
+    refreshable.cpp \
+    refresher.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -81,7 +83,9 @@ HEADERS +=  mainwindow.h\
     workerview.h \
     commanddialogworker.h \
     commanddialoginvoice.h \
-    dialogsetprediction.h
+    dialogsetprediction.h \
+    refreshable.h \
+    refresher.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \

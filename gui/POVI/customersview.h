@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "dbconnection.h"
+#include "refreshable.h"
 
 
 class QPushButton;
@@ -11,13 +12,14 @@ namespace Ui {
 class CustomersView;
 }
 
-class CustomersView : public QWidget
+class CustomersView : public QWidget, public Refreshable
 {
     Q_OBJECT
 
 public:
     CustomersView(QWidget *parent, std::shared_ptr<DBConnection> db);
     ~CustomersView();
+    virtual void refresh();
 
 private slots:
     void on_AddNewCustomer_clicked();
