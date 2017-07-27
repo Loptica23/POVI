@@ -76,6 +76,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
         ui->designerDescription->setReadOnly(true);
         ui->storekeeperDescription->setReadOnly(true);
         ui->invoiceDescription->setReadOnly(true);
+        ui->lineEdit->setReadOnly(true);
         ui->Priority->setEnabled(false);
         ui->comboBox->setVisible(false);
         //ostali su ti taskovi

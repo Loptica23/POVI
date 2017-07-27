@@ -43,6 +43,7 @@ void CommandDialogKomercialist::setUpWindowByWorkPosition()
     removeWidget(ui->Priority);
     removeWidget(ui->label_10);
     removeWidget(ui->invoice);
+    removeWidget(ui->finishQuantity);
     this->repaint();
 }
 

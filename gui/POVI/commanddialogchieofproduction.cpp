@@ -31,6 +31,8 @@ void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
     removeWidget(ui->invoice);
     removeWidget(ui->storekeeper);
     removeWidget(ui->comboBox);
+    removeWidget(ui->label_10);
+    removeWidget(ui->finishQuantity);
 }
 
 void CommandDialogChieOfProduction::fillTaskTable()
@@ -39,15 +41,17 @@ void CommandDialogChieOfProduction::fillTaskTable()
     auto i = 0;
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
     {
+        auto j = 0;
         ui->taskTable->insertRow(i);
         TaskPtr task = (*iter);
-        insertTaskType(task, i, 0);
-        insertTaskState(task, i, 1);
-        insertTaskPrediction(task, i ,2);
-        insertMachineComboBox(task, i, 3);
-        insertWorker(task, i, 4);
-        insertStartTime(task, i , 5);
-        insertEndTime(task, i , 6);
+        insertTaskType(task, i, j++);
+        insertTaskState(task, i, j++);
+        insertTaskPrediction(task, i ,j++);
+        insertMachineComboBox(task, i, j++);
+        insertWorker(task, i, j++);
+        insertStartTime(task, i , j++);
+        insertEndTime(task, i , j++);
+        insertTaskQuantity(task, i , j++);
     }
 
     ui->taskTable->resizeColumnsToContents();
@@ -90,7 +94,7 @@ void CommandDialogChieOfProduction::updateCommand()
 
 void CommandDialogChieOfProduction::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command, 0));
 }
 
 void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
@@ -98,7 +102,7 @@ void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
     m_comboBoxes.clear();
 
     QStringList headers;
-    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina" << "Radnik" << "Poceo" << "Zavrsen";
+    headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina" << "Radnik" << "Poceo" << "Zavrsen" << "Kolicina";
 
     m_machines = m_db->getMachines();
     ui->taskTable->setRowCount(0);
@@ -171,6 +175,13 @@ void CommandDialogChieOfProduction::insertStartTime(TaskPtr task, unsigned i , u
 void CommandDialogChieOfProduction::insertEndTime(TaskPtr task, unsigned i , unsigned j)
 {
     QString str = task->getEndTime().toString(timeFormat);
+    auto *item = new QTableWidgetItem(str);
+    ui->taskTable->setItem(i, j, item);
+}
+
+void CommandDialogChieOfProduction::insertTaskQuantity(TaskPtr task, unsigned i , unsigned j)
+{
+    QString str = QString::number(task->getQuantity());
     auto *item = new QTableWidgetItem(str);
     ui->taskTable->setItem(i, j, item);
 }

@@ -11,6 +11,7 @@ Task::Task(CommandPtr command, unsigned taskType):
     m_workerId(0),
     m_prediction(0),
     m_machineId(0),
+    m_quantity(0),
     m_state(State::New),
     m_serialNumber(0),
     m_id(0),
@@ -26,6 +27,7 @@ Task::Task(unsigned id, CommandPtr command, unsigned taskType):
     m_workerId(0),
     m_prediction(0),
     m_machineId(0),
+    m_quantity(0),
     m_state(State::New),
     m_serialNumber(0),
     m_id(id),
@@ -125,6 +127,11 @@ const QDateTime& Task::getEndTime() const
     return m_endTime;
 }
 
+unsigned Task::getQuantity() const
+{
+    return m_quantity;
+}
+
 //seters
 void Task::setCommand(CommandPtr command)
 {
@@ -196,11 +203,13 @@ void Task::setSerialNumber(unsigned serialNumber)
 
 void Task::setCurrentTimeForStarted()
 {
+    //just putting flag to true and database will set time
     m_setStartedTime = true;
 }
 
 void Task::setCurrentTimeForComplited()
 {
+    //just putting flag to true and database will set time
     m_setComplitedTime = true;
 }
 
@@ -214,18 +223,28 @@ void Task::setEndTime(const QDateTime& end)
     m_endTime = end;
 }
 
+void Task::setQuantity(unsigned quantity)
+{
+    if (m_quantity != quantity)
+    {
+        m_quantityChanged = true;
+        m_quantity = quantity;
+    }
+}
+
 QString Task::statemantForCreating(unsigned employeeID) const
 {
     QString stm;
     stm = "insert into zadatak (Nalog_idNalog, Nalog_idNarudzbina, Nalog_idKlijent,"
-          "TipoviZadatka_idTipoviZadatka, Radnik_idRadnik, Stanje, RedniBroj) values (";
+          "TipoviZadatka_idTipoviZadatka, Radnik_idRadnik, Stanje, RedniBroj, Kolicina) values (";
     stm += QString::number(getCommand()->getID()) + ", ";
     stm += QString::number(getCommand()->getIdOrder()) + ", ";
     stm += QString::number(getCommand()->getIdCustomer()) + ", ";
     stm += QString::number(getTaskTypeId()) + ", ";
     stm += QString::number(employeeID) + ", ";
     stm += "'" + getStateString() + "', ";
-    stm += QString::number(getSerialNumber());
+    stm += QString::number(getSerialNumber()) + ", ";
+    stm += QString::number(getQuantity());
     stm += ");";
     qDebug() << stm;
     return stm;
@@ -265,6 +284,10 @@ QString Task::statemantForUpdating() const
         {
             stm += "Zavrsen = NOW(), ";
         }
+        if (m_quantityChanged)
+        {
+            stm += "Kolicina = " + QString::number(m_quantity) + ", ";
+        }
         stm.chop(2);
         stm += " where idZadatak = " + QString::number(m_id) + ";";
         qDebug() << stm;
@@ -289,7 +312,8 @@ bool Task::isModified() const
             m_serialNumberChanged ||
             m_setStartedTime ||
             m_setComplitedTime ||
-            m_stateChanged);
+            m_stateChanged ||
+            m_quantityChanged );
 }
 
 bool Task::isCreated() const
@@ -306,6 +330,7 @@ void Task::resetChangeTracking()
     m_serialNumberChanged = false;
     m_setStartedTime = false;
     m_setComplitedTime = false;
+    m_quantityChanged = false;
 }
 
 TaskPtrVtr Task::createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr command)
@@ -321,6 +346,7 @@ TaskPtrVtr Task::createTaskFromQueryAndCommand(QSqlQuery& query, CommandPtr comm
         task->setSerialNumber(query.value("RedniBroj").toUInt());
         task->setStartTime(query.value("Poceo").toDateTime());
         task->setEndTime(query.value("Zavrsen").toDateTime());
+        task->setQuantity(query.value("Kolicina").toUInt());
         task->resetChangeTracking();
         tasks->push_back(task);
     }

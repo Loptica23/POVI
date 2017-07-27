@@ -48,7 +48,7 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
 
 void CommandDialogWorker::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command, ui->lineEdit->text().toUInt()));
     if (m_haveItInvoice)
     {
         InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
@@ -58,7 +58,12 @@ void CommandDialogWorker::acceptButtonClicked()
 
 void CommandDialogWorker::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), ui->lineEdit->text().toUInt()));
+    if (m_haveItInvoice)
+    {
+        InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
+        ifFalseShowDbError(m_db->createNewInvoice(invoice));
+    }
 }
 
 void CommandDialogWorker::backToDefaultScreen()

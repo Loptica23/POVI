@@ -59,12 +59,13 @@ public:
     virtual bool updateCommand(CommandPtr command) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool sendToProduction(CommandPtr command) = 0;
-    virtual bool completeCurrentTask(CommandPtr command) = 0;
-    virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee) = 0;
+    virtual bool completeCurrentTask(CommandPtr command, unsigned quantity) = 0;
+    virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity) = 0;
     virtual bool startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee) = 0;
 
     virtual TaskPtrVtr getTasks() = 0;
     virtual TaskPtrVtr getTasks(CommandPtr command) = 0;
+    virtual TaskPtr getCurrentTask(CommandPtr command) = 0;
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) = 0;
     virtual bool updateTask(TaskPtr task) = 0;
     virtual bool deleteTask(TaskPtr task) = 0;

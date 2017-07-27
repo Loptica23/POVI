@@ -23,12 +23,20 @@ void CommandDialogDesigner::setUpWindowByWorkPosition()
     removeWidget(ui->tasks);
     removeWidget(ui->priorityWidget);
     removeWidget(ui->invoice);
+    removeWidget(ui->finishQuantity);
+    removeWidget(ui->Priority);
+    removeWidget(ui->label_5);
 
     ui->commandNumber->setEnabled(false);
     ui->specification->setReadOnly(true);
     ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     //nalog je preuzet
+
+    auto machine = m_db->getMachine(m_currentTask->getMachineId());
+    if (machine)
+        ui->machine->setText(machine->getName());
+
     if (m_edit)
     {
         this->showMaximized();
@@ -54,12 +62,12 @@ void CommandDialogDesigner::updateCommand()
 
 void CommandDialogDesigner::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
 }
 
 void CommandDialogDesigner::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
 }
 
 void CommandDialogDesigner::designerDescriptionChanged()

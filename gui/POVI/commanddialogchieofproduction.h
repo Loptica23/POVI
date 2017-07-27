@@ -23,6 +23,7 @@ protected:
     void insertWorker(TaskPtr task, unsigned i , unsigned j);
     void insertStartTime(TaskPtr task, unsigned i , unsigned j);
     void insertEndTime(TaskPtr task, unsigned i , unsigned j);
+    void insertTaskQuantity(TaskPtr task, unsigned i , unsigned j);
 
     TaskTypesPtr m_taskTypes;
     MachinePtrVtr m_machines;

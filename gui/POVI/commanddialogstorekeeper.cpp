@@ -20,6 +20,7 @@ void CommandDialogStoreKeeper::setUpWindowByWorkPosition()
 {
     removeWidget(ui->tasks);
     removeWidget(ui->priorityWidget);
+    removeWidget(ui->finishQuantity);
     removeInvoiceWidgetIfTaskDontNeedIt();
 
     ui->commandNumber->setEnabled(false);
@@ -27,6 +28,10 @@ void CommandDialogStoreKeeper::setUpWindowByWorkPosition()
     ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
+
+    auto machine = m_db->getMachine(m_currentTask->getMachineId());
+    if (machine)
+        ui->machine->setText(machine->getName());
 
     if (m_edit)
     {
@@ -53,7 +58,7 @@ void CommandDialogStoreKeeper::updateCommand()
 
 void CommandDialogStoreKeeper::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command));
+    ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
     if (m_haveItInvoice)
     {
         InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
@@ -63,7 +68,7 @@ void CommandDialogStoreKeeper::acceptButtonClicked()
 
 void CommandDialogStoreKeeper::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker()));
+    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
 }
 
 void CommandDialogStoreKeeper::storeKeeperDescriptionChanged()

@@ -87,7 +87,7 @@ void CommandsViewIsInState::predict()
     {
         auto index = std::find(m_predictionButtons.begin(), m_predictionButtons.end(), buttonSender) - m_predictionButtons.begin();
         qDebug() << index;
-        auto dialogSetPrediction = new DialogSetPrediction(this, m_db, m_commands->at(index));
+        auto dialogSetPrediction = new DialogSetPrediction(this, m_db, m_commands->at(index), this);
         dialogSetPrediction->show();
     }
 }

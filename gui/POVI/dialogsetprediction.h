@@ -2,17 +2,18 @@
 #include <QDialog>
 #include "command.h"
 #include "dbconnection.h"
+#include "refresher.h"
 
 namespace Ui {
 class DialogSetPrediction;
 }
 
-class DialogSetPrediction : public QDialog
+class DialogSetPrediction : public QDialog, public Refresher
 {
     Q_OBJECT
 
 public:
-    DialogSetPrediction(QWidget *parent, DBConnectionPtr db , CommandPtr command);
+    DialogSetPrediction(QWidget *parent, DBConnectionPtr db , CommandPtr command, Refreshable* refreshable);
     ~DialogSetPrediction();
 
 private slots:

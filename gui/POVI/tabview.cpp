@@ -33,6 +33,9 @@ void TabView::setUpTabViewByWorkPosition()
         commandsviewWaitingOnProduction = new CommandsViewIsInState(this, m_db, Command::State::WaitForProduction);
         ui->tabWidget->addTab(commandsviewWaitingOnProduction, "Nalozi koji cekaju na potvrdu:");
 
+        commandsviewWaitingOnProduction = new CommandsViewIsInState(this, m_db, Command::State::Complited);
+        ui->tabWidget->addTab(commandsviewWaitingOnProduction, "Zavrseni nalozi:");
+
         machinesview = new MachinesView(this, m_db);
         ui->tabWidget->addTab(machinesview, "Masine:");
 

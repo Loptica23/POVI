@@ -380,7 +380,8 @@ CommandPtrVtr DBConnectionImpl::getCommands()
 {
     CommandPtrVtr commands;
     QSqlQuery query;
-    query.prepare("select * from nalog");
+    QString stm = "select * from nalog";
+    query.prepare(stm);
     if(query.exec())
     {
         commands = Command::createCommandsFromQuery(query);
@@ -397,7 +398,9 @@ CommandPtrVtr DBConnectionImpl::getCommands(OrderPtr order)
 {
     CommandPtrVtr commands;
     QSqlQuery query;
-    query.prepare("select * from nalog where idNarudzbina = " + QString::number(order->getID()));
+    QString stm = "select * from nalog where idNarudzbina = " + QString::number(order->getID());
+    qDebug() << stm;
+    query.prepare(stm);
     if(query.exec())
     {
         commands = Command::createCommandsFromQuery(query);
@@ -414,7 +417,9 @@ CommandPtrVtr DBConnectionImpl::getCommands(Command::State & state)
 {
     CommandPtrVtr commands;
     QSqlQuery query;
-    query.prepare("select * from nalog where Stanje = '" + Command::convertStateToString(state) + "';");
+    QString stm = "select * from nalog where Stanje = '" + Command::convertStateToString(state) + "';";
+    qDebug() << stm;
+    query.prepare(stm);
     if(query.exec())
     {
         commands = Command::createCommandsFromQuery(query);
@@ -578,7 +583,7 @@ bool DBConnectionImpl::sendToProduction(CommandPtr command)
     return updateCommand(command);
 }
 
-bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
+bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity)
 {
     TaskPtrVtr tasks = getTasks(command);
     TaskPtr task;
@@ -607,6 +612,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
             qDebug() << "postavljnje zadatka na zavrseno!";
             task->setState(Task::State::Complited);
             task->setCurrentTimeForComplited();
+            task->setQuantity(quantity);
             ++iter;
             if (iter == tasks->end())
             {
@@ -649,7 +655,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command)
     return true;
 }
 
-bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee)
+bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity)
 {
     TaskPtrVtr tasks = getTasks(command);
     TaskPtr task;
@@ -666,6 +672,7 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
                 serialNumber = task->getSerialNumber();
                 task->setState(Task::State::Leaved);
                 task->setCurrentTimeForComplited();
+                task->setQuantity(quantity);
                 newTask.reset(new Task(command, task->getTaskTypeId()));
                 newTask->setSerialNumber(++serialNumber);
                 newTask->setState(Task::State::Waiting);
@@ -673,6 +680,23 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
                 {
                     return false;
                 }
+                newTask = getCurrentTask(command);
+                if (newTask != nullptr)
+                {
+                    newTask->setMachineId(task->getMachineId());
+                    auto msecconds = task->getStartTime().msecsTo(QDateTime::currentDateTime());
+                    unsigned minutes = msecconds/(1000*60);
+                    unsigned leftPredictedTime = task->getPrediction();
+                    leftPredictedTime -= minutes;
+                    if (leftPredictedTime > 0)
+                        newTask->setPrediction(leftPredictedTime);
+
+                    if (!updateTask(newTask))
+                    {
+                        return false;
+                    }
+                }
+
                 if (!updateTask(task))
                 {
                     return false;
@@ -742,6 +766,22 @@ TaskPtrVtr DBConnectionImpl::getTasks(CommandPtr command)
         qDebug() << "nije uspeo query!";
     }
     return tasks;
+}
+
+TaskPtr DBConnectionImpl::getCurrentTask(CommandPtr command)
+{
+    TaskPtrVtr tasks = getTasks(command);
+    TaskPtr currentTask = nullptr;
+
+    for(const auto& task: *tasks)
+    {
+        if ((task->getState() == Task::State::Waiting) || (task->getState() == Task::State::InProgress))
+        {
+            currentTask = task;
+        }
+    }
+
+    return currentTask;
 }
 
 bool DBConnectionImpl::createNewTask(TaskPtr task, unsigned employeeID)

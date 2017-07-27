@@ -37,6 +37,7 @@ public:
     unsigned getSerialNumber() const;
     const QDateTime& getStartTime() const;
     const QDateTime& getEndTime() const;
+    unsigned getQuantity() const;
 
     //seters
     void setCommand(CommandPtr command);
@@ -48,7 +49,7 @@ public:
     void setSerialNumber(unsigned serialNumber);
     void setCurrentTimeForStarted();
     void setCurrentTimeForComplited();
-
+    void setQuantity(unsigned quantity);
 
     QString statemantForCreating(unsigned employeeID) const;
     QString statemantForUpdating() const;
@@ -90,6 +91,9 @@ private:
 
     bool m_setStartedTime;
     bool m_setComplitedTime;
+
+    unsigned m_quantity;
+    bool m_quantityChanged;
 
     QDateTime m_startTime;
     QDateTime m_endTime;

@@ -47,12 +47,13 @@ public:
     virtual bool updateCommand(CommandPtr command);
     virtual bool deleteCommand(CommandPtr command);
     virtual bool sendToProduction(CommandPtr command);
-    virtual bool completeCurrentTask(CommandPtr command);
-    virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee);
+    virtual bool completeCurrentTask(CommandPtr command, unsigned quantity);
+    virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity);
     virtual bool startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee);
 
     virtual TaskPtrVtr getTasks();
     virtual TaskPtrVtr getTasks(CommandPtr command);
+    virtual TaskPtr getCurrentTask(CommandPtr command);
     virtual bool createNewTask(TaskPtr task, unsigned employeeID);
     virtual bool updateTask(TaskPtr task);
     virtual bool deleteTask(TaskPtr task);
