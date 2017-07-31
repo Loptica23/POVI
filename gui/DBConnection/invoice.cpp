@@ -90,7 +90,7 @@ QString Invoice::statemantForUpdating() const
 QString Invoice::statementForDeleting() const
 {
     QString stm;
-    qDebug() << "nije implementirana funkcija za brisanje fakture.";
+    stm = "delete from faktura where idFaktura = " + QString::number(getId()) + ";";
     return stm;
 }
 

@@ -39,6 +39,7 @@ protected slots:
 
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
+    virtual void annul();
 
 protected:
     void fillTaskTable();

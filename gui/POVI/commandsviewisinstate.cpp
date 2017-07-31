@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QLabel>
 #include "commandsviewisinstate.h"
 #include "ui_commandsviewisinstate.h"
 #include "commanddialogchieofproduction.h"
@@ -24,6 +25,11 @@ CommandsViewIsInState::CommandsViewIsInState(QWidget *parent, DBConnectionPtr db
     m_resultMap(nullptr)
 {
     ui->setupUi(this);
+    ui->pushButton_2->setEnabled(false);
+    if (state == Command::State::InProgress)
+    {
+        ui->pushButton_2->setEnabled(true);
+    }
     refresh();
 }
 
@@ -92,6 +98,30 @@ void CommandsViewIsInState::predict()
     }
 }
 
+void CommandsViewIsInState::stopCommand()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_stopContinueButons.begin(), m_stopContinueButons.end(), buttonSender) != m_stopContinueButons.end())
+    {
+        auto index = std::find(m_stopContinueButons.begin(), m_stopContinueButons.end(), buttonSender) - m_stopContinueButons.begin();
+        qDebug() << index;
+        m_db->stopCommand(m_commands->at(index));
+        refresh();
+    }
+}
+
+void CommandsViewIsInState::continueCommand()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_stopContinueButons.begin(), m_stopContinueButons.end(), buttonSender) != m_stopContinueButons.end())
+    {
+        auto index = std::find(m_stopContinueButons.begin(), m_stopContinueButons.end(), buttonSender) - m_stopContinueButons.begin();
+        qDebug() << index;
+        m_db->continueCommand(m_commands->at(index));
+        refresh();
+    }
+}
+
 void CommandsViewIsInState::fillTable()
 {
     clearBuutonsAndInitializeHeaders();
@@ -103,17 +133,19 @@ void CommandsViewIsInState::fillTable()
     for (auto iter = m_commands->begin(); iter != m_commands->end(); ++i, ++iter)
     {
         CommandPtr command = *iter;
+        auto j = 0;
         ui->tableWidget->insertRow(i);
-        insertCommandNumber(command, i, 0);
-        insertPriority(command, i, 1);
-        insertDetailsButton(i, 2);
-        insertEditButton(i, 3);
-        insertTimeSimulatorPrediction(command, i , 4);
-        insertDeathLine(command, i, 5);
-        insertPrediction(command, i, 6);
-        insertKomercialist(command, i, 7);
-        insertHealth(command, i , 8);
-        insertPredictionButton(i, 9);
+        insertCommandNumber(command, i, j++);
+        insertPriority(command, i, j++);
+        insertDetailsButton(i, j++);
+        insertEditButton(i, j++);
+        insertTimeSimulatorPrediction(command, i , j++);
+        insertDeathLine(command, i, j++);
+        insertPrediction(command, i, j++);
+        insertKomercialist(command, i, j++);
+        insertHealth(command, i , j++);
+        insertPredictionButton(i, j++);
+        insertStopContinueButton(command, i, j++);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -123,9 +155,20 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_editButtons.clear();
     m_detailsButtons.clear();
     m_predictionButtons.clear();
+    m_stopContinueButons.clear();
 
     QStringList headers;
-    headers << "Broj Naloga" << "Prioritet" << "Detalji" << "Izmeni" << "Izracunato vreme" << "Rok Zavrsetka" << "Predvidjanje" << "Komercijalista" << "Status" << "Predvidi";
+    headers << "Broj Naloga"
+            << "Prioritet"
+            << "Detalji"
+            << "Izmeni"
+            << "Izracunato vreme"
+            << "Rok Zavrsetka"
+            << "Predvidjanje"
+            << "Komercijalista"
+            << "Status"
+            << "Predvidi"
+            << "Stopiraj/Nastavi";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -221,6 +264,26 @@ void CommandsViewIsInState::insertPredictionButton(unsigned i, unsigned j)
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_predict);
     m_predictionButtons.push_back(btn_predict);
     connect(btn_predict, SIGNAL(clicked()), this, SLOT(predict()));
+}
+
+void CommandsViewIsInState::insertStopContinueButton(CommandPtr command, unsigned i, unsigned j)
+{
+    QPushButton* btn = new QPushButton();
+    btn->setEnabled(false);
+    if (command->getState() == Command::State::InProgress)
+    {
+        btn->setText("Stopiraj");
+        btn->setEnabled(true);
+        connect(btn, SIGNAL(clicked()), this, SLOT(stopCommand()));
+    }
+    if (command->getState() == Command::State::Stopped)
+    {
+        btn->setText("Nastavi");
+        btn->setEnabled(true);
+        connect(btn, SIGNAL(clicked()), this, SLOT(continueCommand()));
+    }
+    m_stopContinueButons.push_back(btn);
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn);
 }
 
 void CommandsViewIsInState::on_pushButton_2_clicked()

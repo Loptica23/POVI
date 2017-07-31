@@ -6,9 +6,11 @@
 #define timeFormat "hh:mm dd.MM.yyyy"
 
 CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit, Refreshable *refreshable):
-    CommandDialog(parent, db, command, edit, refreshable)
+    CommandDialog(parent, db, command, edit, refreshable),
+    m_annul(false)
 {
     this->showMaximized();
+    m_annul = showAnnul();
     m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
@@ -28,6 +30,7 @@ void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
     ui->designerDescription->setReadOnly(true);
     ui->commandNumber->setEnabled(false);
     ui->storekeeperDescription->setReadOnly(true);
+
     removeWidget(ui->invoice);
     removeWidget(ui->storekeeper);
     removeWidget(ui->comboBox);
@@ -52,6 +55,7 @@ void CommandDialogChieOfProduction::fillTaskTable()
         insertStartTime(task, i , j++);
         insertEndTime(task, i , j++);
         insertTaskQuantity(task, i , j++);
+        insertAnnulButton(task, i, j++);
     }
 
     ui->taskTable->resizeColumnsToContents();
@@ -97,12 +101,32 @@ void CommandDialogChieOfProduction::acceptButtonClicked()
     ifFalseShowDbError(m_db->completeCurrentTask(m_command, 0));
 }
 
+bool CommandDialogChieOfProduction::showAnnul()
+{
+    bool result = (m_command->getState() == Command::State::Stopped);
+    for (auto task : *m_tasks)
+    {
+        if (task->getState() == Task::State::InProgress)
+        {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
 void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
 {
     m_comboBoxes.clear();
+    m_annulButtons.clear();
 
     QStringList headers;
     headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina" << "Radnik" << "Poceo" << "Zavrsen" << "Kolicina";
+
+    if (m_annul)
+    {
+        headers << "Storniraj";
+    }
 
     m_machines = m_db->getMachines();
     ui->taskTable->setRowCount(0);
@@ -184,4 +208,33 @@ void CommandDialogChieOfProduction::insertTaskQuantity(TaskPtr task, unsigned i 
     QString str = QString::number(task->getQuantity());
     auto *item = new QTableWidgetItem(str);
     ui->taskTable->setItem(i, j, item);
+}
+
+void CommandDialogChieOfProduction::insertAnnulButton(TaskPtr task, unsigned i , unsigned j)
+{
+    if (m_annul)
+    {
+        QPushButton* btn = new QPushButton();
+        m_annulButtons.push_back(btn);
+        connect(btn, SIGNAL(clicked()), this, SLOT(annul()));
+        btn->setEnabled(false);
+        btn->setText("Storniraj");
+        if (((task->getState() == Task::State::Complited) || (task->getState() == Task::State::Leaved)) && m_edit)
+        {
+            btn->setEnabled(true);
+        }
+        ui->taskTable->setIndexWidget(ui->taskTable->model()->index(i, j), btn);
+    }
+}
+
+void CommandDialogChieOfProduction::annul()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_annulButtons.begin(), m_annulButtons.end(), buttonSender) != m_annulButtons.end())
+    {
+        auto index = std::find(m_annulButtons.begin(), m_annulButtons.end(), buttonSender) - m_annulButtons.begin();
+        qDebug() << index;
+        m_db->annulTask(m_tasks->at(index), m_command, m_tasks);
+        close();
+    }
 }

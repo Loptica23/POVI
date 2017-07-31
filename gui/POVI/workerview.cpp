@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "commandsviewwaitingontask.h"
 #include "mainwindow.h"
+#include "utils/utils.h"
 
 #define TASK_BUTTON_FONT_SIZE 25
 
@@ -29,16 +30,17 @@ void WorkerView::refresh()
 {
     clearTable();
     auto i = 0;
-    for(auto iter = TaskTypeIDs.begin(); iter != TaskTypeIDs.end(); ++iter)
+    m_commands = m_db->getCommandWhichWaitingOnTasks(TaskTypeIDs);
+    for(auto id : TaskTypeIDs)
     {
-        unsigned id = *iter;
-        if (m_db->isThereCommandWhichWaitingOnTask(id))
+        if (isThereCommandWhichWaitingOnTask(id))
         {
             ui->tableWidget->insertRow(i);
             insertTaskButton(id, i);
             ++i;
         }
     }
+
     ui->tableWidget->resizeRowsToContents();
 }
 
@@ -62,6 +64,18 @@ void WorkerView::insertTaskButton(unsigned id, unsigned column)
     m_taskButtons.push_back(taskButton);
     m_tasksIDs.push_back(id);
     connect(taskButton, SIGNAL(clicked()), this, SLOT(on_task_clicked()));
+}
+
+bool WorkerView::isThereCommandWhichWaitingOnTask(unsigned id)
+{
+    for (const auto & command : *m_commands)
+    {
+        if (m_db->getCurrentTask(command)->getTaskTypeId() == id)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void WorkerView::paintEvent(QPaintEvent *event)

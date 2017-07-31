@@ -29,6 +29,7 @@ private slots:
 private:
     void clearTable();
     void insertTaskButton(unsigned id, unsigned column);
+    bool isThereCommandWhichWaitingOnTask(unsigned id);
 
 private:
     Ui::WorkerView *ui;
@@ -37,6 +38,7 @@ private:
     std::vector<QPushButton*> m_taskButtons;
     std::vector<unsigned> m_tasksIDs;
     TaskTypesPtr m_taskTypes;
+    CommandPtrVtr m_commands;
 
 protected:
     static std::vector<unsigned> TaskTypeIDs;

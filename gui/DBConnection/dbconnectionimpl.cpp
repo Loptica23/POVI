@@ -456,7 +456,8 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId
         stm += queryGetTasks.value("Nalog_idNalog").toString() + ",";
     }
     stm.chop(1);
-    stm += ");";
+    stm += ")";
+    stm += " and Stanje = 'izr';";
     qDebug() << stm;
 
     queryGetCommands.prepare(stm);
@@ -473,7 +474,7 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTask(unsigned taskTypeId
 
 CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTasks(std::vector<unsigned> taskTypeIds)
 {
-    CommandPtrVtr commands;
+    CommandPtrVtr commands(new CommandVtr());
     QSqlQuery queryGetTasks;
     QSqlQuery queryGetCommands;
     QString stm("select Nalog_idNalog from zadatak where (TipoviZadatka_idTipoviZadatka = ");
@@ -501,7 +502,8 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTasks(std::vector<unsign
         stm += queryGetTasks.value("Nalog_idNalog").toString() + ",";
     }
     stm.chop(1);
-    stm += ");";
+    stm += ")";
+    stm += " and Stanje = 'izr';";
     qDebug() << stm;
 
     queryGetCommands.prepare(stm);
@@ -583,6 +585,18 @@ bool DBConnectionImpl::sendToProduction(CommandPtr command)
     return updateCommand(command);
 }
 
+bool DBConnectionImpl::stopCommand(CommandPtr command)
+{
+    command->setState(Command::State::Stopped);
+    return updateCommand(command);
+}
+
+bool DBConnectionImpl::continueCommand(CommandPtr command)
+{
+    command->setState(Command::State::InProgress);
+    return updateCommand(command);
+}
+
 bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity)
 {
     TaskPtrVtr tasks = getTasks(command);
@@ -613,15 +627,18 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
             task->setState(Task::State::Complited);
             task->setCurrentTimeForComplited();
             task->setQuantity(quantity);
-            ++iter;
+            while (++iter != tasks->end())
+            {
+                task1 = *iter;
+                if (task1->getState() == Task::State::New)
+                {
+                    task1->setState(Task::State::Waiting);
+                    break;
+                }
+            }
             if (iter == tasks->end())
             {
                 command->setState(Command::State::Complited);
-            }
-            else
-            {
-                task1 = *iter;
-                task1->setState(Task::State::Waiting);
             }
             break;
         }
@@ -782,6 +799,46 @@ TaskPtr DBConnectionImpl::getCurrentTask(CommandPtr command)
     }
 
     return currentTask;
+}
+
+bool DBConnectionImpl::annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks)
+{
+    TaskPtr currentTask = nullptr;
+    for (auto t: *tasks)
+    {
+        if (t->getState() == Task::State::Waiting)
+        {
+            currentTask = t;
+        }
+    }
+
+    if (currentTask == nullptr)
+        return false;
+
+    currentTask->setState(Task::State::New);
+    task->setState(Task::State::InProgress);
+
+    InvoicePtrVtr invoices = getInvoices(task);
+    for (auto inv : *invoices)
+    {
+        deleteInvoice(inv);
+    }
+
+
+    if (!updateTask(currentTask))
+    {
+        return false;
+    }
+
+    if (!updateTask(task))
+    {
+        return false;
+    }
+
+    //paiz kako komplitujes zadatak.. moras da stavis na cekanje prvi koji je u stanju nov..
+    //to ne znaci da je u pitanju sledeci zadatak
+    //cakk se moze desiti da je rec o poslednjem zadatku, u tom slucaju treba setovati ceo nalog u stanje zav
+    return true;
 }
 
 bool DBConnectionImpl::createNewTask(TaskPtr task, unsigned employeeID)
