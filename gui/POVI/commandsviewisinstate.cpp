@@ -330,6 +330,9 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
     for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
     {
         TaskPtr task = *iter;
+        unsigned prediction = task->getPrediction();
+        auto msec = task->getStartTime().msecsTo(QDateTime::currentDateTime());
+        unsigned minutes = 0;
         QString machineName = getMachineName(task->getMachineId());
         TimeSimulator::TaskState state;
         switch(task->getState())
@@ -339,6 +342,11 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
             break;
         case Task::State::InProgress:
             state = TimeSimulator::TaskState::InProgress;
+            minutes = msec/(1000*60);
+            if (prediction > minutes)
+                prediction -= minutes;
+            else
+                prediction = 0;
             break;
         case Task::State::Leaved:
             state = TimeSimulator::TaskState::Leaved;
@@ -353,7 +361,7 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
             state = TimeSimulator::TaskState::Waiting;
             break;
         }
-        m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), task->getPrediction(), state);
+        m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), prediction, state);
     }
 }
 
