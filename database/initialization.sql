@@ -1,63 +1,63 @@
 use vigor;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Administrator', 'Administrator', '5555', 'administrator', 'adm', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Administrator', 'Administrator', '5555', 'administrator', 'adm', true);
 CREATE USER 'administrator'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'administrator'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Komercijalista', 'Komercijalista', '5555', 'komercijalista', 'kom', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Komercijalista', 'Komercijalista', '5555', 'komercijalista', 'kom', true);
 CREATE USER 'komercijalista'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'komercijalista'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Lastis', 'Dizajner Lastis', '5555', 'dizajnerlastis', 'dil', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Lastis', 'Dizajner Lastis', '5555', 'dizajnerlastis', 'dil', true);
 CREATE USER 'dizajnerlastis'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'dizajnerlastis'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Tkanje', 'Dizajner Tkanje', '5555', 'dizajnertkanje', 'dit', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Tkanje', 'Dizajner Tkanje', '5555', 'dizajnertkanje', 'dit', true);
 CREATE USER 'dizajnertkanje'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'dizajnertkanje'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Stampa', 'Dizajner Stampa', '5555', 'dizajnerstampa', 'dis', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Dizajner Stampa', 'Dizajner Stampa', '5555', 'dizajnerstampa', 'dis', true);
 CREATE USER 'dizajnerstampa'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'dizajnerstampa'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Magacioner', 'Magacioner', '5555', 'magacioner', 'mag', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Magacioner', 'Magacioner', '5555', 'magacioner', 'mag', true);
 CREATE USER 'magacioner'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'magacioner'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefProizvodnje', 'SefProizvodnje', '5555', 'sefproizvodnje', 'spr', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefProizvodnje', 'SefProizvodnje', '5555', 'sefproizvodnje', 'spr', true);
 CREATE USER 'sefproizvodnje'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'sefproizvodnje'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefSmene', 'SefSmene', '5555', 'sefsmene', 'ssm', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefSmene', 'SefSmene', '5555', 'sefsmene', 'ssm', true);
 CREATE USER 'sefsmene'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'sefsmene'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Knjigovodjaf', 'Knjigovodjaf', '5555', 'knjigovodjaf', 'kfa', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Knjigovodjaf', 'Knjigovodjaf', '5555', 'knjigovodjaf', 'kfa', true);
 CREATE USER 'knjigovodjaf'@'%'  IDENTIFIED BY '5555';
 GRANT ALL PRIVILEGES ON *.* TO 'knjigovodjaf'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje1', 'RadnikProizvodnje1', '0000', 'radnikproizvodnje1', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje2', 'RadnikProizvodnje2', '0000', 'radnikproizvodnje2', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje3', 'RadnikProizvodnje3', '0000', 'radnikproizvodnje3', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje4', 'RadnikProizvodnje4', '0000', 'radnikproizvodnje4', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje5', 'RadnikProizvodnje5', '0000', 'radnikproizvodnje5', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje6', 'RadnikProizvodnje6', '0000', 'radnikproizvodnje6', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje7', 'RadnikProizvodnje7', '0000', 'radnikproizvodnje7', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje8', 'RadnikProizvodnje8', '0000', 'radnikproizvodnje8', 'pro', true);
-insert into radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje9', 'RadnikProizvodnje9', '0000', 'radnikproizvodnje9', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje1', 'RadnikProizvodnje1', '0000', 'radnikproizvodnje1', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje2', 'RadnikProizvodnje2', '0000', 'radnikproizvodnje2', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje3', 'RadnikProizvodnje3', '0000', 'radnikproizvodnje3', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje4', 'RadnikProizvodnje4', '0000', 'radnikproizvodnje4', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje5', 'RadnikProizvodnje5', '0000', 'radnikproizvodnje5', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje6', 'RadnikProizvodnje6', '0000', 'radnikproizvodnje6', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje7', 'RadnikProizvodnje7', '0000', 'radnikproizvodnje7', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje8', 'RadnikProizvodnje8', '0000', 'radnikproizvodnje8', 'pro', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje9', 'RadnikProizvodnje9', '0000', 'radnikproizvodnje9', 'pro', true);
 
-insert into klijent (Ime) values ('Znam d.o.o');
+insert into Klijent (Ime) values ('Znam d.o.o');
 
-insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (1, 55.20, 'Ovo je opis!', 'Ovo je naslov!', '2013-08-05 18:19:03');
+insert into Narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (1, 55.20, 'Ovo je opis!', 'Ovo je naslov!', '2017-09-05 18:19:03');
 
 insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Lastis', False); 			#1
 insert into TipoviZadatka (Naziv, Faktura) values ('Snovanje', False);					#2

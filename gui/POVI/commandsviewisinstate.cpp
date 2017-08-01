@@ -143,6 +143,7 @@ void CommandsViewIsInState::fillTable()
         insertDeathLine(command, i, j++);
         insertPrediction(command, i, j++);
         insertKomercialist(command, i, j++);
+        insertDateTimeCreation(command, i, j++);
         insertHealth(command, i , j++);
         insertPredictionButton(i, j++);
         insertStopContinueButton(command, i, j++);
@@ -166,6 +167,7 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
             << "Rok Zavrsetka"
             << "Predvidjanje"
             << "Komercijalista"
+            << "Kreiran"
             << "Status"
             << "Predvidi"
             << "Stopiraj/Nastavi";
@@ -222,6 +224,16 @@ void CommandsViewIsInState::insertKomercialist(CommandPtr command, unsigned i, u
     EmployeePtr employee = m_db->getEmployee(command->getKomercialistID());
     auto *item = new QTableWidgetItem(employee->getUserName());
     ui->tableWidget->setItem(i, j, item);
+}
+
+void CommandsViewIsInState::insertDateTimeCreation(CommandPtr command, unsigned i, unsigned j)
+{
+    QDateTime creation = command->getDateTimeCreation();
+    if (!creation.isNull())
+    {
+        auto *item = new QTableWidgetItem(creation.toString(timeFormat));
+        ui->tableWidget->setItem(i, j, item);
+    }
 }
 
 void CommandsViewIsInState::insertHealth(CommandPtr command, unsigned i, unsigned j)

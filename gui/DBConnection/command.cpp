@@ -111,6 +111,11 @@ const QDateTime& Command::getDateTimePrediction() const
     return m_dateTimePrediction;
 }
 
+const QDateTime& Command::getDateTimeCreation() const
+{
+    return m_dateTimeCreation;
+}
+
 //seters
 void Command::setCommandNumber(int commandNumber)
 {
@@ -237,7 +242,7 @@ void Command::setDateTimePrediction(const QDateTime & prediction)
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, Radnik_idRadnik, OpisKomercijaliste, BrojNaloga, Prioritet, "
-                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina) values (";
+                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina, Kreiran) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_idKomercialist) + ", ";
@@ -248,7 +253,8 @@ QString Command::statemantForCreating() const
     stm += "'" + m_storeKeeperDescription + "', ";
     stm += "'nov', ";
     stm += "'" + m_specification + "', ";
-    stm += QString::number(m_quantity) + ");";
+    stm += QString::number(m_quantity) + " ,";
+    stm += "NOW());";
     qDebug() << stm;
     return stm;
 }
@@ -351,6 +357,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setState(query.value("Stanje").toString());
         command->setPriority(query.value("Prioritet").toInt());
         command->setDateTimePrediction(query.value("Predvidjanje").toDateTime());
+        command->m_dateTimeCreation = query.value("Kreiran").toDateTime();
         command->resetChangeTracking();
         commands->push_back(command);
     }

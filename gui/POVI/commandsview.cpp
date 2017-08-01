@@ -104,6 +104,14 @@ void CommandsView::refresh()
                 ui->tableWidget->setItem(i, 7, item);
             }
         }
+        {
+            QDateTime creation = (*iter)->getDateTimeCreation();
+            if (!creation.isNull())
+            {
+                auto *item = new QTableWidgetItem(creation.toString("hh:mm dd.MM.yyyy"));
+                ui->tableWidget->setItem(i, 8, item);
+            }
+        }
     }
     ui->tableWidget->resizeColumnsToContents();
 }

@@ -47,6 +47,7 @@ private:
     void insertTimeSimulatorPrediction(CommandPtr command, unsigned i, unsigned j);
     void insertDeathLine(CommandPtr command, unsigned i , unsigned j);
     void insertKomercialist(CommandPtr command, unsigned i, unsigned j);
+    void insertDateTimeCreation(CommandPtr command, unsigned i, unsigned j);
     void insertHealth(CommandPtr command, unsigned i, unsigned j);
     void insertPrediction(CommandPtr command, unsigned i, unsigned j);
     void insertPredictionButton(unsigned i, unsigned j);
