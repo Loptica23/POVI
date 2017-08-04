@@ -1,4 +1,4 @@
-use vigor;
+use Vigor;
 
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Administrator', 'Administrator', '5555', 'administrator', 'adm', true);
 CREATE USER 'administrator'@'%'  IDENTIFIED BY '5555';
