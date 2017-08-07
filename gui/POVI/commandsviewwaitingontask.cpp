@@ -143,7 +143,6 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
 {
     QWidget* commanddialog;
     qDebug() << MainWindow::getWorker()->getWorkPositionQString();
-    qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     switch(MainWindow::getWorker()->getWorkPosition())
     {
     case Employee::WorkPosition::DizajnerLastis:

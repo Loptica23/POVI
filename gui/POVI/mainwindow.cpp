@@ -63,6 +63,7 @@ void MainWindow::setUpGuiByWorkPosition()
 {
     unsigned type = 0;
     std::vector<unsigned> types;
+    ui->menuKorisnik->setEnabled(true);
     switch(getLogedUser()->getWorkPosition())
     {
     case Employee::WorkPosition::Komercijalista:

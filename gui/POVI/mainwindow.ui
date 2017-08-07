@@ -43,6 +43,9 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuKorisnik">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>Korisnik</string>
     </property>
