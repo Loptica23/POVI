@@ -27,48 +27,76 @@ CustomersView::~CustomersView()
 
 void CustomersView::refresh()
 {
-    m_editButtons.clear(); //*****************************************************ovde moras da dodas sve vektore dugmica
-    m_viewOrdersButtons.clear();
-    m_newOrderButtons.clear();
-    ui->tableWidget->setRowCount(0);
-    auto customers = m_db->getCustomers();
     qDebug() << "user refreshing customers view!";
-    if (!customers || customers->empty())
+    clearTable();
+    if (!getCustomers())
     {
         return;
     }
-    m_customers = customers;
     auto i = 0;
-    for (auto iter = customers->begin(); iter != customers->end(); ++i, ++iter)
+    for (auto iter = m_customers->begin(); iter != m_customers->end(); ++i, ++iter)
     {
+        auto j = 0;
+        CustomerPtr customer = *iter;
         ui->tableWidget->insertRow(i);
-        {
-            auto *item = new QTableWidgetItem((*iter)->getName());
-            ui->tableWidget->setItem(i, 0,item);
-        }
-        {
-            QPushButton* btn_edit = new QPushButton();
-            btn_edit->setText("Izmeni");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 1), btn_edit);
-            m_editButtons.push_back(btn_edit);
-            connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
-        }
-        {
-            QPushButton* btn_createOrder = new QPushButton();
-            btn_createOrder->setText("Nova Porudzbina");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_createOrder);
-            m_newOrderButtons.push_back(btn_createOrder);
-            connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(createOrderForCustomer()));  // ne sme da stoji edit!!
-        }
-        {
-            QPushButton* btn_viewOrder = new QPushButton();
-            btn_viewOrder->setText("Pregled Porudzbina");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_viewOrder);
-            m_viewOrdersButtons.push_back(btn_viewOrder);
-            connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(showOrdersForCustomer()));
-        }
+        insertName(customer, i, j++);
+        insertEditButton(i, j++);
+        insertNewOrderButton(i, j++);
+        insertOrdersViewButton(i, j++);
     }
     ui->tableWidget->resizeColumnsToContents();
+}
+
+void CustomersView::clearTable()
+{
+    m_editButtons.clear();
+    m_viewOrdersButtons.clear();
+    m_newOrderButtons.clear();
+    ui->tableWidget->setRowCount(0);
+}
+
+bool CustomersView::getCustomers()
+{
+    auto customers = m_db->getCustomers();
+    if (!customers || customers->empty())
+    {
+        return false;
+    }
+    m_customers = customers;
+    return true;
+}
+
+void CustomersView::insertName(CustomerPtr customer, unsigned i, unsigned j)
+{
+    auto *item = new QTableWidgetItem(customer->getName());
+    ui->tableWidget->setItem(i, j, item);
+}
+
+void CustomersView::insertEditButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_edit = new QPushButton();
+    btn_edit->setText("Izmeni");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
+    m_editButtons.push_back(btn_edit);
+    connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+}
+
+void CustomersView::insertNewOrderButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_createOrder = new QPushButton();
+    btn_createOrder->setText("Nova Porudzbina");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_createOrder);
+    m_newOrderButtons.push_back(btn_createOrder);
+    connect(btn_createOrder, SIGNAL(clicked()), this, SLOT(createOrderForCustomer()));
+}
+
+void CustomersView::insertOrdersViewButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_viewOrder = new QPushButton();
+    btn_viewOrder->setText("Pregled Porudzbina");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_viewOrder);
+    m_viewOrdersButtons.push_back(btn_viewOrder);
+    connect(btn_viewOrder, SIGNAL(clicked()), this, SLOT(showOrdersForCustomer()));
 }
 
 void CustomersView::on_AddNewCustomer_clicked()
@@ -76,8 +104,6 @@ void CustomersView::on_AddNewCustomer_clicked()
     auto customerDialog = new CustomersDialog(this, m_db, this);
     customerDialog->show();
 }
-
-
 
 void CustomersView::on_Refresh_clicked()
 {

@@ -12,17 +12,21 @@ const std::vector<int> CommandDialogKomercialist::TkanjeTemplate ({8,9,10,11,12,
 const std::vector<int> CommandDialogKomercialist::StampaTemplate ({18,19,20,13,5,21,15,16,17,6,7});
 
 CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable *refreshable) :
-    CommandDialog(parent, db, order, refreshable)
+    CommandDialog(parent, db, order, refreshable),
+    m_recommendedCommandNumber(1000000000)
 {
     m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
+    setRecommendedCommandNumber();
+    ui->commandNumber->setText(QString::number(m_recommendedCommandNumber));
     fillTaskTable();
     setUpWindowByWorkPosition();
 }
 
 
 CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::shared_ptr<DBConnection> db, CommandPtr command, bool edit, Refreshable *refreshable) :
-    CommandDialog(parent, db, command, edit, refreshable)
+    CommandDialog(parent, db, command, edit, refreshable),
+    m_recommendedCommandNumber(0)
 {
     m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
@@ -298,6 +302,14 @@ void CommandDialogKomercialist::fillComboBoxWithTaskTypes(QComboBox * box)
     {
         box->addItem((*type)->getName());
     }
+}
+
+void CommandDialogKomercialist::setRecommendedCommandNumber()
+{
+    unsigned numberOfCommands = m_db->getCommands(m_order)->size();
+    m_recommendedCommandNumber += m_order->getCustomerId() * 100000;
+    m_recommendedCommandNumber += m_order->getID() * 100;
+    m_recommendedCommandNumber += numberOfCommands;
 }
 
 void CommandDialogKomercialist::updateCommand()

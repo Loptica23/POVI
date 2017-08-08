@@ -39,7 +39,11 @@ protected:
     void insertNewTaskButton(unsigned i);
     void fillComboBoxWithTaskTypes(QComboBox * box);
 
+    void setRecommendedCommandNumber();
+
 
     TaskTypesPtr m_taskTypes;
     TaskTemplate m_template;
+
+    unsigned m_recommendedCommandNumber;
 };

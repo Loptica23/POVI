@@ -185,7 +185,7 @@ CustomerPtrVtr DBConnectionImpl::getCustomers()
 {
     CustomerPtrVtr customers;
     QSqlQuery query;
-    query.prepare("select * from klijent");
+    query.prepare("select * from klijent order by Ime");
     if(query.exec())
     {
         customers = Customer::createCustomersFromQuery(query);

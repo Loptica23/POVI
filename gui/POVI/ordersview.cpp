@@ -24,70 +24,86 @@ OrdersView::~OrdersView()
 
 void OrdersView::refresh()
 {
+    clearTable();
+    if (!getOrders())
+    {
+        return;
+    }
+    auto i = 0;
+    for (auto iter = m_orders->begin(); iter != m_orders->end(); ++i, ++iter)
+    {
+        auto j = 0;
+        ui->tableWidget->insertRow(i);
+        OrderPtr order = *iter;
+
+        insertHeader(order, i, j++);
+        insertTimeLimmit(order, i, j++);
+        insertDetailsButton(i, j++);
+        insertEditButton(i, j++);
+        insertCommandsViewButton(i, j++);
+    }
+    ui->tableWidget->resizeColumnsToContents(); //ovo ne smes ovako da radis zato sto je mnogo karaktera u naslovu
+
+}
+
+void OrdersView::clearTable()
+{
     m_editButtons.clear();
     m_detailsButtons.clear();
     m_createCommandButtons.clear();
     m_viewCommands.clear();
     ui->tableWidget->setRowCount(0);
+}
+
+bool OrdersView::getOrders()
+{
     auto orders = m_db->getOrders(m_customer);
     qDebug() << "user refreshing orders view!";
     if (!orders || orders->empty())
     {
-        return;
+        return false;
     }
     m_orders = orders;
-    auto i = 0;
-    for (auto iter = orders->begin(); iter != orders->end(); ++i, ++iter)
-    {
-        ui->tableWidget->insertRow(i);
-        {
-            auto *item = new QTableWidgetItem((*iter)->getHeader());
-            ui->tableWidget->setItem(i, 0,item);
-        }
-        {
-            auto *item = new QTableWidgetItem((*iter)->getTimeLimitString());
-            ui->tableWidget->setItem(i, 1,item);
-        }
-/*        {
-            auto *item = new QTableWidgetItem(QString::number((*iter)->getPrice()));
-            ui->tableWidget->setItem(i, 2,item);
-        }
-*/
-//        {
-//            auto *item = new QTableWidgetItem((*iter)->getStateQString());
-//            ui->tableWidget->setItem(i, 3,item);
-//        }
-        {
-            QPushButton* btn_details = new QPushButton();
-            btn_details->setText("Detalji");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 2), btn_details);
-            m_detailsButtons.push_back(btn_details);
-            connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
-        }
-        {
-            QPushButton* btn_edit = new QPushButton();
-            btn_edit->setText("Izmeni");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 3), btn_edit);
-            m_editButtons.push_back(btn_edit);
-            connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
-        }
-        {
-            QPushButton* btn_createCommand = new QPushButton();
-            btn_createCommand->setText("Napravi nalog");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 4), btn_createCommand);
-            m_createCommandButtons.push_back(btn_createCommand);
-            connect(btn_createCommand, SIGNAL(clicked()), this, SLOT(createCommand()));
-        }
-        {
-            QPushButton* btn_viewCommands = new QPushButton();
-            btn_viewCommands->setText("Pregled naloga");
-            ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, 5), btn_viewCommands);
-            m_viewCommands.push_back(btn_viewCommands);
-            connect(btn_viewCommands, SIGNAL(clicked()), this, SLOT(viewCommands()));
-        }
-    }
-    ui->tableWidget->resizeColumnsToContents(); //ovo ne smes ovako da radis zato sto je mnogo karaktera u naslovu
+    return true;
+}
 
+void OrdersView::insertHeader(OrderPtr order, unsigned i, unsigned j)
+{
+    auto *item = new QTableWidgetItem(order->getHeader());
+    ui->tableWidget->setItem(i, j, item);
+}
+
+void OrdersView::insertTimeLimmit(OrderPtr order, unsigned i, unsigned j)
+{
+    auto *item = new QTableWidgetItem(order->getTimeLimitString());
+    ui->tableWidget->setItem(i, j,item);
+}
+
+void OrdersView::insertDetailsButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_details = new QPushButton();
+    btn_details->setText("Detalji");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_details);
+    m_detailsButtons.push_back(btn_details);
+    connect(btn_details, SIGNAL(clicked()), this, SLOT(details()));
+}
+
+void OrdersView::insertEditButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_edit = new QPushButton();
+    btn_edit->setText("Izmeni");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
+    m_editButtons.push_back(btn_edit);
+    connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+}
+
+void OrdersView::insertCommandsViewButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_viewCommands = new QPushButton();
+    btn_viewCommands->setText("Pregled naloga");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_viewCommands);
+    m_viewCommands.push_back(btn_viewCommands);
+    connect(btn_viewCommands, SIGNAL(clicked()), this, SLOT(viewCommands()));
 }
 
 void OrdersView::on_pushButton_clicked()

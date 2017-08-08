@@ -19,6 +19,15 @@ public:
 
     virtual void refresh();
 
+private:
+    void clearTable();
+    bool getOrders();
+    void insertHeader(OrderPtr order, unsigned i, unsigned j);
+    void insertTimeLimmit(OrderPtr order, unsigned i, unsigned j);
+    void insertDetailsButton(unsigned i, unsigned j);
+    void insertEditButton(unsigned i, unsigned j);
+    void insertCommandsViewButton(unsigned i, unsigned j);
+
 private slots:
     void on_pushButton_clicked();
     void on_Refresh_clicked();

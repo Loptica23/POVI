@@ -45,11 +45,6 @@
      </column>
      <column>
       <property name="text">
-       <string>Dodaj nalog za porudzbinu</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Pregled naloga za porudzbinu</string>
       </property>
      </column>

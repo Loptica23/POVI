@@ -21,6 +21,14 @@ public:
     ~CustomersView();
     virtual void refresh();
 
+private:
+    void clearTable();
+    bool getCustomers();
+    void insertName(CustomerPtr customer, unsigned i, unsigned j);
+    void insertEditButton(unsigned i, unsigned j);
+    void insertNewOrderButton(unsigned i, unsigned j);
+    void insertOrdersViewButton(unsigned i, unsigned j);
+
 private slots:
     void on_AddNewCustomer_clicked();
     void on_Refresh_clicked();
