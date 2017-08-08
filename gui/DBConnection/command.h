@@ -3,7 +3,7 @@
 #include <vector>
 #include <QSqlQuery>
 #include <QString>
-#include <QdateTime>
+#include <QDateTime>
 
 class Command;
 typedef std::shared_ptr<Command> CommandPtr;
