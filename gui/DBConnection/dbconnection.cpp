@@ -1,4 +1,5 @@
 #include <QString>
+#include <QSettings>
 #include "dbconnection.h"
 #include "dbconnectionimpl.h"
 
@@ -11,9 +12,10 @@ std::shared_ptr<DBConnection> DBConnection::create()
 
 DBConnection::DBConnection()
 {
-    m_databaseConnectionName = "POVI";
-    m_host = "localhost";
-    m_databaseName = "vigor";
+    QSettings settings(QString("config.ini"), QSettings::IniFormat);
+    m_databaseConnectionName = settings.value("DatabaseConfiguration/connectionName", "POVI").toString();
+    m_host = settings.value("DatabaseConfiguration/host", "localhost").toString();
+    m_databaseName = settings.value("DatabaseConfiguration/databaseName", "vigor").toString();
 }
 
 DBConnection::~DBConnection()
