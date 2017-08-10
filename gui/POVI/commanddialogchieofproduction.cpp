@@ -80,7 +80,9 @@ void CommandDialogChieOfProduction::updateCommand()
         QString text = ui->taskTable->item(i, 2)->text();
         if(!text.isEmpty())
         {
-            task->setPrediction(text.toUInt());
+            double hours = text.toDouble();
+            unsigned minutes = (unsigned)(hours*60);
+            task->setPrediction(minutes);
             //ovde moram da postavim setovanu masinu!
             MachinePtr machin = Machine::getMachineByName(m_machines, m_comboBoxes.at(i)->currentText());
             if (machin)
@@ -150,7 +152,9 @@ void CommandDialogChieOfProduction::insertTaskState(TaskPtr task, unsigned i, un
 
 void CommandDialogChieOfProduction::insertTaskPrediction(TaskPtr task, unsigned i, unsigned j)
 {
-    QString str = QString::number(task->getPrediction());
+    unsigned minutes = task->getPrediction();
+    double hours = ((double)minutes/(double)60);
+    QString str = QString::number(hours, 'f', 2);
     auto *item = new QTableWidgetItem(str);
     ui->taskTable->setItem(i, j, item);
 }
