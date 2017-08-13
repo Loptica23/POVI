@@ -128,3 +128,5 @@ INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/../TimeSimulator
 
 INCLUDEPATH += $$PWD/../utils
+
+RC_FILE = AppIcon.rc
