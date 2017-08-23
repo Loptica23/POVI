@@ -36,6 +36,7 @@ public:
     void setWorkPosition(const QString& workPosition);
     void setWorkPosition(const unsigned workPosition);
     void setActivation(bool activation);
+    void resetPWD();
 
     //geters
     unsigned getId() const;

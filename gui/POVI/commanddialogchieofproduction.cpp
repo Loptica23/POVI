@@ -165,20 +165,26 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
     QComboBox* taskComboBox = new QComboBox(ui->taskTable);
     //fill combobox with machines
     taskComboBox->addItem("");
-    for (auto iter = m_machines->begin(); iter != m_machines->end(); ++iter)
+    //refactor -- ovo treba da se baci na backend
+    MachinePtrVtr machines = m_db->getMachines(task->getTaskTypeId());
+    for (auto iter = machines->begin(); iter != machines->end(); ++iter)
     {
         MachinePtr machine = *iter;
-        if (machine->getTaskTypeId() == task->getTaskTypeId())
-        {
-            taskComboBox->addItem(machine->getName());
-        }
+        taskComboBox->addItem(machine->getName());
     }
     ui->taskTable->setCellWidget(i, j, taskComboBox);
     MachinePtr machine = Machine::getMachineById(m_machines, task->getMachineId());
+
     if (machine)
     {
         taskComboBox->setCurrentText(machine->getName());
     }
+    else if (machines->size() == 1)
+    {
+        machine = *(machines->begin());
+        taskComboBox->setCurrentText(machine->getName());
+    }
+
     if (!m_edit)
     {
         taskComboBox->setEnabled(false);

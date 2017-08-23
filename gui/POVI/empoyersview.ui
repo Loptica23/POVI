@@ -46,6 +46,11 @@
        <string>Izmeni</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Resetuj sifru</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

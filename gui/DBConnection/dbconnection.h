@@ -82,6 +82,7 @@ public:
     virtual TaskTypesPtr getTaskTypes() = 0;
 
     virtual MachinePtrVtr getMachines() = 0;
+    virtual MachinePtrVtr getMachines(unsigned taskTypeId) = 0;
     virtual MachinePtr getMachine(unsigned id) = 0;
     virtual bool createMachine(MachinePtr machine) = 0;
     virtual bool updateMachine(MachinePtr machine) = 0;

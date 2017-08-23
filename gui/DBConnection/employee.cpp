@@ -80,6 +80,11 @@ void Employee::setWorkPosition(const unsigned workPosition)
     qDebug() << "setovana radna pozicija preko inta";
 }
 
+void Employee::resetPWD()
+{
+    setPWD("5555");
+}
+
 unsigned Employee::getId() const
 {
     return m_id;
@@ -409,7 +414,7 @@ QString Employee::statemantForUpdatingUser() const
         stm += "where idRadnik = " + QString::number(m_id) + ";";
         if (m_pwdChanged)
         {
-            stm += "SET PASSWORD FOR '" + m_UserName + "'@'%' = PASSWORD('" + m_pwd + "');";
+            stm += "SET PASSWORD FOR '" + m_UserName + "'@'%' = PASSWORD('23" + m_pwd + "23');";
         }
         qDebug() << stm;
     }

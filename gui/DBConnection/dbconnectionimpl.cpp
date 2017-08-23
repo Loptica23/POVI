@@ -34,7 +34,7 @@ bool DBConnectionImpl::conectToDb(QString userName, QString pwd)
     m_db->setHostName(m_host);
     m_db->setDatabaseName(m_databaseName);
     m_db->setUserName(userName);
-    m_db->setPassword(pwd);
+    m_db->setPassword("23" + pwd + "23");
     result =  m_db->open();
     if (!result)
         m_lastError = m_db->lastError().text();
@@ -960,6 +960,24 @@ MachinePtrVtr DBConnectionImpl::getMachines()
     MachinePtrVtr machines = nullptr;
     QSqlQuery query;
     query.prepare("select * from masina;");
+    if(query.exec())
+    {
+        machines = Machine::createMachineFromQuery(query);
+    }
+    else
+    {
+        qDebug() << "nije uspeo query!";
+        m_lastError = query.lastError().text();
+    }
+    return machines;
+}
+
+MachinePtrVtr DBConnectionImpl::getMachines(unsigned taskTypeId)
+{
+    MachinePtrVtr machines = nullptr;
+    QSqlQuery query;
+    QString stm = "select * from masina where TipoviZadatka_idTipoviZadatka = " + QString::number(taskTypeId);
+    query.prepare(stm);
     if(query.exec())
     {
         machines = Machine::createMachineFromQuery(query);

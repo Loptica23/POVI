@@ -70,6 +70,7 @@ public:
     virtual TaskTypesPtr getTaskTypes();
 
     virtual MachinePtrVtr getMachines();
+    virtual MachinePtrVtr getMachines(unsigned taskTypeId);
     virtual MachinePtr getMachine(unsigned id);
     virtual bool createMachine(MachinePtr machine);
     virtual bool updateMachine(MachinePtr machine);
