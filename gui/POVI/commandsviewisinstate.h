@@ -34,6 +34,7 @@ private slots:
     void predict();
     void stopCommand();
     void continueCommand();
+    void sendBackToKomercialists();
 
     void on_pushButton_2_clicked();
 
@@ -52,6 +53,7 @@ private:
     void insertPrediction(CommandPtr command, unsigned i, unsigned j);
     void insertPredictionButton(unsigned i, unsigned j);
     void insertStopContinueButton(CommandPtr command, unsigned i, unsigned j);
+    void insertSendBackToKomercialist(CommandPtr command, unsigned i, unsigned j);
 
     void initializeTimeMachines();
     void initializeCommands();
@@ -71,6 +73,7 @@ private:
     std::vector<QPushButton*> m_editButtons;
     std::vector<QPushButton*> m_predictionButtons;
     std::vector<QPushButton*> m_stopContinueButons;
+    std::vector<QPushButton*> m_sendBackToKomercialistsButtons;
 
     TimeSimulator::CommandTerminationTimeEngine* m_engine;
     std::shared_ptr<TimeSimulator::TimeSimulator> m_timeSimulator;

@@ -11,6 +11,7 @@ public:
 
 protected slots:
     virtual void annul();
+    virtual void taskMachineChanged();
 
 protected:
     virtual void setUpWindowByWorkPosition();
@@ -38,4 +39,5 @@ protected:
     std::vector<QPushButton*> m_annulButtons;
 
     bool m_annul;
+    bool m_isThereTaskWithoutMachie;
 };

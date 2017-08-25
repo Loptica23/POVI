@@ -47,6 +47,7 @@ public:
     virtual bool updateCommand(CommandPtr command);
     virtual bool deleteCommand(CommandPtr command);
     virtual bool sendToProduction(CommandPtr command);
+    virtual bool sendToKomercial(CommandPtr command);
     virtual bool stopCommand(CommandPtr command);
     virtual bool continueCommand(CommandPtr command);
     virtual bool completeCurrentTask(CommandPtr command, unsigned quantity);

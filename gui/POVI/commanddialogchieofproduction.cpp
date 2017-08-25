@@ -57,7 +57,6 @@ void CommandDialogChieOfProduction::fillTaskTable()
         insertTaskQuantity(task, i , j++);
         insertAnnulButton(task, i, j++);
     }
-
     ui->taskTable->resizeColumnsToContents();
 }
 
@@ -184,12 +183,17 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
         machine = *(machines->begin());
         taskComboBox->setCurrentText(machine->getName());
     }
+    else
+    {
+        m_isThereTaskWithoutMachie = true;
+    }
 
     if (!m_edit)
     {
         taskComboBox->setEnabled(false);
     }
     m_comboBoxes.push_back(taskComboBox);
+    connect(taskComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(taskMachineChanged()));
 }
 
 void CommandDialogChieOfProduction::insertWorker(TaskPtr task, unsigned i , unsigned j)
@@ -246,5 +250,27 @@ void CommandDialogChieOfProduction::annul()
         qDebug() << index;
         m_db->annulTask(m_tasks->at(index), m_command, m_tasks);
         close();
+    }
+}
+
+void CommandDialogChieOfProduction::taskMachineChanged()
+{
+    auto showOKButton = true;
+    for (QComboBox* combo : m_comboBoxes)
+    {
+        if (combo->currentText() == "")
+        {
+            showOKButton = false;
+            break;
+        }
+    }
+
+    if (showOKButton)
+    {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    }
+    else
+    {
+        ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
 }

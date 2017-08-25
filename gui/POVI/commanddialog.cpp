@@ -153,6 +153,7 @@ void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {}
 void CommandDialog::backToDefaultScreen() {}
 void CommandDialog::annul() {}
+void CommandDialog::taskMachineChanged() {}
 
 void CommandDialog::showContinueToWorkButton()
 {

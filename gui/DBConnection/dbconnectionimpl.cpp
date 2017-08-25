@@ -72,7 +72,7 @@ EmployeePtrVtr DBConnectionImpl::getEmployees()
 {
     EmployeePtrVtr employees;
     QSqlQuery query;
-    query.prepare("select * from radnik");
+    query.prepare("select * from radnik  order by ime;");
     if(query.exec())
     {
         employees = Employee::createEmployeesFromQuery(query);
@@ -585,6 +585,12 @@ bool DBConnectionImpl::sendToProduction(CommandPtr command)
     return updateCommand(command);
 }
 
+bool DBConnectionImpl::sendToKomercial(CommandPtr command)
+{
+    command->setState(Command::State::New);
+    return updateCommand(command);
+}
+
 bool DBConnectionImpl::stopCommand(CommandPtr command)
 {
     command->setState(Command::State::Stopped);
@@ -607,7 +613,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
         qDebug() << "Nalog nema zadatke!";
         return false;
     }
-
+    //refactor
     for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
     {
         task = *iter;

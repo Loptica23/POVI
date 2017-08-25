@@ -59,6 +59,7 @@ public:
     virtual bool updateCommand(CommandPtr command) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool sendToProduction(CommandPtr command) = 0;
+    virtual bool sendToKomercial(CommandPtr command) = 0;
     virtual bool stopCommand(CommandPtr command) = 0;
     virtual bool continueCommand(CommandPtr command) = 0;
     virtual bool completeCurrentTask(CommandPtr command, unsigned quantity) = 0;

@@ -122,6 +122,18 @@ void CommandsViewIsInState::continueCommand()
     }
 }
 
+void CommandsViewIsInState::sendBackToKomercialists()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_sendBackToKomercialistsButtons.begin(), m_sendBackToKomercialistsButtons.end(), buttonSender) != m_sendBackToKomercialistsButtons.end())
+    {
+        auto index = std::find(m_sendBackToKomercialistsButtons.begin(), m_sendBackToKomercialistsButtons.end(), buttonSender) - m_sendBackToKomercialistsButtons.begin();
+        qDebug() << index;
+        m_db->sendToKomercial(m_commands->at(index));
+        refresh();
+    }
+}
+
 void CommandsViewIsInState::fillTable()
 {
     clearBuutonsAndInitializeHeaders();
@@ -147,6 +159,7 @@ void CommandsViewIsInState::fillTable()
         insertHealth(command, i , j++);
         insertPredictionButton(i, j++);
         insertStopContinueButton(command, i, j++);
+        insertSendBackToKomercialist(command, i, j++);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -170,7 +183,8 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
             << "Kreiran"
             << "Status"
             << "Predvidi"
-            << "Stopiraj/Nastavi";
+            << "Stopiraj/Nastavi"
+            << "Vrati komercijali";
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -295,6 +309,23 @@ void CommandsViewIsInState::insertStopContinueButton(CommandPtr command, unsigne
         connect(btn, SIGNAL(clicked()), this, SLOT(continueCommand()));
     }
     m_stopContinueButons.push_back(btn);
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn);
+}
+
+void CommandsViewIsInState::insertSendBackToKomercialist(CommandPtr command, unsigned i, unsigned j)
+{
+    QPushButton* btn = new QPushButton();
+    btn->setText("Vrati komercijali");
+    connect(btn, SIGNAL(clicked()), this, SLOT(sendBackToKomercialists()));
+    if ((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::WaitForProduction))
+    {
+        btn->setEnabled(true);
+    }
+    else
+    {
+        btn->setEnabled(false);
+    }
+    m_sendBackToKomercialistsButtons.push_back(btn);
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn);
 }
 
