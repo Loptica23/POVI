@@ -608,46 +608,64 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
     TaskPtrVtr tasks = getTasks(command);
     TaskPtr task;
     TaskPtr task1;
-    if (tasks->empty())
+    if (tasks == nullptr || tasks->empty())
     {
         qDebug() << "Nalog nema zadatke!";
         return false;
     }
-    //refactor
-    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    switch (command->getState())
     {
-        task = *iter;
-        //ako je ovaj uslov ispunjen radi se o prvom zadatku
-        if (task->getState() == Task::State::New && iter == tasks->begin())
-        {
-            qDebug() << "postavljnje zadatka na cekanje!";
-            task->setState(Task::State::Waiting);
-            command->setState(Command::State::InProgress);
-            break;
-        }
+    case Command::State::New:
 
-        //nije rec o prvom zadatku!
-        if (task->getState() == Task::State::InProgress)
-        {
-            qDebug() << "postavljnje zadatka na zavrseno!";
-            task->setState(Task::State::Complited);
-            task->setCurrentTimeForComplited();
-            task->setQuantity(quantity);
-            while (++iter != tasks->end())
-            {
-                task1 = *iter;
-                if (task1->getState() == Task::State::New)
-                {
-                    task1->setState(Task::State::Waiting);
-                    break;
-                }
-            }
-            if (iter == tasks->end())
-            {
-                command->setState(Command::State::Complited);
-            }
             break;
+    case Command::State::InProgress:
+        for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+        {
+            task = *iter;
+            if (task->getState() == Task::State::InProgress)
+            {
+                qDebug() << "postavljnje zadatka na zavrseno!";
+                task->setState(Task::State::Complited);
+                task->setCurrentTimeForComplited();
+                task->setQuantity(quantity);
+                while (++iter != tasks->end())
+                {
+                    task1 = *iter;
+                    if (task1->getState() == Task::State::New)
+                    {
+                        task1->setState(Task::State::Waiting);
+                        break;
+                    }
+                }
+                if (iter == tasks->end())
+                {
+                    command->setState(Command::State::Complited);
+                }
+                break;
+            }
         }
+        break;
+    case Command::State::Complited:
+        // ne regularna situacija
+        break;
+    case Command::State::WaitForProduction:
+        //moguce su dve situacije
+        command->setState(Command::State::InProgress);
+        task = (*tasks->begin());
+        if (task->getState() == Task::State::New)
+        {
+            //1. da je nalog bio nov i da su mu svi zadaci u novom stanju                               - zadatak takodje treba prebaciti na cekanje
+            task->setState(Task::State::Waiting);
+        }
+        else
+        {
+            //2. da je nalog bio u proizvodnji, a zatim stopiran, a zatim se ponovo vraca u proizvodnju - vec ima zadatak na cekanju
+
+        }
+        break;
+    case Command::State::Stopped:
+        // ne regularna situacija
+        break;
     }
 
     //refactor (ovaj kod dole se stalno ponavlja!!)

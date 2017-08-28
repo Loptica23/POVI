@@ -41,6 +41,9 @@ insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Stampa', False);				#
 insert into TipoviZadatka (Naziv, Faktura) values ('Stampa', True);						#19
 insert into TipoviZadatka (Naziv, Faktura) values ('Transfer', False);					#20
 insert into TipoviZadatka (Naziv, Faktura) values ('Blindruk', False);					#21
+insert into TipoviZadatka (Naziv, Faktura) values ('Narucivanje materijalia', False);	#22
+insert into TipoviZadatka (Naziv, Faktura) values ('Motalica', False);					#23
+insert into TipoviZadatka (Naziv, Faktura) values ('Navezivanje', False);				#24
 
 #1
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Dizajn Lastis', 1, True);
@@ -109,3 +112,11 @@ insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('PR
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('PRESA2', 20, False);
 #21
 insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno Blindruk', 21, True);
+#22
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno narucivanje materijala', 22, True);
+#23
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('Rucno motalica', 23, True);
+#24
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MBJ1', 24, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('MBJ2', 24, False);
+insert into Masina (Naziv, TipoviZadatka_idTipoviZadatka, Virtuelna) values ('NF', 24, False);

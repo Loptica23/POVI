@@ -7,7 +7,7 @@
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 
-const std::vector<int> CommandDialogKomercialist::LastisTemplate ({1,2,3,4,5,6,7});
+const std::vector<int> CommandDialogKomercialist::LastisTemplate ({1,22,23,2,24,3,4,5,6,7});
 const std::vector<int> CommandDialogKomercialist::TkanjeTemplate ({8,9,10,11,12,5,13,14,15,17,6,7});
 const std::vector<int> CommandDialogKomercialist::StampaTemplate ({18,19,20,13,5,21,15,16,17,6,7});
 
