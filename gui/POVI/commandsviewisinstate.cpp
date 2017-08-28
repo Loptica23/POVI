@@ -1,5 +1,6 @@
 #include <QDateTime>
 #include <QLabel>
+#include <QBrush>
 #include "commandsviewisinstate.h"
 #include "ui_commandsviewisinstate.h"
 #include "commanddialogchieofproduction.h"
@@ -254,23 +255,28 @@ void CommandsViewIsInState::insertHealth(CommandPtr command, unsigned i, unsigne
 {
     QDateTime predictedTime = getPredictionFromTimeSimulatorResult(command);
     QDateTime deatheLine = m_db->getOrder(command->getIdOrder())->getTimeLimit();
+    auto *item = new QTableWidgetItem();
+    QBrush brush;
     if (!predictedTime.isNull())
     {
-        QLabel* label = new QLabel();
-        if (deatheLine < predictedTime) // kasni
+        if (deatheLine < predictedTime)
         {
-            label->setText("Kasni");
+            item->setText("Kasni");
+            brush.setColor(QColor("red"));
         }
         else if (deatheLine < predictedTime.addDays(3))
         {
-            label->setText("Paznja");
+            item->setText("Paznja");
+            brush.setColor(QColor("yellow"));
         }
         else
         {
-            label->setText("U redu");
+            item->setText("U redu");
+            brush.setColor(QColor("green"));
         }
-        ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), label);
     }
+    item->setForeground(brush);
+    ui->tableWidget->setItem(i, j, item);
 }
 
 void CommandsViewIsInState::insertPrediction(CommandPtr command, unsigned i, unsigned j)
