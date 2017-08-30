@@ -13,7 +13,7 @@ class CommandsViewWaitingOnTask : public QWidget, public Refreshable
     Q_OBJECT
 
 public:
-    CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID);
+    CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID, bool onlyOneCommandAtTime = true);
     CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs);
 
     ~CommandsViewWaitingOnTask();
@@ -30,6 +30,7 @@ private:
     void fillTable();
     void clearButtons();
     void insertCommandNumber(CommandPtr command, unsigned i, unsigned j);
+    void insertPriority(CommandPtr command, unsigned i, unsigned j);
     void insertDetailsButton(unsigned i, unsigned j);
     void inserTakeCommandButton(unsigned i, unsigned j);
 
@@ -44,4 +45,6 @@ private:
 
     std::vector<QPushButton *> m_detailsButtons;
     std::vector<QPushButton *> m_takeCommandButtons;
+
+    bool m_onlyOneCommandAtTime;
 };

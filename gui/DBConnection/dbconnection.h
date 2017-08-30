@@ -50,6 +50,7 @@ public:
     virtual CommandPtrVtr getCommands() = 0;
     virtual CommandPtr getCommand(unsigned commandNumber) = 0;
     virtual CommandPtr getCommandOnWhichEmployeeWorkingOn(EmployeePtr employee) = 0;
+    virtual CommandPtrVtr getCommandsOnWhichEmployeeeWorkingOn(EmployeePtr employee) = 0;
     virtual CommandPtrVtr getCommands(OrderPtr order) = 0;
     virtual CommandPtrVtr getCommands(Command::State & state) = 0;
     virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;

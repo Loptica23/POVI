@@ -19,7 +19,7 @@ public:
                             DizajnerStampa,
                             Magacioner,
                             Proizvodnja,
-                            Pakovanje,
+                            Narucilac,
                             SefProizvodnje,
                             SefSmene,
                             KnjigovodjaFakture,

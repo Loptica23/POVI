@@ -335,6 +335,17 @@ CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr empl
 {
     CommandPtr command = nullptr;
     CommandPtrVtr commands;
+    commands = getCommandsOnWhichEmployeeeWorkingOn(employee);
+    if (!commands->empty())
+    {
+        command = commands->at(0);
+    }
+    return command;
+}
+
+CommandPtrVtr DBConnectionImpl::getCommandsOnWhichEmployeeeWorkingOn(EmployeePtr employee)
+{
+    CommandPtrVtr commands;
     QSqlQuery queryForTasks;
     QSqlQuery queryForCommands;
     QString stm;
@@ -357,10 +368,6 @@ CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr empl
         if(queryForCommands.exec())
         {
             commands = Command::createCommandsFromQuery(queryForCommands);
-            if (!commands->empty())
-            {
-                command = commands->at(0);
-            }
         }
         else
         {
@@ -373,7 +380,7 @@ CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr empl
         m_lastError = queryForTasks.lastError().text();
         qDebug() << "neuspeo kveri!!";
     }
-    return command;
+    return commands;
 }
 
 CommandPtrVtr DBConnectionImpl::getCommands()
@@ -503,7 +510,8 @@ CommandPtrVtr DBConnectionImpl::getCommandWhichWaitingOnTasks(std::vector<unsign
     }
     stm.chop(1);
     stm += ")";
-    stm += " and Stanje = 'izr';";
+    stm += " and Stanje = 'izr' ";
+    stm += "order by prioritet;";
     qDebug() << stm;
 
     queryGetCommands.prepare(stm);

@@ -38,6 +38,7 @@ public:
     virtual CommandPtrVtr getCommands();
     virtual CommandPtr getCommand(unsigned commandNumber);
     virtual CommandPtr getCommandOnWhichEmployeeWorkingOn(EmployeePtr employee);
+    virtual CommandPtrVtr getCommandsOnWhichEmployeeeWorkingOn(EmployeePtr employee);
     virtual CommandPtrVtr getCommands(OrderPtr order);
     virtual CommandPtrVtr getCommands(Command::State & state);
     virtual CommandPtrVtr getCommandWhichWaitingOnTask(unsigned taskTypeId);

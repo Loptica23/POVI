@@ -7,10 +7,11 @@
 #include "commanddialogworker.h"
 #include "commanddialoginvoice.h"
 
-CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID) :
+CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, unsigned taskTypeID, bool onlyOneCommandAtTime) :
     QWidget(parent),
     ui(new Ui::CommandsViewWaitingOnTask),
-    m_db(db)
+    m_db(db),
+    m_onlyOneCommandAtTime(onlyOneCommandAtTime)
 {
     m_taskTypeIDs.push_back(taskTypeID);
     ui->setupUi(this);
@@ -62,11 +63,13 @@ void CommandsViewWaitingOnTask::fillTable()
     auto i = 0;
     for (auto iter = m_commands->begin(); iter != m_commands->end(); ++i, ++iter)
     {
+        auto j = 0;
         ui->tableWidget->insertRow(i);
         CommandPtr command = *iter;
-        insertCommandNumber(command, i, 0);
-        insertDetailsButton(i, 1);
-        inserTakeCommandButton(i, 2);
+        insertCommandNumber(command, i, j++);
+        insertPriority(command, i, j++);
+        insertDetailsButton(i, j++);
+        inserTakeCommandButton(i, j++);
 
     }
     ui->tableWidget->resizeColumnsToContents();
@@ -81,6 +84,12 @@ void CommandsViewWaitingOnTask::clearButtons()
 void CommandsViewWaitingOnTask::insertCommandNumber(CommandPtr command, unsigned i, unsigned j)
 {
     auto *item = new QTableWidgetItem(QString::number(command->getCommandNumber()));
+    ui->tableWidget->setItem(i, j, item);
+}
+
+void CommandsViewWaitingOnTask::insertPriority(CommandPtr command, unsigned i, unsigned j)
+{
+    auto *item = new QTableWidgetItem(QString::number(command->getPriority()));
     ui->tableWidget->setItem(i, j, item);
 }
 
@@ -129,7 +138,7 @@ void CommandsViewWaitingOnTask::openDialogIfThereIsTaskOnWhichUserWorkingOn()
 {
     EmployeePtr employee = MainWindow::getWorker();
     //ako nije radnik onda otvaras ovo, u slucaju radnika se trenutni zadatak otvara ranije
-    if (employee->getWorkPosition() != Employee::WorkPosition::Proizvodnja)
+    if ((employee->getWorkPosition() != Employee::WorkPosition::Proizvodnja) && m_onlyOneCommandAtTime)
     {
         CommandPtr command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
         if (command)
@@ -164,6 +173,9 @@ void CommandsViewWaitingOnTask::OpenCommandDialogByWorkPosition(CommandPtr comma
         commanddialog = new CommandDialogInvoice(this, m_db, command, edit, this);
         commanddialog->show();
         break;
+    case Employee::WorkPosition::Narucilac:
+        commanddialog = new CommandDialogWorker(this, m_db, command, edit, this);
+        commanddialog->show();
     default:
         break;
     }

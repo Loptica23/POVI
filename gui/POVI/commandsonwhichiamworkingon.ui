@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CommandsViewWaitingOnTask</class>
- <widget class="QWidget" name="CommandsViewWaitingOnTask">
+ <class>CommandsOnWhichIAmWorkingOn</class>
+ <widget class="QWidget" name="CommandsOnWhichIAmWorkingOn">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1052</width>
-    <height>626</height>
+    <width>927</width>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Nalozi koji cekaju na</string>
+      <string>Nalozi na kojima ja radim:</string>
      </property>
     </widget>
    </item>
@@ -35,12 +35,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Detalji</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Uzmi nalog</string>
+       <string>Otvori nalog</string>
       </property>
      </column>
     </widget>
@@ -61,16 +56,9 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QPushButton" name="Refresh">
+       <widget class="QPushButton" name="pushButton">
         <property name="text">
          <string>Osvezi</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="Back">
-        <property name="text">
-         <string>Vrati se nazad</string>
         </property>
        </widget>
       </item>

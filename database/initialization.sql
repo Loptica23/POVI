@@ -9,6 +9,7 @@ insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefProizvodnje', 'SefProizvodnje', '5555', 'sefproizvodnje', 'spr', true);
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('SefSmene', 'SefSmene', '5555', 'sefsmene', 'ssm', true);
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Knjigovodjaf', 'Knjigovodjaf', '5555', 'knjigovodjaf', 'kfa', true);
+insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('Narucilac', 'Narucilac', '5555', 'narucilac', 'nar', true);
 
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje1', 'RadnikProizvodnje1', '0000', 'radnikproizvodnje1', 'pro', true);
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje2', 'RadnikProizvodnje2', '0000', 'radnikproizvodnje2', 'pro', true);

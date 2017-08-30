@@ -54,7 +54,8 @@ SOURCES +=  main.cpp\
     commanddialoginvoice.cpp \
     dialogsetprediction.cpp \
     refreshable.cpp \
-    refresher.cpp
+    refresher.cpp \
+    commandsonwhichiamworkingon.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -85,7 +86,8 @@ HEADERS +=  mainwindow.h\
     commanddialoginvoice.h \
     dialogsetprediction.h \
     refreshable.h \
-    refresher.h
+    refresher.h \
+    commandsonwhichiamworkingon.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -108,7 +110,8 @@ FORMS   +=  mainwindow.ui \
     shiftmanagerview.ui \
     tasksinproductionview.ui \
     workerview.ui \
-    dialogsetprediction.ui
+    dialogsetprediction.ui \
+    commandsonwhichiamworkingon.ui
 
 RESOURCES += resource.qrc
 

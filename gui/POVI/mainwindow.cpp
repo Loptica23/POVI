@@ -110,6 +110,10 @@ void MainWindow::setUpGuiByWorkPosition()
         type = m_dbConnection->getTaskTypes()->getTypeIdByString("Faktura");
         setView(new CommandsViewWaitingOnTask(this, m_dbConnection, type));
         break;
+    case Employee::WorkPosition::Narucilac:
+        qDebug() << "Narucilac";
+        setView(new TabView(this, m_dbConnection));
+        break;
     default:
         break;
     }

@@ -203,9 +203,9 @@ Employee::WorkPosition Employee::getWorkPositionFromQstring(const QString & work
     {
         result = WorkPosition::Proizvodnja;
     }
-    else if(workPosition == "pak")
+    else if(workPosition == "nar")
     {
-        result = WorkPosition::Pakovanje;
+        result = WorkPosition::Narucilac;
     }
     else if(workPosition == "kom")
     {
@@ -253,7 +253,7 @@ Employee::WorkPosition Employee::getWorkPositionFromUint(unsigned workPosition)
         result = WorkPosition::DizajnerStampa;
         break;
     case 6:
-        result = WorkPosition::Pakovanje;
+        result = WorkPosition::Narucilac;
         break;
     case 7:
         result = WorkPosition::Magacioner;
@@ -291,8 +291,8 @@ QString Employee::getQstringFromWorkPosition(const Employee::WorkPosition workPo
     case WorkPosition::Proizvodnja:
         result = "pro";
         break;
-    case WorkPosition::Pakovanje:
-        result = "pak";
+    case WorkPosition::Narucilac:
+        result = "nar";
         break;
     case WorkPosition::DizajnerLastis:
         result = "dil";
@@ -342,7 +342,7 @@ unsigned Employee::getUnsignedFromWorkPosition(const Employee::WorkPosition work
     case WorkPosition::DizajnerStampa:
         result = 5;
         break;
-    case WorkPosition::Pakovanje:
+    case WorkPosition::Narucilac:
         result = 6;
         break;
     case WorkPosition::Magacioner:
