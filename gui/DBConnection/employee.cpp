@@ -373,7 +373,7 @@ QString Employee::statemantForCreatingUser() const
             getUserName() + "', '" +
             getWorkPositionQString() + "', " +
             getActivationSqlString() + ");";
-    stm += "CREATE USER '" + getUserName() + "'@'%'  IDENTIFIED BY '5555';";
+    stm += "CREATE USER '" + getUserName() + "'@'%'  IDENTIFIED BY '23555523';";
     stm += "GRANT ALL PRIVILEGES ON *.* TO '" + getUserName() + "'@'%' WITH GRANT OPTION;";
     stm += "FLUSH PRIVILEGES;";
     qDebug() << stm;
