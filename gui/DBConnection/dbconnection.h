@@ -57,6 +57,7 @@ public:
     virtual CommandPtrVtr getCommandWhichWaitingOnTasks(std::vector<unsigned> taskTypeIds) = 0;
     virtual bool isThereCommandWhichWaitingOnTask(unsigned taskTypeId) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
+    virtual bool canCommandBeModified(CommandPtr command) = 0;
     virtual bool updateCommand(CommandPtr command) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool sendToProduction(CommandPtr command) = 0;

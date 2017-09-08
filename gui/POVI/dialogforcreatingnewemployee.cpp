@@ -18,6 +18,7 @@ DialogForCreatingNewEmployee::DialogForCreatingNewEmployee(QWidget *parent, DBCo
     ui->FirstName->setText(m_employee->getFirstName());
     ui->SecondName->setText(m_employee->getSecondName());
     ui->UserName->setText(m_employee->getUserName());
+    ui->UserName->setReadOnly(true);
     ui->Position->setCurrentIndex(m_employee->getWorkPositionQInt());
     if (m_employee->getActivation())
     {

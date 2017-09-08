@@ -57,6 +57,7 @@ void CommandDialogChieOfProduction::fillTaskTable()
         insertTaskQuantity(task, i , j++);
         insertAnnulButton(task, i, j++);
     }
+    taskMachineChanged();
     ui->taskTable->resizeColumnsToContents();
 }
 

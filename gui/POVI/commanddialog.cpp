@@ -54,6 +54,9 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    m_command = m_db->getCommand(m_command->getCommandNumber());
+
     connectSignalsAndSlots();
     initializeTasks();
 
@@ -117,15 +120,24 @@ void CommandDialog::removeWidget(QWidget * widget)
 
 void CommandDialog::on_buttonBox_accepted()
 {
-    acceptButtonClicked();
-
-    if (m_create)
+    if (!m_create && !m_db->canCommandBeModified(m_command))
     {
-        createCommand();
+        QString error = "Akcija ne moze biti izvrsena jer je neko drugi uradio izmenu pre Vas. Pokusajte ponovo.";
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error",error);
     }
     else
     {
-        updateCommand();
+        acceptButtonClicked();
+
+        if (m_create)
+        {
+            createCommand();
+        }
+        else
+        {
+            updateCommand();
+        }
     }
 
     backToDefaultScreen();

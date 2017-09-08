@@ -116,6 +116,12 @@ const QDateTime& Command::getDateTimeCreation() const
     return m_dateTimeCreation;
 }
 
+const QDateTime& Command::getDateTimeLastUpdated() const
+{
+    return m_dateTimeLastupdated;
+}
+
+
 //seters
 void Command::setCommandNumber(int commandNumber)
 {
@@ -242,7 +248,7 @@ void Command::setDateTimePrediction(const QDateTime & prediction)
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, Radnik_idRadnik, OpisKomercijaliste, BrojNaloga, Prioritet, "
-                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina, Kreiran) values (";
+                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina, Kreiran, PoslednjaPromena) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_idKomercialist) + ", ";
@@ -253,7 +259,8 @@ QString Command::statemantForCreating() const
     stm += "'" + m_storeKeeperDescription + "', ";
     stm += "'nov', ";
     stm += "'" + m_specification + "', ";
-    stm += QString::number(m_quantity) + " ,";
+    stm += QString::number(m_quantity) + ", ";
+    stm += "NOW(), ";
     stm += "NOW());";
     qDebug() << stm;
     return stm;
@@ -301,7 +308,7 @@ QString Command::statemantForUpdating() const
         {
             stm += "Predvidjanje = '" + getDateTimePrediction().toString("yyyy-MM-dd hh:mm:ss") + "', ";
         }
-        stm.chop(2);
+        stm += "PoslednjaPromena = NOW() ";
         stm += " where idNalog = " + QString::number(m_id);
         qDebug() << stm;
     }
@@ -358,6 +365,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setPriority(query.value("Prioritet").toInt());
         command->setDateTimePrediction(query.value("Predvidjanje").toDateTime());
         command->m_dateTimeCreation = query.value("Kreiran").toDateTime();
+        command->m_dateTimeLastupdated = query.value("PoslednjaPromena").toDateTime();
         command->resetChangeTracking();
         commands->push_back(command);
     }

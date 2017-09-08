@@ -28,6 +28,11 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
     CommandDialog(parent, db, command, edit, refreshable),
     m_recommendedCommandNumber(0)
 {
+    if (edit && m_command->getState() != Command::State::New)
+    {
+        close();
+    }
+
     m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
     fillTaskTable();

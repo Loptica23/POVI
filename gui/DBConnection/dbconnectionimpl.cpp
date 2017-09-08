@@ -345,7 +345,7 @@ CommandPtr DBConnectionImpl::getCommandOnWhichEmployeeWorkingOn(EmployeePtr empl
 
 CommandPtrVtr DBConnectionImpl::getCommandsOnWhichEmployeeeWorkingOn(EmployeePtr employee)
 {
-    CommandPtrVtr commands;
+    CommandPtrVtr commands(new CommandVtr());
     QSqlQuery queryForTasks;
     QSqlQuery queryForCommands;
     QString stm;
@@ -387,7 +387,7 @@ CommandPtrVtr DBConnectionImpl::getCommands()
 {
     CommandPtrVtr commands;
     QSqlQuery query;
-    QString stm = "select * from nalog";
+    QString stm = "select SQL_NO_CACHE  * from nalog";
     query.prepare(stm);
     if(query.exec())
     {
@@ -563,6 +563,17 @@ bool DBConnectionImpl::createNewCommand(CommandPtr command)
     return true;
 }
 
+bool DBConnectionImpl::canCommandBeModified(CommandPtr command)
+{
+    bool result = false;
+    CommandPtr original = getCommand(command->getCommandNumber());
+    if (original->getDateTimeLastUpdated() == command->getDateTimeLastUpdated())
+    {
+        result = true;
+    }
+    return result;
+}
+
 bool DBConnectionImpl::updateCommand(CommandPtr command)
 {
     QSqlQuery query;
@@ -676,7 +687,6 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
         break;
     }
 
-    //refactor (ovaj kod dole se stalno ponavlja!!)
     if (task->isModified())
     {
         if (!updateTask(task))

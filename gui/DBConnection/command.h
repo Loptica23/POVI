@@ -37,6 +37,7 @@ public:
     QString getStateQString() const;
     const QDateTime& getDateTimePrediction() const;
     const QDateTime& getDateTimeCreation() const;
+    const QDateTime& getDateTimeLastUpdated() const;
 
     //seters
     void setCommandNumber(int commandNumber);
@@ -96,4 +97,5 @@ private:
     bool m_dateTimePredictionChanged;
 
     QDateTime m_dateTimeCreation;
+    QDateTime m_dateTimeLastupdated;
 };
