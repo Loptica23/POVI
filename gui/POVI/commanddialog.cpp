@@ -162,7 +162,7 @@ void CommandDialog::specificationChanged() {}
 void CommandDialog::quantityChanged() {}
 void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
-void CommandDialog::taskTemplateChanged(int i) {}
+void CommandDialog::taskTemplateChanged(int i) {qDebug() << "Neiskorisceni parametar" << QString::number(i);}
 void CommandDialog::backToDefaultScreen() {}
 void CommandDialog::annul() {}
 void CommandDialog::taskMachineChanged() {}
@@ -328,6 +328,7 @@ void CommandDialog::on_comercialistDescription_textChanged()
 
 void CommandDialog::on_commandNumber_textChanged(const QString &arg1)
 {
+    qDebug() << arg1;
     if (!ui->commandNumber->text().isEmpty())
         m_serialNumberEmpty = true;
     else

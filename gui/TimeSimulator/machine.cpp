@@ -71,7 +71,7 @@ void TimeSimulator::Machine::lockNLoadMachine()
 TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTimeForVirtualMachine()
 {
     CommandVtrPtr result (new CommandVtr());
-    m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(), [&](auto & command)
+    m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(), [&](CommandPtr & command)
     {
         if (!command->decrementTimeOfCurrentTask())
         {

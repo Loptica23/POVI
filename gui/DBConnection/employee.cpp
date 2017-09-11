@@ -110,7 +110,7 @@ const QString Employee::getWorkPositionQString() const
     return Employee::getQstringFromWorkPosition(m_WorkPosition);
 }
 
-const unsigned Employee::getWorkPositionQInt() const
+unsigned Employee::getWorkPositionQInt() const
 {
     return Employee::getUnsignedFromWorkPosition(m_WorkPosition);
 }

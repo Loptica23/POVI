@@ -45,7 +45,7 @@ public:
     const QString& getUserName() const;
     const WorkPosition& getWorkPosition() const;
     const QString getWorkPositionQString() const;
-    const unsigned getWorkPositionQInt() const;
+    unsigned getWorkPositionQInt() const;
     bool getActivation() const;
     QString getActivationString() const;
     QString getActivationSqlString() const;

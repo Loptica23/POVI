@@ -76,7 +76,7 @@ const QString& Command::getStoreKeeperDescription() const
     return m_storeKeeperDescription;
 }
 
-const Command::State Command::getState() const
+Command::State Command::getState() const
 {
     return m_state;
 }

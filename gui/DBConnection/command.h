@@ -32,7 +32,7 @@ public:
     const QString& getComercialistDescription() const;
     const QString& getDesignerDescription() const;
     const QString& getStoreKeeperDescription() const;
-    const State getState() const;
+    State getState() const;
     unsigned getStateInt() const;
     QString getStateQString() const;
     const QDateTime& getDateTimePrediction() const;

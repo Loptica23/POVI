@@ -38,7 +38,6 @@ void ShiftManagerView::refresh()
     {
         return;
     }
-    m_employees;
     auto i = 0;
     for (auto iter = m_employees->begin(); iter != m_employees->end(); ++i, ++iter)
     {

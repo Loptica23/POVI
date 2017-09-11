@@ -938,6 +938,12 @@ bool DBConnectionImpl::deleteTask(TaskPtr task)
 InvoicePtrVtr DBConnectionImpl::getInvoices(CommandPtr command)
 {
     InvoicePtrVtr invoices(new InvoiceVtr());
+    auto tasks = getTasks(command);
+    for (auto task: (*tasks))
+    {
+        auto invs = getInvoices(task);
+        invoices->insert(invoices->end(), invs->begin(), invs->end());
+    }
     return invoices;
 }
 
