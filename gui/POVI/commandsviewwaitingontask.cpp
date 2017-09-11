@@ -129,8 +129,14 @@ void CommandsViewWaitingOnTask::takeCommand()
     {
         auto index = std::find(m_takeCommandButtons.begin(), m_takeCommandButtons.end(), buttonSender) - m_takeCommandButtons.begin();
         qDebug() << index;
-        m_db->startWorkingOnWaitingTask(m_commands->at(index), MainWindow::getWorker());
-        OpenCommandDialogByWorkPosition(m_commands->at(index), true);
+        if (m_db->startWorkingOnWaitingTask(m_commands->at(index), MainWindow::getWorker()))
+        {
+            OpenCommandDialogByWorkPosition(m_commands->at(index), true);
+        }
+        else
+        {
+            refresh();
+        }
     }
 }
 

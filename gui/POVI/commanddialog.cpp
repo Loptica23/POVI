@@ -124,7 +124,7 @@ void CommandDialog::on_buttonBox_accepted()
     {
         QString error = "Akcija ne moze biti izvrsena jer je neko drugi uradio izmenu pre Vas. Pokusajte ponovo.";
         QMessageBox messageBox;
-        messageBox.critical(0,"Error",error);
+        messageBox.critical(0, "Greska", error);
     }
     else
     {

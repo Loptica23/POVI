@@ -551,6 +551,17 @@ bool DBConnectionImpl::isThereCommandWhichWaitingOnTask(unsigned taskTypeId)
     }
 }
 
+bool DBConnectionImpl::isCommandUpToDate(CommandPtr command)
+{
+    bool result = false;
+    CommandPtr dbCommand = getCommand(command->getCommandNumber());
+    if (dbCommand->getDateTimeLastUpdated() == command->getDateTimeLastUpdated())
+    {
+        result = true;
+    }
+    return result;
+}
+
 bool DBConnectionImpl::createNewCommand(CommandPtr command)
 {
     QSqlQuery query;
@@ -777,6 +788,10 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
 
 bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee)
 {
+    if (!isCommandUpToDate(command))
+    {
+        return false;
+    }
     TaskPtrVtr tasks = getTasks(command);
     if (tasks->empty())
     {
@@ -792,6 +807,7 @@ bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr
             task->setWorkerId(employee->getId());
             task->setCurrentTimeForStarted();
             updateTask(task);
+            return true;
         }
     }
 
