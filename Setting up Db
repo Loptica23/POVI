@@ -1,0 +1,8 @@
+Setting up mysql database;
+Database>Manage connections>System Profile -- set up my.cnf
+Server>options file
+mysqlid = 1
+lower_case_table_names = 1
+
+-----
+Initial data..
