@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QComboBox>
+#include <QCloseEvent>
 #include "commanddialog.h"
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
@@ -164,6 +165,7 @@ void CommandDialog::designerDescriptionChanged() {}
 void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {qDebug() << "Neiskorisceni parametar" << QString::number(i);}
 void CommandDialog::backToDefaultScreen() {}
+void CommandDialog::closeEvent(QCloseEvent * closeEvent) {closeEvent->accept();}
 void CommandDialog::annul() {}
 void CommandDialog::taskMachineChanged() {}
 
@@ -241,6 +243,20 @@ void CommandDialog::createCommand()
                 messageBox.critical(0,"Error",error);
             }
         }
+    }
+}
+
+void CommandDialog::closeCommandDialogAndApp(QCloseEvent * closeEvent)
+{
+    auto resBtn = QMessageBox::question(this, "Upozorenje",
+                                        "Da li ste sigurni da zelite da zatvorite nalog i ugasite aplikaciju. Promene nece biti sacuvane!",
+                                        QMessageBox::No | QMessageBox::Yes);
+    if (resBtn != QMessageBox::Yes) {
+        closeEvent->ignore();
+    } else {
+        closeEvent->accept();
+        auto mainWindow = MainWindow::getMainWindow();
+        mainWindow->close();
     }
 }
 

@@ -48,8 +48,9 @@ protected:
     void initializeTasks();
     void removeWidget(QWidget * widget);
     void createCommand();
-    virtual void updateCommand();
+    void closeCommandDialogAndApp(QCloseEvent * closeEvent);
 
+    virtual void updateCommand();
     virtual void serialNumberChanged();
     virtual void comercialistDescriptionChanged();
     virtual void specificationChanged();
@@ -58,6 +59,7 @@ protected:
     virtual void storeKeeperDescriptionChanged();
     virtual void taskTemplateChanged(int i);
     virtual void backToDefaultScreen();
+    virtual void closeEvent(QCloseEvent * closeEvent);
 
     void showContinueToWorkButton();
     void ifFalseShowDbError(bool b);
@@ -86,6 +88,7 @@ protected:
     bool m_quantityEmpty;
     bool m_designerDescriptionEmpty;
     bool m_storeKeeperDescriptionEmpty;
+
 private slots:
     void on_storekeeperDescription_textChanged();
     void on_specification_textChanged();

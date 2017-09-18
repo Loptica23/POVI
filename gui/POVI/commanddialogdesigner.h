@@ -12,8 +12,8 @@ public:
 
 protected:
     virtual void updateCommand();
-
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
     virtual void designerDescriptionChanged();
+    virtual void closeEvent(QCloseEvent * closeEvent);
 };

@@ -1,5 +1,6 @@
 #include <QWidget>
 #include <QMessageBox>
+#include <QCloseEvent>
 #include "commanddialogdesigner.h"
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
@@ -73,4 +74,12 @@ void CommandDialogDesigner::rejectButtonClicked()
 void CommandDialogDesigner::designerDescriptionChanged()
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!m_designerDescriptionEmpty);
+}
+
+void CommandDialogDesigner::closeEvent(QCloseEvent * closeEvent)
+{
+    if (m_edit)
+    {
+        closeCommandDialogAndApp(closeEvent);
+    }
 }

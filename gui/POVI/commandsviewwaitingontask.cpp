@@ -15,8 +15,8 @@ CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnecti
 {
     m_taskTypeIDs.push_back(taskTypeID);
     ui->setupUi(this);
-    openDialogIfThereIsTaskOnWhichUserWorkingOn();
     refresh();
+    openDialogIfThereIsTaskOnWhichUserWorkingOn();
 }
 
 CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnectionPtr db, std::vector<unsigned> taskTypeIDs) :
@@ -26,8 +26,8 @@ CommandsViewWaitingOnTask::CommandsViewWaitingOnTask(QWidget *parent, DBConnecti
     m_taskTypeIDs(taskTypeIDs)
 {
     ui->setupUi(this);
-    openDialogIfThereIsTaskOnWhichUserWorkingOn();
     refresh();
+    openDialogIfThereIsTaskOnWhichUserWorkingOn();
 }
 
 
@@ -45,6 +45,7 @@ void CommandsViewWaitingOnTask::refresh()
 void CommandsViewWaitingOnTask::on_Refresh_clicked()
 {
     refresh();
+    openDialogIfThereIsTaskOnWhichUserWorkingOn();
 }
 
 void CommandsViewWaitingOnTask::fillTable()

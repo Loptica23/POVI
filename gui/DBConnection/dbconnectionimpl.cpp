@@ -649,6 +649,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
 
             break;
     case Command::State::InProgress:
+    case Command::State::Stopped:
         for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
         {
             task = *iter;
@@ -693,9 +694,6 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
 
         }
         break;
-    case Command::State::Stopped:
-        // ne regularna situacija
-        break;
     }
 
     if (task->isModified())
@@ -727,13 +725,57 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
 
 bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity)
 {
-    TaskPtrVtr tasks = getTasks(command);
-    TaskPtr task;
-    TaskPtr newTask;
-    auto serialNumber = 150;
-    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    //new code same function
+    auto tasks = getTasks(command);
+
+    //setting up leaved task
+    auto task = getCurrentTask(command);
+    if (task == nullptr)
+        return false;
+    task->setState(Task::State::Leaved);
+    task->setCurrentTimeForComplited();
+    task->setQuantity(quantity);
+    auto serialNumber = task->getSerialNumber();
+    if (!updateTask(task))
     {
-        task = *iter;
+        return false;
+    }
+
+    //setting up new Task
+    auto newTask = std::make_shared<Task>(command, task->getTaskTypeId());
+    newTask->setSerialNumber(++serialNumber);
+    newTask->setState(Task::State::Waiting);
+    newTask->setMachineId(task->getMachineId());
+    auto msecconds = task->getStartTime().msecsTo(QDateTime::currentDateTime());
+    unsigned minutes = msecconds/(1000*60);
+    int leftPredictedTime = task->getPrediction();
+    leftPredictedTime -= minutes;
+    if (leftPredictedTime > 0)
+        newTask->setPrediction(leftPredictedTime);
+
+    for (auto t: *tasks)
+    {
+        if (t->getSerialNumber() == serialNumber)
+        {
+            t->setSerialNumber(++serialNumber);
+            if (!updateTask(t)) return false;
+        }
+    }
+
+
+    if (!createNewTask(newTask, employee->getId()))
+    {
+        return false;
+    }
+
+    return true;
+    ///////////////////////////////////////////////
+    /*
+    auto tasks = getTasks(command);
+    auto serialNumber = 150;
+    //svo ovo iteriranje se radi kako bi se nasao trenutni zadatak, sto je realno sranje
+    for (auto task : *tasks)
+    {
         if (serialNumber == 150)
         {
             if (task->getState() == Task::State::InProgress)
@@ -743,7 +785,7 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
                 task->setState(Task::State::Leaved);
                 task->setCurrentTimeForComplited();
                 task->setQuantity(quantity);
-                newTask.reset(new Task(command, task->getTaskTypeId()));
+                auto newTask = std::make_shared<Task>(command, task->getTaskTypeId());
                 newTask->setSerialNumber(++serialNumber);
                 newTask->setState(Task::State::Waiting);
                 if (!createNewTask(newTask, employee->getId()))
@@ -784,6 +826,7 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
     }
 
     return true;
+    */
 }
 
 bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee)
