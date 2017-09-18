@@ -25,6 +25,8 @@ C:\Qt\5.8\msvc2015_64\bin\windeployqt.exe DBConnection.dll
 C:\Qt\5.8\msvc2015_64\bin\windeployqt.exe POVI.exe
 i kopiranje gore pomenutog dll u isti folder
 -----------------------------------------------------------------
-Deployment ubuntu
+Deployment ubuntu64
 
-
+Prebacis sve binary fajlove u jedan dir. Tu stavis i linuxdeployqt fajl, koji skines sa gita.
+Startujes linuxqtdeploy i kao parametar prosledis samo exe (glavni binary) i sacekas da on prikupi sve zavisnosti.
+Sada sve svoje .so fajlove prebacis u lib direktorijum i mozes da startujes aplikaciju.
