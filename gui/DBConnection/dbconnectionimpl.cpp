@@ -609,28 +609,59 @@ bool DBConnectionImpl::deleteCommand(CommandPtr command)
     return true;
 }
 
-bool DBConnectionImpl::sendToProduction(CommandPtr command)
+bool DBConnectionImpl::sendToWaitForProduction(CommandPtr command)
 {
+    if (command->getState() != Command::State::New)
+    {
+        m_lastError = "Komanda mora biti u stanju NEW da bi mogla da se prebaci u WAITFORPRODUCTION stanje.";
+        qDebug() << m_lastError;
+        return false;
+    }
     command->setState(Command::State::WaitForProduction);
     return updateCommand(command);
 }
 
 bool DBConnectionImpl::sendToKomercial(CommandPtr command)
 {
+    if (!((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::WaitForProduction)))
+    {
+        m_lastError = "Komanda mora biti u stanju Stopped ili WaitForProduction da bi mogla da se prebaci u New stanje.";
+        qDebug() << m_lastError;
+        return false;
+    }
     command->setState(Command::State::New);
     return updateCommand(command);
 }
 
 bool DBConnectionImpl::stopCommand(CommandPtr command)
 {
+    if (command->getState() != Command::State::InProgress)
+    {
+        m_lastError = "Komanda mora biti u stanju InProgress da bi mogla da se prebaci u Stopped stanje.";
+        qDebug() << m_lastError;
+        return false;
+    }
     command->setState(Command::State::Stopped);
     return updateCommand(command);
 }
 
-bool DBConnectionImpl::continueCommand(CommandPtr command)
+bool DBConnectionImpl::sendToProduction(CommandPtr command)
 {
+    if (!((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::WaitForProduction)))
+    {
+        m_lastError = "Komanda mora biti u stanju Stopped ili WaitForProduction da bi mogla da se prebaci u InProgress stanje.";
+        qDebug() << m_lastError;
+        return false;
+    }
     command->setState(Command::State::InProgress);
-    return updateCommand(command);
+    auto tasks = getTasks(command);
+    auto task = (*tasks->begin());
+    if (task->getState() == Task::State::New)
+    {
+        //command is new and first task state must be changed to Waiting
+        task->setState(Task::State::Waiting);
+    }
+    return updateCommand(command) && updateTask(task);
 }
 
 bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity)
@@ -643,57 +674,38 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
         qDebug() << "Nalog nema zadatke!";
         return false;
     }
-    switch (command->getState())
+    if (!((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::InProgress)))
     {
-    case Command::State::New:
-
-            break;
-    case Command::State::InProgress:
-    case Command::State::Stopped:
-        for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+        m_lastError = "Da bi se zadatak mogao poslati u stanje complete potrebno je da nalog bude u stanju stopped ili u stanju inProgress.";
+        qDebug() << m_lastError;
+        return false;
+    }
+    //refactor -- izmeni ovu petlju na dve funkcije tipa dohvati trenutni zadatak, poslaji prvi nov zadatak u waiting stanje
+    //         -- i na kraju treca funkcija ako su svi zadaci u zavrsenom stanju possalji ceo nalog u zavrseno stanje
+    for (auto iter = tasks->begin(); iter != tasks->end(); ++iter)
+    {
+        task = *iter;
+        if (task->getState() == Task::State::InProgress)
         {
-            task = *iter;
-            if (task->getState() == Task::State::InProgress)
+            qDebug() << "postavljnje zadatka na zavrseno!";
+            task->setState(Task::State::Complited);
+            task->setCurrentTimeForComplited();
+            task->setQuantity(quantity);
+            while (++iter != tasks->end())
             {
-                qDebug() << "postavljnje zadatka na zavrseno!";
-                task->setState(Task::State::Complited);
-                task->setCurrentTimeForComplited();
-                task->setQuantity(quantity);
-                while (++iter != tasks->end())
+                task1 = *iter;
+                if (task1->getState() == Task::State::New)
                 {
-                    task1 = *iter;
-                    if (task1->getState() == Task::State::New)
-                    {
-                        task1->setState(Task::State::Waiting);
-                        break;
-                    }
+                    task1->setState(Task::State::Waiting);
+                    break;
                 }
-                if (iter == tasks->end())
-                {
-                    command->setState(Command::State::Complited);
-                }
-                break;
             }
+            if (iter == tasks->end())
+            {
+                command->setState(Command::State::Complited);
+            }
+            break;
         }
-        break;
-    case Command::State::Complited:
-        // ne regularna situacija
-        break;
-    case Command::State::WaitForProduction:
-        //moguce su dve situacije
-        command->setState(Command::State::InProgress);
-        task = (*tasks->begin());
-        if (task->getState() == Task::State::New)
-        {
-            //1. da je nalog bio nov i da su mu svi zadaci u novom stanju                               - zadatak takodje treba prebaciti na cekanje
-            task->setState(Task::State::Waiting);
-        }
-        else
-        {
-            //2. da je nalog bio u proizvodnji, a zatim stopiran, a zatim se ponovo vraca u proizvodnju - vec ima zadatak na cekanju
-
-        }
-        break;
     }
 
     if (task->isModified())
@@ -945,7 +957,9 @@ bool DBConnectionImpl::annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr ta
 bool DBConnectionImpl::createNewTask(TaskPtr task, unsigned employeeID)
 {
     QSqlQuery query;
-    query.prepare(task->statemantForCreating(employeeID));
+    QString stm = task->statemantForCreating(employeeID);
+    qDebug() << stm;
+    query.prepare(stm);
     if (!query.exec())
     {
         m_lastError = query.lastError().text();

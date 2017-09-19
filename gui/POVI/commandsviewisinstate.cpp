@@ -118,7 +118,7 @@ void CommandsViewIsInState::continueCommand()
     {
         auto index = std::find(m_stopContinueButons.begin(), m_stopContinueButons.end(), buttonSender) - m_stopContinueButons.begin();
         qDebug() << index;
-        m_db->continueCommand(m_commands->at(index));
+        m_db->sendToProduction(m_commands->at(index));
         refresh();
     }
 }
@@ -171,6 +171,7 @@ void CommandsViewIsInState::clearBuutonsAndInitializeHeaders()
     m_detailsButtons.clear();
     m_predictionButtons.clear();
     m_stopContinueButons.clear();
+    m_sendBackToKomercialistsButtons.clear();
 
     QStringList headers;
     headers << "Broj Naloga"

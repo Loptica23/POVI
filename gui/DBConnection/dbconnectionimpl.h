@@ -49,10 +49,10 @@ public:
     virtual bool canCommandBeModified(CommandPtr command);
     virtual bool updateCommand(CommandPtr command);
     virtual bool deleteCommand(CommandPtr command);
-    virtual bool sendToProduction(CommandPtr command);
+    virtual bool sendToWaitForProduction(CommandPtr command);
     virtual bool sendToKomercial(CommandPtr command);
     virtual bool stopCommand(CommandPtr command);
-    virtual bool continueCommand(CommandPtr command);
+    virtual bool sendToProduction(CommandPtr command);
     virtual bool completeCurrentTask(CommandPtr command, unsigned quantity);
     virtual bool leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity);
     virtual bool startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee);
