@@ -48,6 +48,9 @@ protected:
     void initializeTasks();
     void removeWidget(QWidget * widget);
     void createCommand();
+    void leaveCurrentTask();
+    void completeCurrentTask();
+    void saveInvoice();
     void closeCommandDialogAndApp(QCloseEvent * closeEvent);
 
     virtual void updateCommand();

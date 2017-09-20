@@ -63,12 +63,12 @@ void CommandDialogDesigner::updateCommand()
 
 void CommandDialogDesigner::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
+    completeCurrentTask();
 }
 
 void CommandDialogDesigner::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
+    leaveCurrentTask();
 }
 
 void CommandDialogDesigner::designerDescriptionChanged()

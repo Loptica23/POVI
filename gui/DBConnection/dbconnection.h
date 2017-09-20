@@ -59,7 +59,7 @@ public:
     virtual bool isCommandUpToDate(CommandPtr command) = 0;
     virtual bool createNewCommand(CommandPtr command) = 0;
     virtual bool canCommandBeModified(CommandPtr command) = 0;
-    virtual bool updateCommand(CommandPtr command) = 0;
+    virtual bool updateCommand(CommandPtr command, bool noteModifiedTime=true) = 0;
     virtual bool deleteCommand(CommandPtr command) = 0;
     virtual bool sendToWaitForProduction(CommandPtr command) = 0;
     virtual bool sendToKomercial(CommandPtr command) = 0;

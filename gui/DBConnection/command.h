@@ -53,7 +53,7 @@ public:
     void setDateTimePrediction(const QDateTime & prediction);
 
     QString statemantForCreating() const;
-    QString statemantForUpdating() const;
+    QString statemantForUpdating(bool noteModifiedTime=true) const;
     QString statementForDeleting() const;
 
     bool isModified() const;

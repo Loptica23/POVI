@@ -266,7 +266,7 @@ QString Command::statemantForCreating() const
     return stm;
 }
 
-QString Command::statemantForUpdating() const
+QString Command::statemantForUpdating(bool noteModifiedTime) const
 {
     QString stm;
     if (isModified())
@@ -308,7 +308,11 @@ QString Command::statemantForUpdating() const
         {
             stm += "Predvidjanje = '" + getDateTimePrediction().toString("yyyy-MM-dd hh:mm:ss") + "', ";
         }
-        stm += "PoslednjaPromena = NOW() ";
+        if (noteModifiedTime)
+        {
+            stm += "PoslednjaPromena = NOW(), ";
+        }
+        stm.chop(2);
         stm += " where idNalog = " + QString::number(m_id);
         qDebug() << stm;
     }

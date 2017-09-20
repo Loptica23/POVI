@@ -58,17 +58,12 @@ void CommandDialogStoreKeeper::updateCommand()
 
 void CommandDialogStoreKeeper::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
-    if (m_haveItInvoice)
-    {
-        InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
-        ifFalseShowDbError(m_db->createNewInvoice(invoice));
-    }
+    completeCurrentTask();
 }
 
 void CommandDialogStoreKeeper::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
+    leaveCurrentTask();
 }
 
 void CommandDialogStoreKeeper::storeKeeperDescriptionChanged()

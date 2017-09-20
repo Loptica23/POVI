@@ -246,6 +246,33 @@ void CommandDialog::createCommand()
     }
 }
 
+void CommandDialog::leaveCurrentTask()
+{
+    if (m_edit)
+    {
+        ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
+        saveInvoice();
+    }
+}
+
+void CommandDialog::completeCurrentTask()
+{
+    if (m_edit)
+    {
+        ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
+        saveInvoice();
+    }
+}
+
+void CommandDialog::saveInvoice()
+{
+    if (m_haveItInvoice)
+    {
+        InvoicePtr invoice(new Invoice(m_currentTask, ui->invoiceDescription->toPlainText()));
+        ifFalseShowDbError(m_db->createNewInvoice(invoice));
+    }
+}
+
 void CommandDialog::closeCommandDialogAndApp(QCloseEvent * closeEvent)
 {
     auto resBtn = QMessageBox::question(this, "Upozorenje",
@@ -260,36 +287,7 @@ void CommandDialog::closeCommandDialogAndApp(QCloseEvent * closeEvent)
     }
 }
 
-void CommandDialog::updateCommand()
-{
-    //ova funkcija bi trebalo da je overajdovana! i da je ovaj kod ispod mrtav kod
-    /*switch(MainWindow::getWorker()->getWorkPosition())
-    {
-    case Employee::WorkPosition::Administrator:
-        if (!ui->commandNumber->text().isEmpty())
-            m_command->setCommandNumber(ui->commandNumber->text().toUInt());
-        if (!ui->comercialistDescription->toPlainText().isEmpty())
-            m_command->setComercialistDescription(ui->comercialistDescription->toPlainText());
-        if (!ui->designerDescription->toPlainText().isEmpty())
-            m_command->setDesignerDescription(ui->designerDescription->toPlainText());
-        if (!ui->storekeeperDescription->toPlainText().isEmpty())
-            m_command->setStoreKeeperDescription(ui->storekeeperDescription->toPlainText());
-        break;
-    case Employee::WorkPosition::Komercijalista:
-        break;
-    }
-
-    if (m_command->isModified())
-    {
-        if (!m_db->updateCommand(m_command))
-        {
-            QString error = m_db->getLastError();
-            QMessageBox messageBox;
-            messageBox.critical(0,"Error",error);
-        }
-    }*/
-}
-
+void CommandDialog::updateCommand(){}
 
 void CommandDialog::on_storekeeperDescription_textChanged()
 {

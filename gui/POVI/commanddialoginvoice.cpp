@@ -45,12 +45,12 @@ void CommandDialogInvoice::updateCommand()
 
 void CommandDialogInvoice::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
+    completeCurrentTask();
 }
 
 void CommandDialogInvoice::rejectButtonClicked()
 {
-    ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
+    leaveCurrentTask();
 }
 
 void CommandDialogInvoice::initializeInvoiceDescription()

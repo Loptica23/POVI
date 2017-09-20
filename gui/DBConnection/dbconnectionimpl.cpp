@@ -585,10 +585,10 @@ bool DBConnectionImpl::canCommandBeModified(CommandPtr command)
     return result;
 }
 
-bool DBConnectionImpl::updateCommand(CommandPtr command)
+bool DBConnectionImpl::updateCommand(CommandPtr command, bool noteModifiedTime)
 {
     QSqlQuery query;
-    query.prepare(command->statemantForUpdating());
+    query.prepare(command->statemantForUpdating(noteModifiedTime));
     if (!query.exec())
     {
         m_lastError = query.lastError().text();
@@ -737,6 +737,7 @@ bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity
 
 bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee, unsigned quantity)
 {
+    qDebug() << "leave current task";
     //new code same function
     auto tasks = getTasks(command);
 
@@ -781,64 +782,6 @@ bool DBConnectionImpl::leaveCurrentTask(CommandPtr command, EmployeePtr employee
     }
 
     return true;
-    ///////////////////////////////////////////////
-    /*
-    auto tasks = getTasks(command);
-    auto serialNumber = 150;
-    //svo ovo iteriranje se radi kako bi se nasao trenutni zadatak, sto je realno sranje
-    for (auto task : *tasks)
-    {
-        if (serialNumber == 150)
-        {
-            if (task->getState() == Task::State::InProgress)
-            {
-                qDebug() << "postavljnje zadatka u ostavljeno stanje!";
-                serialNumber = task->getSerialNumber();
-                task->setState(Task::State::Leaved);
-                task->setCurrentTimeForComplited();
-                task->setQuantity(quantity);
-                auto newTask = std::make_shared<Task>(command, task->getTaskTypeId());
-                newTask->setSerialNumber(++serialNumber);
-                newTask->setState(Task::State::Waiting);
-                if (!createNewTask(newTask, employee->getId()))
-                {
-                    return false;
-                }
-                newTask = getCurrentTask(command);
-                if (newTask != nullptr)
-                {
-                    newTask->setMachineId(task->getMachineId());
-                    auto msecconds = task->getStartTime().msecsTo(QDateTime::currentDateTime());
-                    unsigned minutes = msecconds/(1000*60);
-                    unsigned leftPredictedTime = task->getPrediction();
-                    leftPredictedTime -= minutes;
-                    if (leftPredictedTime > 0)
-                        newTask->setPrediction(leftPredictedTime);
-
-                    if (!updateTask(newTask))
-                    {
-                        return false;
-                    }
-                }
-
-                if (!updateTask(task))
-                {
-                    return false;
-                }
-                qDebug() << "postavljnje zadatka u ostavljeno stanje!";
-            }
-        }
-        else
-        {
-            //znaci da smo sada u stanju inkrementiranja rednog broja zadatka
-            qDebug() << "uvecavanje rednog broja zadatka!!";
-            task->setSerialNumber(++serialNumber);
-            if (!updateTask(task)) return false;
-        }
-    }
-
-    return true;
-    */
 }
 
 bool DBConnectionImpl::startWorkingOnWaitingTask(CommandPtr command, EmployeePtr employee)

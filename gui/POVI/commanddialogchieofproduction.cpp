@@ -70,7 +70,7 @@ void CommandDialogChieOfProduction::updateCommand()
 
     if (m_command->isModified())
     {
-        ifFalseShowDbError(m_db->updateCommand(m_command));
+        ifFalseShowDbError(m_db->updateCommand(m_command, false));
     }
 
     auto i = 0;
@@ -100,7 +100,8 @@ void CommandDialogChieOfProduction::updateCommand()
 
 void CommandDialogChieOfProduction::acceptButtonClicked()
 {
-    ifFalseShowDbError(m_db->completeCurrentTask(m_command, 0));
+    if (m_command->getState() == Command::State::WaitForProduction)
+        ifFalseShowDbError(m_db->sendToProduction(m_command));
 }
 
 bool CommandDialogChieOfProduction::showAnnul()
