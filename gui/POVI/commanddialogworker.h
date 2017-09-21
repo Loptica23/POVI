@@ -14,4 +14,7 @@ protected:
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
     virtual void backToDefaultScreen();
+
+private:
+    void removeQuantityIfOrderingTask();
 };

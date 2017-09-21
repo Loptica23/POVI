@@ -22,12 +22,14 @@ void CommandDialogWorker::setUpWindowByWorkPosition()
     removeWidget(ui->tasks);
     removeWidget(ui->priorityWidget);
     removeInvoiceWidgetIfTaskDontNeedIt();
+    removeQuantityIfOrderingTask();
 
     ui->commandNumber->setEnabled(false);
     ui->specification->setReadOnly(true);
     ui->quantity->setReadOnly(true);
     ui->comercialistDescription->setReadOnly(true);
     ui->designerDescription->setReadOnly(true);
+    ui->Priority->setReadOnly(true);
     auto machine = m_db->getMachine(m_currentTask->getMachineId());
     if (machine)
         ui->machine->setText(machine->getName());
@@ -62,5 +64,13 @@ void CommandDialogWorker::backToDefaultScreen()
     {
         auto mainWindow = MainWindow::getMainWindow();
         mainWindow->backToDefaultScreen();
+    }
+}
+
+void CommandDialogWorker::removeQuantityIfOrderingTask()
+{
+    if (MainWindow::getLogedUser()->getWorkPosition() == Employee::WorkPosition::Narucilac)
+    {
+        removeWidget(ui->finishQuantity);
     }
 }

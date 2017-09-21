@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "shiftmanagerview.h"
 #include "ui_shiftmanagerview.h"
 #include "dbconnection.h"
@@ -77,17 +78,25 @@ void ShiftManagerView::buttonClicked()
         auto index = std::find(m_buttons.begin(), m_buttons.end(), buttonSender) - m_buttons.begin();
         qDebug() << index;
         auto employee = m_employees->at(index);
-        auto command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
-        if (command != nullptr)
+
+        auto resBtn = QMessageBox::question(this, "Neophodna potvrda identiteta:",
+                                            "Da li ste vi: " + employee->getUserName(),
+                                            QMessageBox::No | QMessageBox::Yes);
+
+        if (resBtn == QMessageBox::Yes)
         {
-            auto commanddialog = new CommandDialogWorker(this, m_db, command, true, this);
-            commanddialog->show();
-        }
-        else
-        {
-            auto mainWindow = MainWindow::getMainWindow();
-            std::shared_ptr<QWidget> workerView(new WorkerView(this, m_db, employee));
-            mainWindow->forward(workerView);
+            auto command = m_db->getCommandOnWhichEmployeeWorkingOn(employee);
+            if (command != nullptr)
+            {
+                auto commanddialog = new CommandDialogWorker(this, m_db, command, true, this);
+                commanddialog->show();
+            }
+            else
+            {
+                auto mainWindow = MainWindow::getMainWindow();
+                std::shared_ptr<QWidget> workerView(new WorkerView(this, m_db, employee));
+                mainWindow->forward(workerView);
+            }
         }
     }
 }

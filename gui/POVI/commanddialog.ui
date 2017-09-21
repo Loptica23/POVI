@@ -241,14 +241,8 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="finishQuantity">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <widget class="QWidget" name="finishQuantity" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
          <property name="leftMargin">
           <number>0</number>
          </property>
