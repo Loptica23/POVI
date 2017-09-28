@@ -661,7 +661,7 @@ bool DBConnectionImpl::sendToProduction(CommandPtr command)
         //command is new and first task state must be changed to Waiting
         task->setState(Task::State::Waiting);
     }
-    return updateCommand(command) && updateTask(task);
+    return updateCommand(command) && updateTaskIfModyfied(task);
 }
 
 bool DBConnectionImpl::completeCurrentTask(CommandPtr command, unsigned quantity)
@@ -921,6 +921,17 @@ bool DBConnectionImpl::updateTask(TaskPtr task)
         return false;
     }
     return true;
+}
+
+//return false only if query fails
+bool DBConnectionImpl::updateTaskIfModyfied(TaskPtr task)
+{
+    auto result = true;
+    if (task->isModified())
+    {
+        result = updateTask(task);
+    }
+    return result;
 }
 
 bool DBConnectionImpl::deleteTask(TaskPtr task)

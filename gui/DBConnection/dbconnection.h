@@ -75,6 +75,7 @@ public:
     virtual bool annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) = 0;
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) = 0;
     virtual bool updateTask(TaskPtr task) = 0;
+    virtual bool updateTaskIfModyfied(TaskPtr task) = 0;
     virtual bool deleteTask(TaskPtr task) = 0;
 
     virtual InvoicePtrVtr getInvoices(CommandPtr command) = 0;

@@ -63,6 +63,7 @@ public:
     virtual bool annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) override;
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) override;
     virtual bool updateTask(TaskPtr task) override;
+    virtual bool updateTaskIfModyfied(TaskPtr task) override;
     virtual bool deleteTask(TaskPtr task) override;
 
     virtual InvoicePtrVtr getInvoices(CommandPtr command) override;

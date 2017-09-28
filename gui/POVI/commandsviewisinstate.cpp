@@ -322,16 +322,18 @@ void CommandsViewIsInState::insertStopContinueButton(CommandPtr command, unsigne
 void CommandsViewIsInState::insertSendBackToKomercialist(CommandPtr command, unsigned i, unsigned j)
 {
     QPushButton* btn = new QPushButton();
+    auto enable = false;
     btn->setText("Vrati komercijali");
     connect(btn, SIGNAL(clicked()), this, SLOT(sendBackToKomercialists()));
     if ((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::WaitForProduction))
     {
-        btn->setEnabled(true);
+        auto task = m_db->getCurrentTask(command);
+        if (task->getState() != Task::State::InProgress)
+        {
+            enable = true;
+        }
     }
-    else
-    {
-        btn->setEnabled(false);
-    }
+    btn->setEnabled(enable);
     m_sendBackToKomercialistsButtons.push_back(btn);
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn);
 }

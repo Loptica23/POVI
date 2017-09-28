@@ -1,4 +1,9 @@
 Setting up mysql database;
+install ubuntu; download all updates during installation;
+
+sudo apt-get install mysql-server
+sudo apt-get install mysql-workbench
+
 Database>Manage connections>System Profile -- set up my.cnf
 Server>options file
 mysqlid = 1
