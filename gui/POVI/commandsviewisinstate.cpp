@@ -328,7 +328,7 @@ void CommandsViewIsInState::insertSendBackToKomercialist(CommandPtr command, uns
     if ((command->getState() == Command::State::Stopped) || (command->getState() == Command::State::WaitForProduction))
     {
         auto task = m_db->getCurrentTask(command);
-        if (task->getState() != Task::State::InProgress)
+        if ((task != nullptr) && (task->getState() != Task::State::InProgress))
         {
             enable = true;
         }

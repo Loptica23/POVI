@@ -857,7 +857,7 @@ TaskPtr DBConnectionImpl::getCurrentTask(CommandPtr command)
     return currentTask;
 }
 
-bool DBConnectionImpl::annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks)
+bool DBConnectionImpl::returnTaskToWorker(TaskPtr task, CommandPtr command, TaskPtrVtr tasks)
 {
     TaskPtr currentTask = nullptr;
     for (auto t: *tasks)
@@ -873,6 +873,46 @@ bool DBConnectionImpl::annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr ta
 
     currentTask->setState(Task::State::New);
     task->setState(Task::State::InProgress);
+
+    InvoicePtrVtr invoices = getInvoices(task);
+    for (auto inv : *invoices)
+    {
+        deleteInvoice(inv);
+    }
+
+
+    if (!updateTask(currentTask))
+    {
+        return false;
+    }
+
+    if (!updateTask(task))
+    {
+        return false;
+    }
+
+    //paiz kako komplitujes zadatak.. moras da stavis na cekanje prvi koji je u stanju nov..
+    //to ne znaci da je u pitanju sledeci zadatak
+    //cakk se moze desiti da je rec o poslednjem zadatku, u tom slucaju treba setovati ceo nalog u stanje zav
+    return true;
+}
+
+bool DBConnectionImpl::annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks)
+{
+    TaskPtr currentTask = nullptr;
+    for (auto t: *tasks)
+    {
+        if (t->getState() == Task::State::Waiting)
+        {
+            currentTask = t;
+        }
+    }
+
+    if (currentTask == nullptr)
+        return false;
+
+    currentTask->setState(Task::State::New);
+    task->setState(Task::State::Waiting);
 
     InvoicePtrVtr invoices = getInvoices(task);
     for (auto inv : *invoices)

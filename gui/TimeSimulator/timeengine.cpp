@@ -4,7 +4,7 @@
 #include "commandmanager.h"
 #include "machine.h"
 
-
+//ne sme biti staticka!!!
 unsigned TimeSimulator::TimeEngine::moment = 0;
 
 TimeSimulator::TimeEngine::TimeEngine(QObject* parent) :
@@ -30,6 +30,11 @@ void TimeSimulator::TimeEngine::run()
         qDebug() << "MOMENT: " + QString::number(moment);
         m_running = m_machineManager->decrementTime(moment);
         ++moment;
+        if (moment == 2147483647)
+        {
+            qDebug() << "Engine timed out!!";
+            break;
+        }
     }
 
     //ovde moras da notifajerujes glavnu nit! vidi kako ces to!

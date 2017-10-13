@@ -7,10 +7,10 @@
 
 CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DBConnectionPtr db, CommandPtr command, bool edit, Refreshable *refreshable):
     CommandDialog(parent, db, command, edit, refreshable),
-    m_annul(false)
+    m_canBeAnnul(false)
 {
     this->showMaximized();
-    m_annul = showAnnul();
+    m_canBeAnnul = showAnnulButtons();
     m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
@@ -55,6 +55,7 @@ void CommandDialogChieOfProduction::fillTaskTable()
         insertStartTime(task, i , j++);
         insertEndTime(task, i , j++);
         insertTaskQuantity(task, i , j++);
+        insertReturnToWorkerButton(task, i, j++);
         insertAnnulButton(task, i, j++);
     }
     taskMachineChanged();
@@ -104,7 +105,7 @@ void CommandDialogChieOfProduction::acceptButtonClicked()
         ifFalseShowDbError(m_db->sendToProduction(m_command));
 }
 
-bool CommandDialogChieOfProduction::showAnnul()
+bool CommandDialogChieOfProduction::showAnnulButtons()
 {
     bool result = (m_command->getState() == Command::State::Stopped);
     for (auto task : *m_tasks)
@@ -121,14 +122,15 @@ bool CommandDialogChieOfProduction::showAnnul()
 void CommandDialogChieOfProduction::clearButtonsAndSetHeaders()
 {
     m_comboBoxes.clear();
+    m_returnToWorkerButtons.clear();
     m_annulButtons.clear();
 
     QStringList headers;
     headers << "Tip zadatka" << "Stanje" << "Procena" << "Masina" << "Radnik" << "Poceo" << "Zavrsen" << "Kolicina";
 
-    if (m_annul)
+    if (m_canBeAnnul)
     {
-        headers << "Storniraj";
+        headers << "Vrati radniku" << "Storniraj";
     }
 
     m_machines = m_db->getMachines();
@@ -190,7 +192,11 @@ void CommandDialogChieOfProduction::insertMachineComboBox(TaskPtr task, unsigned
         m_isThereTaskWithoutMachie = true;
     }
 
-    if (!m_edit)
+    if (    (!m_edit) ||
+            (task->getState() == Task::State::Complited) ||
+            (task->getState() == Task::State::Leaved) ||
+            (task->getState() == Task::State::InProgress)
+       )
     {
         taskComboBox->setEnabled(false);
     }
@@ -226,13 +232,30 @@ void CommandDialogChieOfProduction::insertTaskQuantity(TaskPtr task, unsigned i 
     ui->taskTable->setItem(i, j, item);
 }
 
+void CommandDialogChieOfProduction::insertReturnToWorkerButton(TaskPtr task, unsigned i , unsigned j)
+{
+    if (m_canBeAnnul)
+    {
+        QPushButton* btn = new QPushButton();
+        m_returnToWorkerButtons.push_back(btn);
+        connect(btn, SIGNAL(clicked()), this, SLOT(returnToWorker()));
+        btn->setEnabled(false);
+        btn->setText("Vrati radniku");
+        if (((task->getState() == Task::State::Complited) || (task->getState() == Task::State::Leaved)) && m_edit)
+        {
+            btn->setEnabled(true);
+        }
+        ui->taskTable->setIndexWidget(ui->taskTable->model()->index(i, j), btn);
+    }
+}
+
 void CommandDialogChieOfProduction::insertAnnulButton(TaskPtr task, unsigned i , unsigned j)
 {
-    if (m_annul)
+    if (m_canBeAnnul)
     {
         QPushButton* btn = new QPushButton();
         m_annulButtons.push_back(btn);
-        connect(btn, SIGNAL(clicked()), this, SLOT(annul()));
+        connect(btn, SIGNAL(clicked()), this, SLOT(annulTask()));
         btn->setEnabled(false);
         btn->setText("Storniraj");
         if (((task->getState() == Task::State::Complited) || (task->getState() == Task::State::Leaved)) && m_edit)
@@ -243,7 +266,19 @@ void CommandDialogChieOfProduction::insertAnnulButton(TaskPtr task, unsigned i ,
     }
 }
 
-void CommandDialogChieOfProduction::annul()
+void CommandDialogChieOfProduction::returnToWorker()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_returnToWorkerButtons.begin(), m_returnToWorkerButtons.end(), buttonSender) != m_returnToWorkerButtons.end())
+    {
+        auto index = std::find(m_returnToWorkerButtons.begin(), m_returnToWorkerButtons.end(), buttonSender) - m_returnToWorkerButtons.begin();
+        qDebug() << index;
+        m_db->returnTaskToWorker(m_tasks->at(index), m_command, m_tasks);
+        close();
+    }
+}
+
+void CommandDialogChieOfProduction::annulTask()
 {
     QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
     if(std::find(m_annulButtons.begin(), m_annulButtons.end(), buttonSender) != m_annulButtons.end())

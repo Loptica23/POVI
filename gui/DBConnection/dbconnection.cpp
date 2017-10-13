@@ -14,7 +14,7 @@ DBConnection::DBConnection()
 {
     QSettings settings(QString("config.ini"), QSettings::IniFormat);
     m_databaseConnectionName = settings.value("DatabaseConfiguration/connectionName", "POVI").toString();
-    m_host = settings.value("DatabaseConfiguration/host", "localhost").toString();
+    m_host = settings.value("DatabaseConfiguration/host", "192.168.1.24").toString();
     m_databaseName = settings.value("DatabaseConfiguration/databaseName", "vigor").toString();
 }
 

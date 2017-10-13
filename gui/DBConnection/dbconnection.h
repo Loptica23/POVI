@@ -72,6 +72,7 @@ public:
     virtual TaskPtrVtr getTasks() = 0;
     virtual TaskPtrVtr getTasks(CommandPtr command) = 0;
     virtual TaskPtr getCurrentTask(CommandPtr command) = 0;
+    virtual bool returnTaskToWorker(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) = 0;
     virtual bool annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) = 0;
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) = 0;
     virtual bool updateTask(TaskPtr task) = 0;

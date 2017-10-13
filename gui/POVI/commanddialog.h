@@ -39,7 +39,8 @@ protected slots:
 
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
-    virtual void annul();
+    virtual void returnToWorker();
+    virtual void annulTask();
 
     virtual void taskMachineChanged();
 

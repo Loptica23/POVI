@@ -166,7 +166,8 @@ void CommandDialog::storeKeeperDescriptionChanged() {}
 void CommandDialog::taskTemplateChanged(int i) {qDebug() << "Neiskorisceni parametar" << QString::number(i);}
 void CommandDialog::backToDefaultScreen() {}
 void CommandDialog::closeEvent(QCloseEvent * closeEvent) {closeEvent->accept();}
-void CommandDialog::annul() {}
+void CommandDialog::returnToWorker() {}
+void CommandDialog::annulTask() {}
 void CommandDialog::taskMachineChanged() {}
 
 void CommandDialog::showContinueToWorkButton()

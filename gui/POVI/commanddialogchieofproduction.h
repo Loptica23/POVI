@@ -10,7 +10,8 @@ public:
     virtual ~CommandDialogChieOfProduction();
 
 protected slots:
-    virtual void annul();
+    virtual void returnToWorker() override;
+    virtual void annulTask() override;
     virtual void taskMachineChanged();
 
 protected:
@@ -19,7 +20,7 @@ protected:
     virtual void updateCommand();
     virtual void acceptButtonClicked();
 
-    bool showAnnul();
+    bool showAnnulButtons();
 
     void clearButtonsAndSetHeaders();
     void insertTaskType(TaskPtr task, unsigned i, unsigned j);
@@ -30,14 +31,16 @@ protected:
     void insertStartTime(TaskPtr task, unsigned i , unsigned j);
     void insertEndTime(TaskPtr task, unsigned i , unsigned j);
     void insertTaskQuantity(TaskPtr task, unsigned i , unsigned j);
+    void insertReturnToWorkerButton(TaskPtr task, unsigned i , unsigned j);
     void insertAnnulButton(TaskPtr task, unsigned i , unsigned j);
 
     TaskTypesPtr m_taskTypes;
     MachinePtrVtr m_machines;
 
     std::vector<QComboBox*> m_comboBoxes;
+    std::vector<QPushButton*> m_returnToWorkerButtons;
     std::vector<QPushButton*> m_annulButtons;
 
-    bool m_annul;
+    bool m_canBeAnnul;
     bool m_isThereTaskWithoutMachie;
 };

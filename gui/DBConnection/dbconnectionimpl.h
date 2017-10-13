@@ -60,6 +60,7 @@ public:
     virtual TaskPtrVtr getTasks() override;
     virtual TaskPtrVtr getTasks(CommandPtr command) override;
     virtual TaskPtr getCurrentTask(CommandPtr command) override;
+    virtual bool returnTaskToWorker(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) override;
     virtual bool annulTask(TaskPtr task, CommandPtr command, TaskPtrVtr tasks) override;
     virtual bool createNewTask(TaskPtr task, unsigned employeeID) override;
     virtual bool updateTask(TaskPtr task) override;
