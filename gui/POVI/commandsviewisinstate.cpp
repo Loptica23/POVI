@@ -58,6 +58,7 @@ void CommandsViewIsInState::setCommands(CommandPtrVtr commands)
 
 void CommandsViewIsInState::timeEngineFinish()
 {
+    ui->pushButton_2->setEnabled(true);
     qDebug() << "Pozvan slot! " + QString::number(m_timeSimulator->getResult()->size());
     m_resultMap = m_timeSimulator->getResult();
     fillTable();
@@ -340,6 +341,7 @@ void CommandsViewIsInState::insertSendBackToKomercialist(CommandPtr command, uns
 
 void CommandsViewIsInState::on_pushButton_2_clicked()
 {
+    ui->pushButton_2->setEnabled(false);
     m_timeSimulator.reset(new TimeSimulator::TimeSimulator());
     connect(  m_timeSimulator->getSender()
             , SIGNAL(sendResult())

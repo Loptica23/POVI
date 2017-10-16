@@ -62,22 +62,23 @@ void CommandDialogKomercialist::fillTaskTable()
     {
         clearButtons();
         QStringList headers;
-        headers << "Tip zadatka" << "Gore" << "Dole" << "Brisi";
+        headers << "Tip zadatka" << /*"Gore" << "Dole" <<*/ "Brisi";
         ui->taskTable->setRowCount(0);
-        ui->taskTable->setColumnCount(4);
+        ui->taskTable->setColumnCount(headers.size());
         ui->taskTable->setHorizontalHeaderLabels(headers);
         auto i = 0;
         for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++i, ++iter)
         {
             //ovde se dodaju zadaci koji su vec vezani za nalog
+            auto j = 0;
             ui->taskTable->insertRow(i);
-            insertComboBox((*iter), i, 0);
-            insertUpButton(i, 1);
-            insertDownButton(i, 2);
-            insertDeleteButton(i, 3);
+            insertComboBox((*iter), i, j++);
+            //insertUpButton(i, j++);
+            //insertDownButton(i, j++);
+            insertDeleteButton(i, j++);
         }
         disableFirstAndLastButtons();
-        insertNewTaskButton(i);
+        //insertNewTaskButton(i);
     }
     else
     {
@@ -236,6 +237,7 @@ void CommandDialogKomercialist::insertComboBox(TaskPtr task, unsigned i, unsigne
     QComboBox* taskComboBox = new QComboBox(ui->taskTable);
     fillComboBoxWithTaskTypes(taskComboBox);
     taskComboBox->setCurrentIndex(task->getTaskTypeId()-1);
+    taskComboBox->setEnabled(false);
     connect(taskComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeTaskType(int)));
     ui->taskTable->setCellWidget(i, j, taskComboBox);
     m_comboBoxes.push_back(taskComboBox);
