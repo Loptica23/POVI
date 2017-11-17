@@ -16,7 +16,7 @@ class DBCONNECTIONSHARED_EXPORT Command{
 
 public:
     enum class State{New, WaitForProduction, InProgress, Complited, Stopped};
-    enum class UnitOfQuantity{M, KG, KOM};
+    enum class UnitOfQuantity{M, KG, KOM, PAR};
 
     Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand, unsigned idKomercialist);
     virtual ~Command();

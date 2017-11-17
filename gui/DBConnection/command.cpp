@@ -2,6 +2,10 @@
 #include <QVariant>
 #include "command.h"
 
+#define sM "metara"
+#define sKG "kilograma"
+#define sKOM "komada"
+#define sPAR "pari"
 
 Command::Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand, unsigned idKomercialist):
     m_id(idCommand),
@@ -444,14 +448,16 @@ QString Command::unitOfQuantityEnumToStr(UnitOfQuantity unitQuantity)
     switch (unitQuantity)
     {
     case UnitOfQuantity::M:
-        result = "m";
+        result = sM;
         break;
     case UnitOfQuantity::KG:
-        result = "kg";
+        result = sKG;
         break;
     case UnitOfQuantity::KOM:
-        result = "kom";
+        result = sKOM;
         break;
+    case UnitOfQuantity::PAR:
+        result = sPAR;
     default:
         break;
     }
@@ -461,17 +467,21 @@ QString Command::unitOfQuantityEnumToStr(UnitOfQuantity unitQuantity)
 Command::UnitOfQuantity Command::unitOfQuantityStrToEnum(const QString &unitQuantity)
 {
     UnitOfQuantity result;
-    if (unitQuantity == "m")
+    if (unitQuantity == sM)
     {
         result = UnitOfQuantity::M;
     }
-    else if (unitQuantity == "kg")
+    else if (unitQuantity == sKG)
     {
         result = UnitOfQuantity::KG;
     }
-    else if (unitQuantity == "kom")
+    else if (unitQuantity == sKOM)
     {
         result = UnitOfQuantity::KOM;
+    }
+    else if (unitQuantity == sPAR)
+    {
+        result = UnitOfQuantity::PAR;
     }
     else
     {

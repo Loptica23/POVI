@@ -36,6 +36,9 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     setAttribute(Qt::WA_DeleteOnClose);
     connectSignalsAndSlots();
     m_taskTypes = m_db->getTaskTypes();
+
+    removeWidget(ui->customer);
+    removeWidget(ui->label_13);
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -67,14 +70,17 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     connectSignalsAndSlots();
     initializeTasks();
 
-    ui->commandNumber->setText(QString::number(command->getCommandNumber()));
-    ui->Priority->setText(QString::number(command->getPriority()));
-    ui->comercialistDescription->setText(command->getComercialistDescription());
-    ui->specification->setText(command->getSpecification());
-    ui->quantity->setText(QString::number(command->getQuantity()));
-    ui->designerDescription->setText(command->getDesignerDescription());
-    ui->storekeeperDescription->setText(command->getStoreKeeperDescription());
+    ui->commandNumber->setText(QString::number(m_command->getCommandNumber()));
+    ui->commandNumber->setReadOnly(true);
+    ui->Priority->setText(QString::number(m_command->getPriority()));
+    ui->comercialistDescription->setText(m_command->getComercialistDescription());
+    ui->specification->setText(m_command->getSpecification());
+    ui->quantity->setText(QString::number(m_command->getQuantity()));
+    ui->designerDescription->setText(m_command->getDesignerDescription());
+    ui->storekeeperDescription->setText(m_command->getStoreKeeperDescription());
     ui->comboBox_2->setCurrentText(m_command->getUnitOfQuantityStr());
+    ui->customer->setText(m_db->getCustomer(m_command->getIdCustomer())->getName());
+    ui->customer->setReadOnly(true);
     //ostali su ti taskovi
 
     if (!m_edit)
@@ -413,7 +419,7 @@ void CommandDialog::printCommand()
     if (!m_command->getComercialistDescription().isEmpty())
     {
         myCursor->insertText("Komentar komercijaliste:\n");
-        myCursor->insertText(m_command->getDesignerDescription() + "\n");
+        myCursor->insertText(m_command->getComercialistDescription() + "\n");
         myCursor->insertText(PRINT_LINE);
     }
 

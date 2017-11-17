@@ -15,6 +15,7 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
     CommandDialog(parent, db, order, refreshable),
     m_recommendedCommandNumber(1000000000)
 {
+    this->showMaximized();
     m_template = TaskTemplate::Manual;
     setRecommendedCommandNumber();
     ui->commandNumber->setText(QString::number(m_recommendedCommandNumber));
@@ -27,6 +28,7 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
     CommandDialog(parent, db, command, edit, refreshable),
     m_recommendedCommandNumber(0)
 {
+    this->showMaximized();
     if (edit && m_command->getState() != Command::State::New)
     {
         close();
