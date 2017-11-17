@@ -46,6 +46,16 @@
           <widget class="QLineEdit" name="commandNumber"/>
          </item>
          <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Narudzbina: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="order"/>
+         </item>
+         <item>
           <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Klijent: </string>

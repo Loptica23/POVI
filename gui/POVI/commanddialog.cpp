@@ -39,6 +39,9 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
 
     removeWidget(ui->customer);
     removeWidget(ui->label_13);
+
+    removeWidget(ui->order);
+    removeWidget(ui->label_14);
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -81,6 +84,10 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui->comboBox_2->setCurrentText(m_command->getUnitOfQuantityStr());
     ui->customer->setText(m_db->getCustomer(m_command->getIdCustomer())->getName());
     ui->customer->setReadOnly(true);
+    ui->order->setText(m_db->getOrder(m_command->getIdOrder())->getHeader());
+    ui->order->setReadOnly(true);
+    ui->order->setCursorPosition(0);
+
     //ostali su ti taskovi
 
     if (!m_edit)
