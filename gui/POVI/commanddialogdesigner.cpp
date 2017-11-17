@@ -31,6 +31,7 @@ void CommandDialogDesigner::setUpWindowByWorkPosition()
     ui->commandNumber->setEnabled(false);
     ui->specification->setReadOnly(true);
     ui->quantity->setReadOnly(true);
+    ui->comboBox_2->setEnabled(false);
     ui->comercialistDescription->setReadOnly(true);
     //nalog je preuzet
 

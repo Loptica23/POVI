@@ -9,6 +9,7 @@ MachinesView::MachinesView(QWidget *parent, DBConnectionPtr db) :
     m_db(db),
     m_machines(new MachineVtr())
 {
+    m_tasktypes = m_db->getTaskTypes();
     ui->setupUi(this);
     refresh();
 }
@@ -20,7 +21,6 @@ MachinesView::~MachinesView()
 
 void MachinesView::refresh()
 {
-    m_tasktypes = m_db->getTaskTypes();
     m_machines = m_db->getMachines();
     fillMachinesTable();
 }

@@ -11,7 +11,6 @@ CommandDialogChieOfProduction::CommandDialogChieOfProduction(QWidget *parent, DB
 {
     this->showMaximized();
     m_canBeAnnul = showAnnulButtons();
-    m_taskTypes = m_db->getTaskTypes();
     fillTaskTable();
     setUpWindowByWorkPosition();
     qDebug() << "Sef proizvodnje";
@@ -30,6 +29,7 @@ void CommandDialogChieOfProduction::setUpWindowByWorkPosition()
     ui->designerDescription->setReadOnly(true);
     ui->commandNumber->setEnabled(false);
     ui->storekeeperDescription->setReadOnly(true);
+    ui->comboBox_2->setEnabled(false);
 
     removeWidget(ui->invoice);
     removeWidget(ui->storekeeper);

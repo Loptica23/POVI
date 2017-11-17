@@ -15,7 +15,6 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
     CommandDialog(parent, db, order, refreshable),
     m_recommendedCommandNumber(1000000000)
 {
-    m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
     setRecommendedCommandNumber();
     ui->commandNumber->setText(QString::number(m_recommendedCommandNumber));
@@ -33,7 +32,6 @@ CommandDialogKomercialist::CommandDialogKomercialist(QWidget *parent, std::share
         close();
     }
 
-    m_taskTypes = m_db->getTaskTypes();
     m_template = TaskTemplate::Manual;
     fillTaskTable();
     setUpWindowByWorkPosition();
@@ -53,6 +51,11 @@ void CommandDialogKomercialist::setUpWindowByWorkPosition()
     removeWidget(ui->label_10);
     removeWidget(ui->invoice);
     removeWidget(ui->finishQuantity);
+    if (!m_edit)
+    {
+        showPrintButton();
+        ui->comboBox_2->setEnabled(false);
+    }
     this->repaint();
 }
 
@@ -330,10 +333,13 @@ void CommandDialogKomercialist::updateCommand()
         m_command->setSpecification(ui->specification->toPlainText());
     if (!ui->comercialistDescription->toPlainText().isEmpty())
         m_command->setComercialistDescription(ui->comercialistDescription->toPlainText());
+    m_command->setUnitOfQuantity(ui->comboBox_2->currentText());
+
     if (m_command->isModified())
     {
         ifFalseShowDbError(m_db->updateCommand(m_command));
     }
+
 
     for (auto iter = m_tasks->begin(); iter != m_tasks->end(); ++iter)
     {

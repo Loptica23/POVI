@@ -140,6 +140,32 @@
             <item>
              <widget class="QLineEdit" name="quantity"/>
             </item>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Mera: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_2">
+              <item>
+               <property name="text">
+                <string>m</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>kg</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>kom</string>
+               </property>
+              </item>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>

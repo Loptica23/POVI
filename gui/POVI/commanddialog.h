@@ -66,6 +66,7 @@ protected:
     virtual void closeEvent(QCloseEvent * closeEvent);
 
     void showContinueToWorkButton();
+    void showPrintButton();
     void ifFalseShowDbError(bool b);
     void removeInvoiceWidgetIfTaskDontNeedIt();
 
@@ -79,6 +80,7 @@ protected:
     TaskPtrVtr m_tasks;
     TaskPtr m_currentTask;
     TaskPtrVtr m_deletedTasks;
+    TaskTypesPtr m_taskTypes;
     std::shared_ptr<DBConnection> m_db;
 
     std::vector<QComboBox*> m_comboBoxes;
@@ -101,4 +103,5 @@ private slots:
     void on_comercialistDescription_textChanged();
     void on_commandNumber_textChanged(const QString &arg1);
     void continueToWorkOnCommand();
+    void printCommand();
 };

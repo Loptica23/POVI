@@ -16,6 +16,7 @@ class DBCONNECTIONSHARED_EXPORT Command{
 
 public:
     enum class State{New, WaitForProduction, InProgress, Complited, Stopped};
+    enum class UnitOfQuantity{M, KG, KOM};
 
     Command(unsigned idCustomer, unsigned idOrder, unsigned idCommand, unsigned idKomercialist);
     virtual ~Command();
@@ -38,6 +39,8 @@ public:
     const QDateTime& getDateTimePrediction() const;
     const QDateTime& getDateTimeCreation() const;
     const QDateTime& getDateTimeLastUpdated() const;
+    UnitOfQuantity getUnitOfQuantity() const;
+    QString getUnitOfQuantityStr() const;
 
     //seters
     void setCommandNumber(int commandNumber);
@@ -51,6 +54,8 @@ public:
     void setState(const QString& state);
     void setState(const unsigned state);
     void setDateTimePrediction(const QDateTime & prediction);
+    void setUnitOfQuantity(UnitOfQuantity unitOfQuantity);
+    void setUnitOfQuantity(const QString& unitOfQuantity);
 
     QString statemantForCreating() const;
     QString statemantForUpdating(bool noteModifiedTime=true) const;
@@ -63,7 +68,10 @@ public:
     static CommandPtrVtr createCommandsFromQuery(QSqlQuery& query);
     static QString convertStateToString(const State &state);
 
+    static QString unitOfQuantityEnumToStr(UnitOfQuantity unitQuantity);
+    static UnitOfQuantity unitOfQuantityStrToEnum(const QString& unitQuantity);
 private:
+
     unsigned m_id;
     unsigned m_idOrder;
     unsigned m_idCustomer;
@@ -95,6 +103,9 @@ private:
 
     QDateTime m_dateTimePrediction;
     bool m_dateTimePredictionChanged;
+
+    UnitOfQuantity m_unitOfQuantity;
+    bool m_unitOfQuantityChanged;
 
     QDateTime m_dateTimeCreation;
     QDateTime m_dateTimeLastupdated;

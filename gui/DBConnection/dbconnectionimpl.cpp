@@ -198,6 +198,28 @@ CustomerPtrVtr DBConnectionImpl::getCustomers()
     return customers;
 }
 
+CustomerPtr DBConnectionImpl::getCustomer(unsigned id)
+{
+    CustomerPtrVtr customers;
+    CustomerPtr customer = nullptr;
+    QSqlQuery query;
+    query.prepare("select * from klijent where idKlijent = " + QString::number(id) + ";");
+    if(query.exec())
+    {
+        customers = Customer::createCustomersFromQuery(query);
+    }
+    else
+    {
+        m_lastError = query.lastError().text();
+        qDebug() << "nije uspeo query!";
+    }
+    if (!customers->empty())
+    {
+        customer = customers->front();
+    }
+    return customer;
+}
+
 bool DBConnectionImpl::createNewCustomer(CustomerPtr customer)
 {
     QSqlQuery query;

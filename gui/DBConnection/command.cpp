@@ -121,6 +121,15 @@ const QDateTime& Command::getDateTimeLastUpdated() const
     return m_dateTimeLastupdated;
 }
 
+Command::UnitOfQuantity Command::getUnitOfQuantity() const
+{
+    return m_unitOfQuantity;
+}
+
+QString Command::getUnitOfQuantityStr() const
+{
+    return unitOfQuantityEnumToStr(m_unitOfQuantity);
+}
 
 //seters
 void Command::setCommandNumber(int commandNumber)
@@ -245,10 +254,28 @@ void Command::setDateTimePrediction(const QDateTime & prediction)
     }
 }
 
+void Command::setUnitOfQuantity(Command::UnitOfQuantity unitOfQuantity)
+{
+    if (m_unitOfQuantity != unitOfQuantity)
+    {
+        m_unitOfQuantityChanged = true;
+        m_unitOfQuantity =  unitOfQuantity;
+    }
+}
+
+void Command::setUnitOfQuantity(const QString& unitOfQuantity)
+{
+    if (m_unitOfQuantity != unitOfQuantityStrToEnum(unitOfQuantity))
+    {
+        m_unitOfQuantityChanged = true;
+        m_unitOfQuantity = unitOfQuantityStrToEnum(unitOfQuantity);
+    }
+}
+
 QString Command::statemantForCreating() const
 {
     QString stm = "insert into nalog (idNarudzbina, idKlijent, Radnik_idRadnik, OpisKomercijaliste, BrojNaloga, Prioritet, "
-                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina, Kreiran, PoslednjaPromena) values (";
+                  "OpisDizajnera, OpisMagacionera, Stanje, Specifikacija, Kolicina, Kreiran, PoslednjaPromena, MeraKolicine) values (";
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_idKomercialist) + ", ";
@@ -261,7 +288,9 @@ QString Command::statemantForCreating() const
     stm += "'" + m_specification + "', ";
     stm += QString::number(m_quantity) + ", ";
     stm += "NOW(), ";
-    stm += "NOW());";
+    stm += "NOW(), ";
+    stm += "'" + getUnitOfQuantityStr() + "'";
+    stm += ");";
     qDebug() << stm;
     return stm;
 }
@@ -308,6 +337,10 @@ QString Command::statemantForUpdating(bool noteModifiedTime) const
         {
             stm += "Predvidjanje = '" + getDateTimePrediction().toString("yyyy-MM-dd hh:mm:ss") + "', ";
         }
+        if (m_unitOfQuantityChanged)
+        {
+            stm += "MeraKolicine = '" + getUnitOfQuantityStr() + "', ";
+        }
         if (noteModifiedTime)
         {
             stm += "PoslednjaPromena = NOW(), ";
@@ -337,7 +370,8 @@ bool Command::isModified() const
             m_commandNumberChanged ||
             m_specificationChanged ||
             m_quantityChanged ||
-            m_dateTimePredictionChanged);
+            m_dateTimePredictionChanged ||
+            m_unitOfQuantityChanged);
 }
 
 void Command::resetChangeTracking()
@@ -351,6 +385,7 @@ void Command::resetChangeTracking()
     m_specificationChanged              = false;
     m_quantityChanged                   = false;
     m_dateTimePredictionChanged         = false;
+    m_unitOfQuantityChanged             = false;
 }
 
 CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
@@ -370,6 +405,7 @@ CommandPtrVtr Command::createCommandsFromQuery(QSqlQuery& query)
         command->setDateTimePrediction(query.value("Predvidjanje").toDateTime());
         command->m_dateTimeCreation = query.value("Kreiran").toDateTime();
         command->m_dateTimeLastupdated = query.value("PoslednjaPromena").toDateTime();
+        command->setUnitOfQuantity(query.value("MeraKolicine").toString());
         command->resetChangeTracking();
         commands->push_back(command);
     }
@@ -398,6 +434,48 @@ QString Command::convertStateToString(const State & state)
         break;
     default:
         qDebug() << "*****************nema takvog stanja*****************";
+    }
+    return result;
+}
+
+QString Command::unitOfQuantityEnumToStr(UnitOfQuantity unitQuantity)
+{
+    QString result;
+    switch (unitQuantity)
+    {
+    case UnitOfQuantity::M:
+        result = "m";
+        break;
+    case UnitOfQuantity::KG:
+        result = "kg";
+        break;
+    case UnitOfQuantity::KOM:
+        result = "kom";
+        break;
+    default:
+        break;
+    }
+    return result;
+}
+
+Command::UnitOfQuantity Command::unitOfQuantityStrToEnum(const QString &unitQuantity)
+{
+    UnitOfQuantity result;
+    if (unitQuantity == "m")
+    {
+        result = UnitOfQuantity::M;
+    }
+    else if (unitQuantity == "kg")
+    {
+        result = UnitOfQuantity::KG;
+    }
+    else if (unitQuantity == "kom")
+    {
+        result = UnitOfQuantity::KOM;
+    }
+    else
+    {
+        qDebug() << "GRESKA: ne postoji ta jedinica";
     }
     return result;
 }

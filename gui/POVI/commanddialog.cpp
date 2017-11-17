@@ -3,10 +3,14 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QCloseEvent>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include "commanddialog.h"
 #include "ui_commanddialog.h"
 #include "mainwindow.h"
 #include "dbconnection.h"
+
+#define PRINT_LINE "------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
 
 //ovaj se koristi za kreiranje naloga
 CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable* refreshable) :
@@ -31,6 +35,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     connectSignalsAndSlots();
+    m_taskTypes = m_db->getTaskTypes();
 }
 
 //ovaj se koristi za prikaz naloga ili njegovu izmenu
@@ -57,6 +62,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     setAttribute(Qt::WA_DeleteOnClose);
 
     m_command = m_db->getCommand(m_command->getCommandNumber());
+    m_taskTypes = m_db->getTaskTypes();
 
     connectSignalsAndSlots();
     initializeTasks();
@@ -68,6 +74,7 @@ CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, 
     ui->quantity->setText(QString::number(command->getQuantity()));
     ui->designerDescription->setText(command->getDesignerDescription());
     ui->storekeeperDescription->setText(command->getStoreKeeperDescription());
+    ui->comboBox_2->setCurrentText(m_command->getUnitOfQuantityStr());
     //ostali su ti taskovi
 
     if (!m_edit)
@@ -177,6 +184,13 @@ void CommandDialog::showContinueToWorkButton()
     connect(cont, SIGNAL(clicked(bool)), this, SLOT(continueToWorkOnCommand()));
 }
 
+void CommandDialog::showPrintButton()
+{
+    auto cont = new QPushButton("Stampaj!");
+    ui->buttonBox->addButton(cont, QDialogButtonBox::ApplyRole);
+    connect(cont, SIGNAL(clicked(bool)), this, SLOT(printCommand()));
+}
+
 void CommandDialog::changeTaskType(int index)
 {
     QComboBox* comboBoxSender = qobject_cast<QComboBox*>(sender());
@@ -222,6 +236,7 @@ void CommandDialog::createCommand()
     {
         command->setCommandNumber(ui->commandNumber->text().toInt());
     }
+    command->setUnitOfQuantity(ui->comboBox_2->currentText());
 
     if (!m_db->createNewCommand(command))
     {
@@ -357,6 +372,72 @@ void CommandDialog::continueToWorkOnCommand()
     close();
     auto mainWindow = MainWindow::getMainWindow();
     mainWindow->backToDefaultScreen();
+}
+
+void CommandDialog::printCommand()
+{
+    qDebug() << "Print";
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, this);
+    dialog->setWindowTitle(tr("Print Document"));
+    if (true)
+    {
+        dialog->addEnabledOption(QAbstractPrintDialog::PrintSelection);
+    }
+    if (dialog->exec() != QDialog::Accepted)
+    {
+        return;
+    }
+
+    QTextDocument* doc = new QTextDocument();
+    QTextCursor* myCursor = new QTextCursor(doc);
+
+    //stavi prvo info onalogu..
+    myCursor->insertText(PRINT_LINE);
+    myCursor->insertText("Brojnaloga: " + QString::number(m_command->getCommandNumber())
+                         + "     Datum kreiranja: " + m_command->getDateTimeCreation().toString("dd.MM.yyyy hh:mm")
+                         + "     Klijent: " + m_db->getCustomer(m_command->getIdCustomer())->getName() + "\n");
+    myCursor->insertText(PRINT_LINE);
+
+    if (!m_command->getSpecification().isEmpty())
+    {
+        myCursor->insertText("Sta se pravi:\n");
+        myCursor->insertText(m_command->getSpecification() + "\n");
+        myCursor->insertText(PRINT_LINE);
+    }
+
+    myCursor->insertText("Kolicina: " + QString::number(m_command->getQuantity()) + "    Mera: " + "\n");
+    myCursor->insertText(PRINT_LINE);
+
+    if (!m_command->getComercialistDescription().isEmpty())
+    {
+        myCursor->insertText("Komentar komercijaliste:\n");
+        myCursor->insertText(m_command->getDesignerDescription() + "\n");
+        myCursor->insertText(PRINT_LINE);
+    }
+
+    if (!m_command->getDesignerDescription().isEmpty())
+    {
+        myCursor->insertText("Komentar dizajnera:\n");
+        myCursor->insertText(m_command->getDesignerDescription() + "\n");
+        myCursor->insertText(PRINT_LINE);
+    }
+
+    myCursor->insertText("Zadaci:\n");
+    for (TaskPtr task : *m_tasks)
+    {
+        myCursor->insertText(QString::number(task->getSerialNumber() + 1)
+                             + ". "
+                             + m_taskTypes->getStringById(task->getTaskTypeId())
+                             + " - "
+                             + task->getStateString()
+                             + "\n"
+                             );
+    }
+    myCursor->insertText(PRINT_LINE);
+
+    doc->print(&printer);
 }
 
 void CommandDialog::ifFalseShowDbError(bool b)

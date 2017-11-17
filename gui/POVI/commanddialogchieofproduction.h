@@ -34,7 +34,6 @@ protected:
     void insertReturnToWorkerButton(TaskPtr task, unsigned i , unsigned j);
     void insertAnnulButton(TaskPtr task, unsigned i , unsigned j);
 
-    TaskTypesPtr m_taskTypes;
     MachinePtrVtr m_machines;
 
     std::vector<QComboBox*> m_comboBoxes;

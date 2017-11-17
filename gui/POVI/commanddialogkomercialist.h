@@ -41,8 +41,6 @@ protected:
 
     void setRecommendedCommandNumber();
 
-
-    TaskTypesPtr m_taskTypes;
     TaskTemplate m_template;
 
     unsigned m_recommendedCommandNumber;

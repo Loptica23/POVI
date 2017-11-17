@@ -38,6 +38,7 @@ public:
     virtual bool updateEmployee(EmployeePtr employee) = 0;
 
     virtual CustomerPtrVtr getCustomers() = 0;
+    virtual CustomerPtr getCustomer(unsigned id) = 0;
     virtual bool createNewCustomer(CustomerPtr customer) = 0;
     virtual bool updateCustomer(CustomerPtr customer) = 0;
 

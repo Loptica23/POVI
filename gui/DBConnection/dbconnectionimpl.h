@@ -26,6 +26,7 @@ public:
     virtual bool updateEmployee(EmployeePtr employee) override;
 
     virtual CustomerPtrVtr getCustomers() override;          //neki search bi trebalo da postoji
+    virtual CustomerPtr getCustomer(unsigned id) override;
     virtual bool createNewCustomer(CustomerPtr customer) override;
     virtual bool updateCustomer(CustomerPtr customer) override;
 
