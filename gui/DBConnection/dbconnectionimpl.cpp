@@ -6,6 +6,7 @@
 #include "dbconnectionimpl.h"
 
 DBConnectionImpl::DBConnectionImpl()
+    : m_machinesTaskTypes (nullptr)
 {
 
 }
@@ -44,20 +45,21 @@ bool DBConnectionImpl::conectToDb(QString userName, QString pwd)
 EmployeePtr DBConnectionImpl::logIn(QString username, QString pwd)
 {
     EmployeePtr result = nullptr;
-    QSqlQuery query("select * from radnik");
+    QString stm;
+    stm = "select * from radnik where KorisnickoIme = ";
+    stm += "'" + username + "'";
+    stm += " and Sifra = ";
+    stm += "'" + pwd + "'";
+    stm += ";";
+    qDebug() << stm;
+    QSqlQuery query(stm);
     if(query.exec())
     {
         EmployeePtrVtr employees = Employee::createEmployeesFromQuery(query);
         for (auto iter = employees->begin(); iter != employees->end(); ++iter)
         {
-            if (username == (*iter)->getUserName())
-            {
-                if ((*iter)->checkPWD(pwd))
-                {
-                    result = (*iter);
-                    break;
-                }
-            }
+            result = *iter;
+            break;
         }
     }
     else
@@ -1113,7 +1115,15 @@ MachinePtrVtr DBConnectionImpl::getMachines(unsigned taskTypeId)
 {
     MachinePtrVtr machines = nullptr;
     QSqlQuery query;
-    QString stm = "select * from masina where TipoviZadatka_idTipoviZadatka = " + QString::number(taskTypeId);
+    QString stm = "select * from masina where ";    
+    auto machineIds = getMachineIdsForTaskType(taskTypeId);
+    for (auto machineId : machineIds)
+    {
+        stm += "idMasina = " + QString::number(machineId) + " or ";
+    }
+    stm.chop(4);
+    stm += ";";
+    qDebug() << stm;
     query.prepare(stm);
     if(query.exec())
     {
@@ -1173,4 +1183,54 @@ bool DBConnectionImpl::updateMachine(MachinePtr machine)
         return false;
     }
     return true;
+}
+
+MachineTaskTypePtrVtr DBConnectionImpl::getMachineTaskTypes()
+{
+    MachineTaskTypePtrVtr result = m_machinesTaskTypes;
+    if (result == nullptr)
+    {
+        QSqlQuery query;
+        QString stm = "select * from MasinaTipoviZadatka;";
+        qDebug() << stm;
+        query.prepare(stm);
+        if (query.exec())
+        {
+            result = MachineTaskType::createMachineTaskTypeFromQuery(query);
+        }
+        else
+        {
+            qDebug() << "nije uspeo query!";
+            m_lastError = query.lastError().text();
+        }
+    }
+    return result;
+}
+
+std::vector<unsigned> DBConnectionImpl::getTasTypesIdsForMachine(MachinePtr machine)
+{
+    std::vector<unsigned> ids;
+    auto machinesTaskTypes = getMachineTaskTypes();
+    for (const auto machineTaskType : *machinesTaskTypes)
+    {
+        if (machine->getId() == machineTaskType->getMachineId())
+        {
+            ids.push_back(machineTaskType->getTaskTypeId());
+        }
+    }
+    return ids;
+}
+
+std::vector<unsigned> DBConnectionImpl::getMachineIdsForTaskType(unsigned taskTypeId)
+{
+    std::vector<unsigned> ids;
+    auto machinesTaskTypes = getMachineTaskTypes();
+    for (const auto machineTaskType : *machinesTaskTypes)
+    {
+        if (taskTypeId == machineTaskType->getTaskTypeId())
+        {
+            ids.push_back(machineTaskType->getMachineId());
+        }
+    }
+    return ids;
 }

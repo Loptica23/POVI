@@ -10,7 +10,7 @@
 #include "mainwindow.h"
 #include "dbconnection.h"
 
-#define PRINT_LINE "------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
+#define PRINT_LINE "------------------------------------------------\n"
 
 //ovaj se koristi za kreiranje naloga
 CommandDialog::CommandDialog(QWidget *parent, std::shared_ptr<DBConnection> db, OrderPtr order, Refreshable* refreshable) :
@@ -188,6 +188,12 @@ void CommandDialog::backToDefaultScreen() {}
 void CommandDialog::closeEvent(QCloseEvent * closeEvent) {closeEvent->accept();}
 void CommandDialog::returnToWorker() {}
 void CommandDialog::annulTask() {}
+
+unsigned CommandDialog::getQuantityDone()
+{
+    return m_command->getQuantity();
+}
+
 void CommandDialog::taskMachineChanged() {}
 
 void CommandDialog::showContinueToWorkButton()
@@ -279,7 +285,7 @@ void CommandDialog::leaveCurrentTask()
 {
     if (m_edit)
     {
-        ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), m_command->getQuantity()));
+        ifFalseShowDbError(m_db->leaveCurrentTask(m_command, MainWindow::getWorker(), getQuantityDone()));
         saveInvoice();
     }
 }
@@ -288,7 +294,7 @@ void CommandDialog::completeCurrentTask()
 {
     if (m_edit)
     {
-        ifFalseShowDbError(m_db->completeCurrentTask(m_command, m_command->getQuantity()));
+        ifFalseShowDbError(m_db->completeCurrentTask(m_command, getQuantityDone()));
         saveInvoice();
     }
 }
@@ -408,7 +414,7 @@ void CommandDialog::printCommand()
 
     //stavi prvo info onalogu..
     myCursor->insertText(PRINT_LINE);
-    myCursor->insertText("Brojnaloga: " + QString::number(m_command->getCommandNumber())
+    myCursor->insertText("Broj naloga: " + QString::number(m_command->getCommandNumber())
                          + "     Datum kreiranja: " + m_command->getDateTimeCreation().toString("dd.MM.yyyy hh:mm")
                          + "     Klijent: " + m_db->getCustomer(m_command->getIdCustomer())->getName() + "\n");
     myCursor->insertText(PRINT_LINE);
@@ -420,7 +426,7 @@ void CommandDialog::printCommand()
         myCursor->insertText(PRINT_LINE);
     }
 
-    myCursor->insertText("Kolicina: " + QString::number(m_command->getQuantity()) + "    Mera: " + "\n");
+    myCursor->insertText("Kolicina: " + QString::number(m_command->getQuantity()) + "    Mera: " + m_command->getUnitOfQuantityStr() + "\n");
     myCursor->insertText(PRINT_LINE);
 
     if (!m_command->getComercialistDescription().isEmpty())

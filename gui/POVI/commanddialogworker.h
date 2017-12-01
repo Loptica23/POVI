@@ -14,6 +14,7 @@ protected:
     virtual void acceptButtonClicked();
     virtual void rejectButtonClicked();
     virtual void backToDefaultScreen();
+    virtual unsigned getQuantityDone() override;
 
 private:
     void removeQuantityIfOrderingTask();

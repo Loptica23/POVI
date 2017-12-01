@@ -362,7 +362,7 @@ void CommandsViewIsInState::initializeTimeMachines()
     m_machines = m_db->getMachines();
     for (auto & machine : *m_machines)
     {
-        m_timeSimulator->addMachine(machine->getName(), machine->isVirtual());
+        m_timeSimulator->addMachine(machine->getName(), machine->isVirtual(), machine->getStartTime(), machine->getEndTime(), machine->getWorkingDays());
     }
 }
 
@@ -433,16 +433,11 @@ QString CommandsViewIsInState::getMachineName(unsigned machineId)
 QDateTime CommandsViewIsInState::getPredictionFromTimeSimulatorResult(CommandPtr command)
 {
     QDateTime result;
-    QDateTime currentDateTime = QDateTime::currentDateTime();
     if (m_resultMap != nullptr)
     {
         auto prediction = m_resultMap->find(command->getID());
         if (prediction != m_resultMap->end())
-            if (prediction->second != 0)
-            {
-                qint64 seconds = prediction->second * 60;
-                result = currentDateTime.addSecs(seconds);
-            }
+            result = prediction->second;
     }
     return result;
 }

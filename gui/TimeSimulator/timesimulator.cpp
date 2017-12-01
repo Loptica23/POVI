@@ -29,9 +29,9 @@ bool TimeSimulator::TimeSimulator::checkIsEverythingSetUp()
     return m_timeEngine->checkIsEverythingSetUp();
 }
 
-void TimeSimulator::TimeSimulator::addMachine(const QString & name, bool isVirtual)
+void TimeSimulator::TimeSimulator::addMachine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays)
 {
-    m_timeEngine->addMachine(name, isVirtual);
+    m_timeEngine->addMachine(name, isVirtual, startTime, endTime, workingDays);
 }
 
 void TimeSimulator::TimeSimulator::addCommand(unsigned id, unsigned commandNumber, unsigned priority)

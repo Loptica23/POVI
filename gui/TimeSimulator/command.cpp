@@ -6,8 +6,7 @@ TimeSimulator::Command::Command(unsigned id, unsigned commandNumber, unsigned pr
     m_id(id),
     m_commandNumber(commandNumber),
     m_priority(priority),
-    m_tasks(new TaskVtr()),
-    m_finishMoment(0)
+    m_tasks(new TaskVtr())
 {
 
 }
@@ -70,15 +69,15 @@ unsigned TimeSimulator::Command::getCompareMember() const
     return getId();
 }
 
-unsigned TimeSimulator::Command::getFinishMoment() const
+QDateTime TimeSimulator::Command::getFinishMoment() const
 {
     return m_finishMoment;
 }
 
-void TimeSimulator::Command::setFinishMoment(unsigned moment)
+void TimeSimulator::Command::setFinishMoment(const QDateTime& moment)
 {
     m_finishMoment = moment;
-    qDebug() << "Nalog sa brojem: " + QString::number(getCommandNumber()) + " je zavrsen u momentu " + QString::number(moment);
+    qDebug() << "Nalog sa brojem: " + QString::number(getCommandNumber()) + " je zavrsen u momentu " + moment.toString();
 }
 
 void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)

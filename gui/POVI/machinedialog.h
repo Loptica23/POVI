@@ -23,7 +23,7 @@ private slots:
     void on_buttonBox_accepted();
 
 private:
-    void initializeComboBox();
+    void initializeListView();
     void updateMachine();
     void createMachine();
 

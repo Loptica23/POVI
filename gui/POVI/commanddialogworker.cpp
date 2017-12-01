@@ -68,6 +68,21 @@ void CommandDialogWorker::backToDefaultScreen()
     }
 }
 
+unsigned CommandDialogWorker::getQuantityDone()
+{
+    unsigned doneQuantity;
+    if (ui->lineEdit->text().isEmpty())
+    {
+        doneQuantity = m_command->getQuantity();
+    }
+    else
+    {
+        doneQuantity = ui->lineEdit->text().toUInt();
+    }
+
+    return doneQuantity;
+}
+
 void CommandDialogWorker::removeQuantityIfOrderingTask()
 {
     if (MainWindow::getLogedUser()->getWorkPosition() == Employee::WorkPosition::Narucilac)

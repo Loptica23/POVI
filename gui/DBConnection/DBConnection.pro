@@ -32,7 +32,8 @@ SOURCES += dbconnection.cpp \
     task.cpp \
     tasktypes.cpp \
     machine.cpp \
-    invoice.cpp
+    invoice.cpp \
+    machinetasktype.cpp
 
 HEADERS += dbconnection.h\
         dbconnection_global.h \
@@ -44,7 +45,8 @@ HEADERS += dbconnection.h\
     tasktypes.h \
     machine.h \
     employee.h \
-    invoice.h
+    invoice.h \
+    machinetasktype.h
 
 
 INCLUDEPATH += $$PWD/../utils

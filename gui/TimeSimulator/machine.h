@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <QString>
+#include <QTime>
 #include "types.h"
 
 namespace TimeSimulator
@@ -10,15 +11,16 @@ namespace TimeSimulator
 class Machine
 {
 public:
-    Machine(const QString & name, bool isVirtual);
+    Machine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays);
     virtual ~Machine();
 
-    CommandVtrPtr decrementTime();
+    CommandVtrPtr decrementTime(const QDateTime& moment);
     bool checkIsFinished();
 
     const QString& getName() const;
     bool isVirtual() const;
     const QString & getCompareMember() const;
+    bool isMachineWorking(const QDateTime& moment) const;
 
     void putCommandIntoQueue(CommandPtr command);
     void putCurrentCommand(CommandPtr command);
@@ -34,6 +36,9 @@ private:
 
     QString m_name;
     bool m_isVirtual;
+    QTime m_startTime;
+    QTime m_endTime;
+    unsigned m_workingDays;
 
     CommandVtrPtr m_commandsInQueue;
     CommandPtr m_currentCommand;

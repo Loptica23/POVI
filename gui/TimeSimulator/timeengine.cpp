@@ -4,8 +4,6 @@
 #include "commandmanager.h"
 #include "machine.h"
 
-//ne sme biti staticka!!!
-unsigned TimeSimulator::TimeEngine::moment = 0;
 
 TimeSimulator::TimeEngine::TimeEngine(QObject* parent) :
     QObject(parent),
@@ -23,22 +21,18 @@ TimeSimulator::TimeEngine::~TimeEngine()
 
 void TimeSimulator::TimeEngine::run()
 {
-    //refactor: mozda ovde da isproveravas masine i naloge, da li su dati svi podaci i tako to.
-    moment = 1;
+    m_moment = QDateTime::currentDateTime();
+    auto timedOut = m_moment.addYears(1);
     while(m_running)
     {
-        qDebug() << "MOMENT: " + QString::number(moment);
-        m_running = m_machineManager->decrementTime(moment);
-        ++moment;
-        if (moment == 2147483647)
+        m_running = m_machineManager->decrementTime(m_moment);
+        m_moment = m_moment.addSecs(60);
+        if (m_moment == timedOut)
         {
             qDebug() << "Engine timed out!!";
             break;
         }
     }
-
-    //ovde moras da notifajerujes glavnu nit! vidi kako ces to!
-    //potrebna su ti dva flega a ne jedan, kako bi znao da li je nasilno zavrsen task ili je izvrsen normalno!
     emit sendResult();
 }
 
@@ -58,9 +52,9 @@ bool TimeSimulator::TimeEngine::checkIsEverythingSetUp()
     return result;
 }
 
-void TimeSimulator::TimeEngine::addMachine(const QString & name, bool isVirtual)
+void TimeSimulator::TimeEngine::addMachine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays)
 {
-    m_machineManager->addMachine(name, isVirtual);
+    m_machineManager->addMachine(name, isVirtual, startTime, endTime, workingDays);
 }
 
 void TimeSimulator::TimeEngine::addCommand(unsigned id, unsigned commandNumber, unsigned priority)

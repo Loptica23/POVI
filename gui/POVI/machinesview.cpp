@@ -47,12 +47,13 @@ void MachinesView::fillMachinesTable()
     auto i = 0;
     for (auto iter = m_machines->begin(); iter != m_machines->end(); ++i, ++iter)
     {
+        auto j = 0;
         MachinePtr machine = *iter;
         ui->tableWidget->insertRow(i);
-        insertName(machine, i, 0);
-        insertType(machine, i, 1);
-        insertDetailsButton(i, 2);
-        insertEditButton(i, 3);
+        insertName(machine, i, j++);
+        //insertType(machine, i, 1);
+        insertDetailsButton(i, j++);
+        insertEditButton(i, j++);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -63,9 +64,9 @@ void MachinesView::clearBuutonsAndInitializeHeaders()
     m_detailsButtons.clear();
 
     ui->tableWidget->setRowCount(0);
-    ui->tableWidget->setColumnCount(4);
     QStringList headers;
-    headers << "Naziv Masine" << "Tip zadatka" << "Detalji" << "Izmeni";
+    headers << "Naziv Masine" << /*"Tip zadatka" <<*/ "Detalji" << "Izmeni";
+    ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
 }
 
@@ -75,12 +76,14 @@ void MachinesView::insertName(MachinePtr machine, unsigned i, unsigned j)
     ui->tableWidget->setItem(i, j, item);
 }
 
+/*
 void MachinesView::insertType(MachinePtr machine, unsigned i, unsigned j)
 {
     QString type = m_tasktypes->getStringById(machine->getTaskTypeId());
     auto *item = new QTableWidgetItem(type);
     ui->tableWidget->setItem(i, j, item);
 }
+*/
 
 void MachinesView::insertDetailsButton(unsigned i, unsigned j)
 {
@@ -95,6 +98,7 @@ void MachinesView::insertEditButton(unsigned i, unsigned j)
 {
     QPushButton* btn_edit = new QPushButton();
     btn_edit->setText("Izmeni");
+    btn_edit->setEnabled(false);
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
     m_editButtons.push_back(btn_edit);
     connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));

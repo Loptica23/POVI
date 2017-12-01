@@ -16,13 +16,13 @@ TimeSimulator::MachineManager::~MachineManager()
 
 }
 
-bool TimeSimulator::MachineManager::decrementTime(unsigned moment)
+bool TimeSimulator::MachineManager::decrementTime(const QDateTime& moment)
 {
     bool managerFinised = true;
     CommandVtrPtr commands(new CommandVtr());
     for (auto & machine : *m_machines)
     {
-        auto temp = machine->decrementTime();
+        auto temp = machine->decrementTime(moment);
         commands->insert(commands->end(), temp->begin(), temp->end());
     }
 
@@ -30,6 +30,7 @@ bool TimeSimulator::MachineManager::decrementTime(unsigned moment)
     {
         if (command != nullptr)
         {
+            qDebug() << moment.toString() << "  ----  Prelazi sa masine";
             QString machineName = command->getNextTaskMachine();
             if (!machineName.isEmpty())
             {
@@ -55,7 +56,7 @@ bool TimeSimulator::MachineManager::decrementTime(unsigned moment)
     return !managerFinised;
 }
 
-void TimeSimulator::MachineManager::addMachine(const QString &name, bool isVirtual)
+void TimeSimulator::MachineManager::addMachine(const QString &name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays)
 {
     if (isMachineExists(name))
     {
@@ -63,7 +64,7 @@ void TimeSimulator::MachineManager::addMachine(const QString &name, bool isVirtu
     }
     else
     {
-        MachinePtr machine(new Machine(name, isVirtual));
+        MachinePtr machine(new Machine(name, isVirtual, startTime, endTime, workingDays));
         m_machines->push_back(machine);
     }
 }

@@ -70,6 +70,7 @@ void CommandDialogDesigner::acceptButtonClicked()
 void CommandDialogDesigner::rejectButtonClicked()
 {
     leaveCurrentTask();
+    updateCommand();
 }
 
 void CommandDialogDesigner::designerDescriptionChanged()

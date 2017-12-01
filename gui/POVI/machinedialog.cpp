@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QPushButton>
+#include <QListWidgetItem>
 #include "machinedialog.h"
 #include "ui_machinedialog.h"
 #include "mainwindow.h"
@@ -13,7 +14,6 @@ MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, Refreshable *r
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
-    initializeComboBox();
 }
 
 MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr machine, bool edit, Refreshable *refreshable) :
@@ -29,11 +29,12 @@ MachineDialog::MachineDialog(QWidget *parent, DBConnectionPtr db, MachinePtr mac
     setAttribute(Qt::WA_DeleteOnClose);
 
     ui->Name->setText(machine->getName());
-    initializeComboBox();
-    auto taskTypes = m_db->getTaskTypes();
-    ui->comboBox->setCurrentText(taskTypes->getStringById(m_machine->getTaskTypeId()));
-    ui->comboBox->setEnabled(false);
-
+    //auto taskTypes = m_db->getTaskTypes();
+    //ui->comboBox->setCurrentText(taskTypes->getStringById(m_machine->getTaskTypeId()));
+    ui->lineEdit->setText(machine->getStartTime().toString());
+    ui->lineEdit_2->setText(machine->getEndTime().toString());
+    ui->lineEdit_3->setText(QString::number(machine->getWorkingDays()));
+    initializeListView();
     if (!m_edit)
     {
         ui->Name->setEnabled(false);
@@ -46,12 +47,15 @@ MachineDialog::~MachineDialog()
     delete ui;
 }
 
-void MachineDialog::initializeComboBox()
+void MachineDialog::initializeListView()
 {
-    auto taskTypes = m_db->getTaskTypes()->getTypes();
-    for (auto type = taskTypes->begin(); type != taskTypes->end(); ++type)
+    auto taskTypes = m_db->getTaskTypes();
+    auto taskTypesIds = m_db->getTasTypesIdsForMachine(m_machine);
+    for (const auto taskTypeId : taskTypesIds)
     {
-        ui->comboBox->addItem((*type)->getName());
+        QListWidgetItem *itm = new QListWidgetItem();
+        itm->setText(taskTypes->getTaskTypeById(taskTypeId)->getName());
+        ui->listWidget->addItem(itm);
     }
 }
 
@@ -87,8 +91,7 @@ void MachineDialog::updateMachine()
 
 void MachineDialog::createMachine()
 {
-    auto taskTypes = m_db->getTaskTypes();
-    m_machine.reset(new Machine(0, taskTypes->getTypeIdByString(ui->comboBox->currentText())));
+    m_machine.reset(new Machine(0));
     m_machine->setName(ui->Name->text());
 
     if (!m_db->createMachine(m_machine))

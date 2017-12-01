@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <QDateTime>
 #include "timesimulator_global.h"
 #include "types.h"
 
@@ -22,9 +23,9 @@ public:
     unsigned getId() const;
     unsigned getCommandNumber() const;
     unsigned getCompareMember() const;
-    unsigned getFinishMoment() const;
+    QDateTime getFinishMoment() const;
 
-    void setFinishMoment(unsigned moment);
+    void setFinishMoment(const QDateTime& moment);
     void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
 
 private:
@@ -33,7 +34,7 @@ private:
     unsigned m_id;
     unsigned m_commandNumber;
     unsigned m_priority;
-    unsigned m_finishMoment;
+    QDateTime m_finishMoment;
     TaskVtrPtr m_tasks;
     TaskPtr m_currentTask;
 };

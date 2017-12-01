@@ -8,9 +8,8 @@ Machine::Machine():
     resetChangeTracking();
 }
 
-Machine::Machine(unsigned id, unsigned taskTypeId):
-    m_id(id),
-    m_taskTypeId(taskTypeId)
+Machine::Machine(unsigned id):
+    m_id(id)
 {
     resetChangeTracking();
 }
@@ -26,11 +25,6 @@ unsigned Machine::getId() const
     return m_id;
 }
 
-unsigned Machine::getTaskTypeId() const
-{
-    return m_taskTypeId;
-}
-
 const QString& Machine::getName() const
 {
     return m_name;
@@ -39,6 +33,21 @@ const QString& Machine::getName() const
 bool Machine::isVirtual() const
 {
     return m_isVirtual;
+}
+
+QTime Machine::getStartTime() const
+{
+    return m_startTime;
+}
+
+QTime Machine::getEndTime() const
+{
+    return m_endTime;
+}
+
+unsigned Machine::getWorkingDays() const
+{
+    return m_workingDays;
 }
 
 //seters
@@ -60,12 +69,39 @@ void Machine::setVirtuality(bool isVirtual)
     }
 }
 
+void Machine::setStartTime(const QTime &time)
+{
+    if (m_startTime != time)
+    {
+        m_startTimeChanged = true;
+        m_startTime = time;
+    }
+}
+
+void Machine::setEndTime(const QTime &time)
+{
+    if (m_endTime != time)
+    {
+        m_endTimeChanged = true;
+        m_endTime = time;
+    }
+}
+
+void Machine::setWorkingDays(unsigned workingDays)
+{
+    if (m_workingDays != workingDays)
+    {
+        m_workingDaysChanged = true;
+        m_workingDays = workingDays;
+    }
+}
+
 QString Machine::statemantForCreating() const
 {
+    //TODO nije up to date
     QString stm;
     stm = "insert into masina (Naziv, TipoviZadatka_idTipoviZadatka) values (";
     stm += "'" + getName() + "', ";
-    stm += QString::number(getTaskTypeId()) + ", ";
     stm.chop(2);
     stm += ");";
     qDebug() << stm;
@@ -74,6 +110,7 @@ QString Machine::statemantForCreating() const
 
 QString Machine::statemantForUpdating() const
 {
+    //TODO nije up to date
     QString stm;
     if (isModified())
     {
@@ -90,12 +127,21 @@ QString Machine::statemantForUpdating() const
 
 bool Machine::isModified() const
 {
-    return (m_nameChanged || m_isVirtualChanged);
+    return (m_nameChanged ||
+            m_isVirtualChanged ||
+            m_startTimeChanged ||
+            m_endTimeChanged ||
+            m_workingDaysChanged
+            );
 }
 
 void Machine::resetChangeTracking()
 {
     m_nameChanged = false;
+    m_isVirtualChanged = false;
+    m_startTimeChanged = false;
+    m_endTimeChanged = false;
+    m_workingDaysChanged = false;
 }
 
 MachinePtrVtr Machine::createMachineFromQuery(QSqlQuery& query)
@@ -103,9 +149,13 @@ MachinePtrVtr Machine::createMachineFromQuery(QSqlQuery& query)
     MachinePtrVtr machines(new MachineVtr());
     while (query.next())
     {
-        MachinePtr machine(new Machine(query.value("idMasina").toUInt(), query.value("TipoviZadatka_idTipoviZadatka").toUInt()));
+        MachinePtr machine(new Machine(query.value("idMasina").toUInt()));
         machine->setName(query.value("Naziv").toString());
         machine->setVirtuality(query.value("Virtuelna").toBool());
+        machine->setStartTime(query.value("VremePocetka").toTime());
+        machine->setEndTime(query.value("VremeKraja").toTime());
+        machine->setWorkingDays(query.value("RadniDani").toUInt());
+        machine->resetChangeTracking();
         machines->push_back(machine);
     }
     return machines;

@@ -30,7 +30,7 @@ private:
     void fillMachinesTable();
     void clearBuutonsAndInitializeHeaders();
     void insertName(MachinePtr machine, unsigned i, unsigned j);
-    void insertType(MachinePtr machine, unsigned i, unsigned j);
+    //void insertType(MachinePtr machine, unsigned i, unsigned j);
     void insertDetailsButton(unsigned i, unsigned j);
     void insertEditButton(unsigned i, unsigned j);
 

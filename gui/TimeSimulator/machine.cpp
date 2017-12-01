@@ -2,9 +2,12 @@
 #include "machine.h"
 #include "command.h"
 
-TimeSimulator::Machine::Machine(const QString &name, bool isVirtual):
+TimeSimulator::Machine::Machine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays):
     m_name(name),
     m_isVirtual(isVirtual),
+    m_startTime(startTime),
+    m_endTime(endTime),
+    m_workingDays(workingDays),
     m_currentCommand(nullptr),
     m_commandsInQueue(new CommandVtr())
 {
@@ -16,19 +19,22 @@ TimeSimulator::Machine::~Machine()
 
 }
 
-TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTime()
+TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTime(const QDateTime &moment)
 {
     CommandVtrPtr result (new CommandVtr());
-    if (m_isVirtual)
+    if (isMachineWorking(moment))
     {
-        result = decrementTimeForVirtualMachine();
-    }
-    else
-    {
-        CommandPtr command = decrementTimeForNormalMachine();
-        if (command)
+        if (m_isVirtual)
         {
-            result->push_back(command);
+            result = decrementTimeForVirtualMachine();
+        }
+        else
+        {
+            CommandPtr command = decrementTimeForNormalMachine();
+            if (command)
+            {
+                result->push_back(command);
+            }
         }
     }
     return result;
@@ -54,6 +60,22 @@ bool TimeSimulator::Machine::isVirtual() const
 const QString & TimeSimulator::Machine::getCompareMember() const
 {
     return getName();
+}
+
+bool TimeSimulator::Machine::isMachineWorking(const QDateTime &moment) const
+{
+    bool result = true;
+
+    if ((m_startTime != m_endTime) && !((moment.time() < m_endTime) && (moment.time() > m_startTime)))
+    {
+        result = false;
+    }
+    else if (moment.date().dayOfWeek() > (int)m_workingDays)
+    {
+        result = false;
+    }
+
+    return result;
 }
 
 void TimeSimulator::Machine::lockNLoadMachine()

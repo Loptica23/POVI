@@ -15,7 +15,7 @@ public:
     void execute();
     bool checkIsEverythingSetUp();
 
-    void addMachine(const QString & name, bool isVirtual);
+    void addMachine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays);
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
     void addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state);
 
