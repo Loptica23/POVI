@@ -27,12 +27,12 @@ void TimeSimulator::CommandManager::addCommand(unsigned id, unsigned commandNumb
     }
 }
 
-void TimeSimulator::CommandManager::addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state)
+void TimeSimulator::CommandManager::addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism)
 {
     if (isCommandExists(idCommand))
     {
         CommandPtr command = getCommand(idCommand);
-        command->addTask(machine, serialNumber, prediction, state);
+        command->addTask(machine, serialNumber, prediction, state, taskType, taskTypeparallelism);
     }
     else
     {

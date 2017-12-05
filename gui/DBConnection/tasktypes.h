@@ -16,17 +16,19 @@ typedef std::shared_ptr<TaskTypes> TaskTypesPtr;
 class DBCONNECTIONSHARED_EXPORT TaskType
 {
 public:
-    TaskType(int id, QString name, bool isVirtual);
+    TaskType(int id, QString name, bool isVirtual, unsigned workerNumber);
     virtual ~TaskType();
 
     unsigned getId() const;
     QString getName() const;
     bool isVirtual() const;
+    unsigned getWorkersNumber() const;
 
 private:
-    unsigned m_id;
-    QString m_name;
-    bool m_isVirtual;
+    unsigned        m_id;
+    QString         m_name;
+    bool            m_isVirtual;
+    unsigned        m_workersNumber;
 };
 
 class DBCONNECTIONSHARED_EXPORT TaskTypes

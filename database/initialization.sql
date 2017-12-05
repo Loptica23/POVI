@@ -22,30 +22,30 @@ insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu
 insert into Radnik (Ime, Prezime, Sifra, KorisnickoIme, Pozicija, PristupSistemu) values ('RadnikProizvodnje9', 'RadnikProizvodnje9', '0000', 'radnikproizvodnje9', 'pro', true);
 
 #Tipovi zadatka
-insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Lastis', 			False); #1
-insert into TipoviZadatka (Naziv, Faktura) values ('Snovanje', 					False);	#2
-insert into TipoviZadatka (Naziv, Faktura) values ('Tkanje Lastis', 			True);	#3
-insert into TipoviZadatka (Naziv, Faktura) values ('Peglanje Lastis', 			False);	#4
-insert into TipoviZadatka (Naziv, Faktura) values ('Namotavanje', 				False);	#5
-insert into TipoviZadatka (Naziv, Faktura) values ('Kontrola Pakovanje', 		False);	#6
-insert into TipoviZadatka (Naziv, Faktura) values ('Faktura', 					False);	#7
-insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Tkanje', 			False);	#8
-insert into TipoviZadatka (Naziv, Faktura) values ('Magacin Zaduzivanje', 		False);	#9
-insert into TipoviZadatka (Naziv, Faktura) values ('Tkacnica', 					False);	#10
-insert into TipoviZadatka (Naziv, Faktura) values ('Magacin Razduzivanje', 		True);	#11
-insert into TipoviZadatka (Naziv, Faktura) values ('Peglanje Tkanje', 			False);	#12
-insert into TipoviZadatka (Naziv, Faktura) values ('Secenje-Savijanje', 		False);	#13
-insert into TipoviZadatka (Naziv, Faktura) values ('Lepljenje', 				True);	#14
-insert into TipoviZadatka (Naziv, Faktura) values ('Laser', 					False);	#15
-insert into TipoviZadatka (Naziv, Faktura) values ('Endlanje', 					False);	#16
-insert into TipoviZadatka (Naziv, Faktura) values ('Sivenje', 					False);	#17
-insert into TipoviZadatka (Naziv, Faktura) values ('Dizajn Stampa', 			False);	#18
-insert into TipoviZadatka (Naziv, Faktura) values ('Stampa', 					True);	#19
-insert into TipoviZadatka (Naziv, Faktura) values ('Transfer', 					False);	#20
-insert into TipoviZadatka (Naziv, Faktura) values ('Blindruk', 					False);	#21
-insert into TipoviZadatka (Naziv, Faktura) values ('Narucivanje materijalia', 	False);	#22
-insert into TipoviZadatka (Naziv, Faktura) values ('Motanje', 					False);	#23
-insert into TipoviZadatka (Naziv, Faktura) values ('Navezivanje', 				False);	#24
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Dizajn Lastis', 			False, 1); 	#1
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Snovanje', 				False, 1);	#2
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Tkanje Lastis', 			True , 1);	#3
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Peglanje Lastis', 			False, 1);	#4
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Namotavanje', 				False, 1);	#5
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Kontrola Pakovanje', 		False, 1);	#6
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Faktura', 					False, 1);	#7
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Dizajn Tkanje', 			False, 1);	#8
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Magacin Zaduzivanje', 		False, 1);	#9
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Tkacnica', 				False, 1);	#10
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Magacin Razduzivanje', 	True , 1);	#11
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Peglanje Tkanje', 			False, 1);	#12
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Secenje-Savijanje', 		False, 1);	#13
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Lepljenje', 				True , 1);	#14
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Laser', 					False, 1);	#15
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Endlanje', 				False, 1);	#16
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Sivenje', 					False, 1);	#17
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Dizajn Stampa', 			False, 1);	#18
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Stampa', 					True , 1);	#19
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Transfer', 				False, 1);	#20
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Blindruk', 				False, 1);	#21
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Narucivanje materijalia', 	False, 1);	#22
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Motanje', 					False, 1);	#23
+insert into TipoviZadatka (Naziv, Faktura, BrojRadnika) values ('Navezivanje', 				False, 1);	#24
 
 #Masine
 insert into Masina (Naziv, Virtuelna, VremePocetka, VremeKraja, RadniDani) values ('Virtuelna', True,  '07:00:00', '15:00:00', 6);	#1

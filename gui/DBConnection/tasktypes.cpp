@@ -4,12 +4,15 @@
 //--------------------------------------------------------------
 //TaskType
 
-TaskType::TaskType(int id, QString name, bool isVirtual)
+TaskType::TaskType(int id, QString name, bool isVirtual, unsigned workerNumber)
+    : m_id(id)
+    , m_name(name)
+    , m_isVirtual(isVirtual)
+    , m_workersNumber(workerNumber)
 {
-    m_id = id;
-    m_name = name;
-    m_isVirtual = isVirtual;
+
 }
+
 TaskType::~TaskType()
 {
 
@@ -30,6 +33,11 @@ bool TaskType::isVirtual() const
     return m_isVirtual;
 }
 
+unsigned TaskType::getWorkersNumber() const
+{
+    return m_workersNumber;
+}
+
 //--------------------------------------------------------------
 //TaskTypes
 TaskTypes::TaskTypes(QSqlQuery query):
@@ -38,7 +46,7 @@ TaskTypes::TaskTypes(QSqlQuery query):
     while (query.next())
     {
         TaskTypePtr taskType;
-        taskType.reset(new TaskType(query.value("idTipoviZadatka").toUInt(), query.value("Naziv").toString(), query.value("Faktura").toBool()));
+        taskType.reset(new TaskType(query.value("idTipoviZadatka").toUInt(), query.value("Naziv").toString(), query.value("Faktura").toBool(), query.value("BrojRadnika").toUInt()));
         m_types->push_back(taskType);
     }
 }

@@ -80,9 +80,9 @@ void TimeSimulator::Command::setFinishMoment(const QDateTime& moment)
     qDebug() << "Nalog sa brojem: " + QString::number(getCommandNumber()) + " je zavrsen u momentu " + moment.toString();
 }
 
-void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state)
+void TimeSimulator::Command::addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism)
 {
-    TaskPtr task(new Task(machine, serilaNumber, prediction, state));
+    TaskPtr task(new Task(machine, serilaNumber, prediction, state, taskType, taskTypeparallelism));
     if ((task->getState() == TaskState::New) || (task->getState() == TaskState::Waiting) || (task->getState() == TaskState::InProgress))
     {
         m_tasks->push_back(task);

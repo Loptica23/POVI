@@ -26,7 +26,7 @@ public:
     QDateTime getFinishMoment() const;
 
     void setFinishMoment(const QDateTime& moment);
-    void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state);
+    void addTask(const QString & machine, unsigned serilaNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism);
 
 private:
     bool changeCurrentTask();

@@ -13,7 +13,7 @@ public:
     virtual ~CommandManager();
 
     void addCommand(unsigned id, unsigned commandNumber, unsigned priority);
-    void addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state);
+    void addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism);
     bool isCommandExists(unsigned id);
     CommandPtr getCommand(unsigned id);
     CommandVtrPtr checkIsEverythingSetUp();

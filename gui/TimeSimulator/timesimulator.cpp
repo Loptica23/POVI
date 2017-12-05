@@ -39,9 +39,9 @@ void TimeSimulator::TimeSimulator::addCommand(unsigned id, unsigned commandNumbe
     m_timeEngine->addCommand(id, commandNumber, priority);
 }
 
-void TimeSimulator::TimeSimulator::addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state)
+void TimeSimulator::TimeSimulator::addTask(const QString & machine, unsigned idCommand, unsigned serilaNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism)
 {
-    m_timeEngine->addTask(machine, idCommand, serilaNumber, prediction, state);
+    m_timeEngine->addTask(machine, idCommand, serilaNumber, prediction, state, taskType, taskTypeparallelism);
 }
 
 

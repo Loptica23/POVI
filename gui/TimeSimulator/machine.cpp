@@ -1,6 +1,7 @@
 #include <QDebug>
 #include "machine.h"
 #include "command.h"
+#include "task.h"
 
 TimeSimulator::Machine::Machine(const QString & name, bool isVirtual, QTime startTime, QTime endTime, unsigned workingDays):
     m_name(name),
@@ -8,8 +9,8 @@ TimeSimulator::Machine::Machine(const QString & name, bool isVirtual, QTime star
     m_startTime(startTime),
     m_endTime(endTime),
     m_workingDays(workingDays),
-    m_currentCommand(nullptr),
-    m_commandsInQueue(new CommandVtr())
+    m_commandsInQueue(new CommandVtr()),
+    m_commandsInProgress(new CommandVtr())
 {
 
 }
@@ -24,17 +25,21 @@ TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTime(const QDateTi
     CommandVtrPtr result (new CommandVtr());
     if (isMachineWorking(moment))
     {
-        if (m_isVirtual)
+        for (auto command : *m_commandsInProgress)
         {
-            result = decrementTimeForVirtualMachine();
-        }
-        else
-        {
-            CommandPtr command = decrementTimeForNormalMachine();
-            if (command)
+            if (!command->decrementTimeOfCurrentTask())
             {
+                qDebug() << "Zavrsen zadatak u nalogu: " << QString::number(command->getCommandNumber());
                 result->push_back(command);
             }
+        }
+
+        for (auto command : *result)
+        {
+            m_commandsInProgress->erase(std::remove_if(m_commandsInProgress->begin(), m_commandsInProgress->end(),
+               [command](const auto param) {
+                                    return command->getCommandNumber() == param->getCommandNumber();
+                                }), m_commandsInProgress->end());
         }
     }
     return result;
@@ -43,7 +48,7 @@ TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTime(const QDateTi
 bool TimeSimulator::Machine::checkIsFinished()
 {
     bool result = false;
-    if (!m_currentCommand && m_commandsInQueue->empty()) result = true;
+    if (m_commandsInProgress->empty() && m_commandsInQueue->empty()) result = true;
     return  result;
 }
 
@@ -80,78 +85,57 @@ bool TimeSimulator::Machine::isMachineWorking(const QDateTime &moment) const
 
 void TimeSimulator::Machine::lockNLoadMachine()
 {
-    if (!m_isVirtual)
+    sortCommandsByPriority();
+    auto commands = getWaitingCommandsWhichShouldBegin();
+    m_commandsInProgress->insert(m_commandsInProgress->begin(), commands->begin(), commands->end());
+    for (auto command : *commands)
     {
-        sortCommandsByPriority();
-        if (m_currentCommand == nullptr)
-        {
-            m_currentCommand = getFirstFromQueue();
-        }
+        m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(),
+           [command](const auto param) {
+                                return command->getCommandNumber() == param->getCommandNumber();
+                            }), m_commandsInQueue->end());
     }
-}
-
-TimeSimulator::CommandVtrPtr TimeSimulator::Machine::decrementTimeForVirtualMachine()
-{
-    CommandVtrPtr result (new CommandVtr());
-    m_commandsInQueue->erase(std::remove_if(m_commandsInQueue->begin(), m_commandsInQueue->end(), [&](CommandPtr & command)
-    {
-        if (!command->decrementTimeOfCurrentTask())
-        {
-            qDebug() << "Zavrsen zadatak u nalogu: " << QString::number(command->getCommandNumber());
-            result->push_back(command);
-            return true;
-        }
-        return false;
-    }), m_commandsInQueue->end());
-    return result;
-}
-
-TimeSimulator::CommandPtr TimeSimulator::Machine::decrementTimeForNormalMachine()
-{
-    //refactor
-    CommandPtr command = nullptr;
-    if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
-    {
-        command = m_currentCommand;
-        qDebug() << "Zavrsen zadatak u nalogu: " << QString::number(command->getCommandNumber());
-        m_currentCommand = getFirstFromQueue();
-        if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
-        {
-            command = m_currentCommand;
-            qDebug() << "Zavrsen zadatak u nalogu: " << QString::number(command->getCommandNumber());
-            m_currentCommand = getFirstFromQueue();
-        }
-    }
-
-    if (!m_currentCommand)
-    {
-        m_currentCommand = getFirstFromQueue();
-        if (m_currentCommand && !m_currentCommand->decrementTimeOfCurrentTask())
-        {
-            command = m_currentCommand;
-            qDebug() << "Zavrsen zadatak u nalogu: " << QString::number(command->getCommandNumber());
-            m_currentCommand = getFirstFromQueue();
-        }
-    }
-
-    return command;
-}
-
-TimeSimulator::CommandPtr TimeSimulator::Machine::getFirstFromQueue()
-{
-    CommandPtr command = nullptr;
-    if (m_commandsInQueue && !m_commandsInQueue->empty())
-    {
-        command = m_commandsInQueue->at(0);
-        m_commandsInQueue->erase(m_commandsInQueue->begin());
-        qDebug() << "Nalog sa brojem: " + QString::number(command->getCommandNumber()) + " je poceo da se izvrsava na masini " + getName();
-    }
-    return command;
 }
 
 void TimeSimulator::Machine::sortCommandsByPriority()
 {
     std::sort(m_commandsInQueue->begin(), m_commandsInQueue->end(), compareFunction);
+}
+
+TimeSimulator::CommandVtrPtr TimeSimulator::Machine::getWaitingCommandsWhichShouldBegin()
+{
+    CommandVtrPtr commands(new CommandVtr());
+    if (m_isVirtual)
+    {
+        for (auto command : *m_commandsInQueue)
+        {
+            auto taskTypeId = command->getCurrentTask()->getTaskTypeId();
+            auto numberOfCommandInProgressWithSameTaskTypeId = 0;
+            for (auto inProgressCommand : *m_commandsInProgress)
+            {
+                if (inProgressCommand->getCurrentTask()->getTaskTypeId() == taskTypeId)
+                {
+                    numberOfCommandInProgressWithSameTaskTypeId++;
+                }
+            }
+            if (numberOfCommandInProgressWithSameTaskTypeId < command->getCurrentTask()->getParallelism())
+            {
+                commands->push_back(command);
+            }
+        }
+    }
+    else
+    {
+        if (m_commandsInProgress->empty())
+        {
+            if (!m_commandsInQueue->empty())
+            {
+                commands->push_back(m_commandsInQueue->at(0));
+            }
+        }
+    }
+
+    return commands;
 }
 
 bool TimeSimulator::Machine::compareFunction(CommandPtr command1, CommandPtr command2)
@@ -166,18 +150,9 @@ void TimeSimulator::Machine::putCommandIntoQueue(CommandPtr command)
     sortCommandsByPriority();
 }
 
-void TimeSimulator::Machine::putCurrentCommand(CommandPtr command)
+void TimeSimulator::Machine::putCommandIntoProgress(CommandPtr command)
 {
-    if (m_isVirtual)
-    {
-        qDebug() << "Nalog sa brojem: " + QString::number(command->getCommandNumber()) + " je dodat u red na masini " + getName();
-        putCommandIntoQueue(command);
-    }
-    else
-    {
-        qDebug() << "Nalog sa brojem :" + QString::number(command->getCommandNumber()) + " je postavljen kao trenutni zadatak na masini " + getName();
-        m_currentCommand = command;
-    }
+    m_commandsInProgress->push_back(command);
 }
 
 void TimeSimulator::Machine::eliminateCommandFromCalculation(CommandPtr command)
@@ -185,6 +160,7 @@ void TimeSimulator::Machine::eliminateCommandFromCalculation(CommandPtr command)
     auto it = std::find(m_commandsInQueue->begin(), m_commandsInQueue->end(), command);
     if(it != m_commandsInQueue->end())
         m_commandsInQueue->erase(it);
-    if (m_currentCommand == command)
-        m_currentCommand = nullptr;
+    it = std::find(m_commandsInProgress->begin(), m_commandsInProgress->end(), command);
+    if(it != m_commandsInProgress->end())
+        m_commandsInProgress->erase(it);
 }

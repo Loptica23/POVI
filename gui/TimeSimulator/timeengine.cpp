@@ -62,16 +62,16 @@ void TimeSimulator::TimeEngine::addCommand(unsigned id, unsigned commandNumber, 
     m_commandManager->addCommand(id,commandNumber, priority);
 }
 
-void TimeSimulator::TimeEngine::addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state)
+void TimeSimulator::TimeEngine::addTask(const QString & machine, unsigned idCommand, unsigned serialNumber, unsigned prediction, TaskState state, unsigned taskType, unsigned taskTypeparallelism)
 {
     if (m_machineManager->isMachineExists(machine))
     {
-        m_commandManager->addTask(machine, idCommand, serialNumber, prediction, state);
+        m_commandManager->addTask(machine, idCommand, serialNumber, prediction, state, taskType, taskTypeparallelism);
         CommandPtr command = m_commandManager->getCommand(idCommand);
         switch(state)
         {
         case TaskState::InProgress:
-            m_machineManager->getMachine(machine)->putCurrentCommand(command);
+            m_machineManager->getMachine(machine)->putCommandIntoProgress(command);
             break;
         case TaskState::Waiting:
             m_machineManager->getMachine(machine)->putCommandIntoQueue(command);

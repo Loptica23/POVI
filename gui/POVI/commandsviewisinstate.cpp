@@ -386,6 +386,9 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
         TaskPtr task = *iter;
         unsigned prediction = task->getPrediction();
         auto msec = task->getStartTime().msecsTo(QDateTime::currentDateTime());
+        auto taskType = task->getTaskTypeId();
+        auto taskTypes = m_db->getTaskTypes();
+        auto taskTypeparallelism = taskTypes->getTaskTypeById(taskType)->getWorkersNumber();
         unsigned minutes = 0;
         QString machineName = getMachineName(task->getMachineId());
         TimeSimulator::TaskState state;
@@ -415,7 +418,7 @@ void CommandsViewIsInState::initializeTasksForCommand(CommandPtr command)
             state = TimeSimulator::TaskState::Waiting;
             break;
         }
-        m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), prediction, state);
+        m_timeSimulator->addTask(machineName, command->getID(), task->getSerialNumber(), prediction, state, taskType, taskTypeparallelism);
     }
 }
 

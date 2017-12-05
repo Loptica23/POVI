@@ -1,11 +1,13 @@
 #include <QDebug>
 #include "task.h"
 
-TimeSimulator::Task::Task(const QString & machine, unsigned serialNumber, unsigned prediction, TaskState state):
+TimeSimulator::Task::Task(const QString & machine, unsigned serialNumber, unsigned prediction, TaskState state, unsigned taskTypeId, unsigned taskTypeparallelism):
     m_machine(machine),
     m_serialNumber(serialNumber),
     m_prediction(prediction),
-    m_state(state)
+    m_state(state),
+    m_taskTypeId(taskTypeId),
+    m_taskTypeparallelism(taskTypeparallelism)
 {
 
 }
@@ -30,9 +32,19 @@ unsigned TimeSimulator::Task::getSerialNumber() const
     return m_serialNumber;
 }
 
+unsigned TimeSimulator::Task::getTaskTypeId() const
+{
+    return m_taskTypeId;
+}
+
 TimeSimulator::TaskState TimeSimulator::Task::getState() const
 {
     return m_state;
+}
+
+unsigned TimeSimulator::Task::getParallelism() const
+{
+    return m_taskTypeparallelism;
 }
 
 void TimeSimulator::Task::setState(const TaskState & state)
