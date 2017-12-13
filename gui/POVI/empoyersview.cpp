@@ -121,7 +121,7 @@ void EmpoyersView::insertResetPWDButton(unsigned i, unsigned j)
     }
 }
 
-void EmpoyersView::paintEvent(QPaintEvent *event)
+void EmpoyersView::paintEvent(QPaintEvent *)
 {
 
 }

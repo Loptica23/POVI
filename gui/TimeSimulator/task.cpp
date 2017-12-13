@@ -69,6 +69,11 @@ bool TimeSimulator::Task::checkIsEverythingSetUp()
         qDebug() << "zadatak nije lepo inicijalizovan predikcija: " << m_serialNumber;
         return false;
     }
+    if (m_taskTypeparallelism < 1)
+    {
+        qDebug() << "Broj radnika nije dobro postavljen! " << m_serialNumber;
+        return false;
+    }
     return true;
 }
 

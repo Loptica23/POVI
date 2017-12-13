@@ -18,6 +18,9 @@ public:
     unsigned getMachineId() const;
     unsigned getTaskTypeId() const;
 
+    QString statemantForCreating() const;
+    QString statemantForDeleting() const;
+
     static MachineTaskTypePtrVtr createMachineTaskTypeFromQuery(QSqlQuery& query);
 
 private:

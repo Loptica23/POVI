@@ -78,7 +78,7 @@ bool WorkerView::isThereCommandWhichWaitingOnTask(unsigned id)
     return false;
 }
 
-void WorkerView::paintEvent(QPaintEvent *event)
+void WorkerView::paintEvent(QPaintEvent *)
 {
     ui->tableWidget->setColumnWidth(0, ui->tableWidget->width());
 }

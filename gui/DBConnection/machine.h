@@ -35,6 +35,7 @@ public:
 
     QString statemantForCreating() const;
     QString statemantForUpdating() const;
+    QString statemantForDeleting() const;
 
     bool isModified() const;
     void resetChangeTracking();

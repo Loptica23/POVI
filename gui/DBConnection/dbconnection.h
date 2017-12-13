@@ -94,10 +94,13 @@ public:
     virtual MachinePtr getMachine(unsigned id) = 0;
     virtual bool createMachine(MachinePtr machine) = 0;
     virtual bool updateMachine(MachinePtr machine) = 0;
+    virtual bool deleteMachine(MachinePtr machine) = 0;
 
     virtual MachineTaskTypePtrVtr getMachineTaskTypes() = 0;
     virtual std::vector<unsigned> getTasTypesIdsForMachine(MachinePtr machine) = 0;
     virtual std::vector<unsigned> getMachineIdsForTaskType(unsigned taskTypeId) = 0;
+    virtual bool createMachineTaskType(MachinePtr, unsigned) = 0;
+    virtual bool deleteMahineTaskType(MachinePtr, unsigned) = 0;
 
     virtual void setDatabaseConnectionName(const QString& databaseConnectionName);
     virtual void setHost(const QString& host);

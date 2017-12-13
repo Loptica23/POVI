@@ -2,6 +2,7 @@
 #include "ui_machinesview.h"
 #include "tasktypes.h"
 #include "machinedialog.h"
+#include <QMessageBox>
 
 MachinesView::MachinesView(QWidget *parent, DBConnectionPtr db) :
     QWidget(parent),
@@ -54,6 +55,7 @@ void MachinesView::fillMachinesTable()
         //insertType(machine, i, 1);
         insertDetailsButton(i, j++);
         insertEditButton(i, j++);
+        insertDeleteButton(i, j++);
     }
     ui->tableWidget->resizeColumnsToContents();
 }
@@ -62,10 +64,11 @@ void MachinesView::clearBuutonsAndInitializeHeaders()
 {
     m_editButtons.clear();
     m_detailsButtons.clear();
+    m_deleteButtons.clear();
 
     ui->tableWidget->setRowCount(0);
     QStringList headers;
-    headers << "Naziv Masine" << /*"Tip zadatka" <<*/ "Detalji" << "Izmeni";
+    headers << "Naziv Masine" << "Detalji" << "Izmeni" << "Obrisi";
     ui->tableWidget->setColumnCount(headers.size());
     ui->tableWidget->setHorizontalHeaderLabels(headers);
 }
@@ -98,10 +101,18 @@ void MachinesView::insertEditButton(unsigned i, unsigned j)
 {
     QPushButton* btn_edit = new QPushButton();
     btn_edit->setText("Izmeni");
-    btn_edit->setEnabled(false);
     ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_edit);
     m_editButtons.push_back(btn_edit);
     connect(btn_edit, SIGNAL(clicked()), this, SLOT(edit()));
+}
+
+void MachinesView::insertDeleteButton(unsigned i, unsigned j)
+{
+    QPushButton* btn_delete = new QPushButton();
+    btn_delete->setText("Obrisi");
+    ui->tableWidget->setIndexWidget(ui->tableWidget->model()->index(i, j), btn_delete);
+    m_deleteButtons.push_back(btn_delete);
+    connect(btn_delete, SIGNAL(clicked()), this, SLOT(deleteMachine()));
 }
 
 void MachinesView::details()
@@ -125,5 +136,22 @@ void MachinesView::edit()
         qDebug() << index;
         auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), true, this);
         machinesdialog->show();
+    }
+}
+
+void MachinesView::deleteMachine()
+{
+    QPushButton* buttonSender = qobject_cast<QPushButton*>(sender());
+    if(std::find(m_deleteButtons.begin(), m_deleteButtons.end(), buttonSender) != m_deleteButtons.end())
+    {
+        auto index = std::find(m_deleteButtons.begin(), m_deleteButtons.end(), buttonSender) - m_deleteButtons.begin();
+        qDebug() << index;
+        if (!m_db->deleteMachine(m_machines->at(index)))
+        {
+            QString error = m_db->getLastError();
+            QMessageBox messageBox;
+            messageBox.critical(0,"Error",error);
+        }
+        refresh();
     }
 }

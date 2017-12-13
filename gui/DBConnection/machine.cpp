@@ -98,10 +98,20 @@ void Machine::setWorkingDays(unsigned workingDays)
 
 QString Machine::statemantForCreating() const
 {
-    //TODO nije up to date
     QString stm;
-    stm = "insert into masina (Naziv, TipoviZadatka_idTipoviZadatka) values (";
+    stm = "insert into masina (Naziv, Virtuelna, VremePocetka, VremeKraja, RadniDani) values (";
     stm += "'" + getName() + "', ";
+    if (isVirtual())
+    {
+        stm += "true, ";
+    }
+    else
+    {
+        stm += "false, ";
+    }
+    stm += "'" + getStartTime().toString("hh:mm:ss") + "', ";
+    stm += "'" + getEndTime().toString("hh:mm:ss") + "', ";
+    stm += QString::number(getWorkingDays()) + ", ";
     stm.chop(2);
     stm += ");";
     qDebug() << stm;
@@ -110,18 +120,54 @@ QString Machine::statemantForCreating() const
 
 QString Machine::statemantForUpdating() const
 {
-    //TODO nije up to date
     QString stm;
     if (isModified())
     {
         stm = "update masina set ";
+
         if (m_nameChanged)
         {
             stm += "Naziv = '" + getName() + "', ";
         }
+
+        if (m_isVirtualChanged)
+        {
+            if (isVirtual())
+            {
+                stm += "Virtuelna = true, ";
+            }
+            else
+            {
+                stm += "Virtuelna = false, ";
+            }
+        }
+
+        if (m_startTimeChanged)
+        {
+            stm += "VremePocetka = '" + getStartTime().toString("hh:mm:ss") + "', ";
+        }
+
+        if (m_endTimeChanged)
+        {
+            stm += "VremeKraja = '" + getEndTime().toString("hh:mm:ss") + "', ";
+        }
+
+        if (m_workingDaysChanged)
+        {
+            stm += "RadniDani = " + QString::number(getWorkingDays()) + ", ";
+        }
+
         stm.chop(2);
         stm += " where idMasina = " + QString::number(m_id) + ";";
     }
+    return stm;
+}
+
+QString Machine::statemantForDeleting() const
+{
+    QString stm;
+    stm = "delete from masina where idMasina = " + QString::number(m_id) + ";";
+    qDebug() << stm;
     return stm;
 }
 

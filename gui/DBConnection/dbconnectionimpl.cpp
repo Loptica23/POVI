@@ -1185,6 +1185,18 @@ bool DBConnectionImpl::updateMachine(MachinePtr machine)
     return true;
 }
 
+bool DBConnectionImpl::deleteMachine(MachinePtr machine)
+{
+    QSqlQuery query;
+    query.prepare(machine->statemantForDeleting());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
 MachineTaskTypePtrVtr DBConnectionImpl::getMachineTaskTypes()
 {
     MachineTaskTypePtrVtr result = m_machinesTaskTypes;
@@ -1204,6 +1216,7 @@ MachineTaskTypePtrVtr DBConnectionImpl::getMachineTaskTypes()
             m_lastError = query.lastError().text();
         }
     }
+    m_machinesTaskTypes = result;
     return result;
 }
 
@@ -1233,4 +1246,42 @@ std::vector<unsigned> DBConnectionImpl::getMachineIdsForTaskType(unsigned taskTy
         }
     }
     return ids;
+}
+
+bool DBConnectionImpl::createMachineTaskType(MachinePtr machine, unsigned taskTypeId)
+{
+    QSqlQuery query;
+    MachineTaskTypePtr machineTaskType(new MachineTaskType(machine->getId(), taskTypeId));
+    query.prepare(machineTaskType->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+
+    m_machinesTaskTypes = nullptr;
+    getMachineTaskTypes();
+    return true;
+}
+
+bool DBConnectionImpl::deleteMahineTaskType(MachinePtr machine, unsigned taskTypeId)
+{
+    auto machinesTaskTypes = getMachineTaskTypes();
+    for (auto it = machinesTaskTypes->begin(); it != machinesTaskTypes->end(); ++it)
+    {
+        auto machineTaskType = *it;
+        if (taskTypeId == machineTaskType->getTaskTypeId() && machine->getId() == machineTaskType->getMachineId())
+        {
+            QSqlQuery query;
+            query.prepare(machineTaskType->statemantForDeleting());
+            if (!query.exec())
+            {
+                m_lastError = query.lastError().text();
+                return false;
+            }
+            machinesTaskTypes->erase(it);
+            return true;
+        }
+    }
+    return false;
 }

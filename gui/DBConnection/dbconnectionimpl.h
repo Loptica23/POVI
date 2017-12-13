@@ -81,10 +81,13 @@ public:
     virtual MachinePtr getMachine(unsigned id) override;
     virtual bool createMachine(MachinePtr machine) override;
     virtual bool updateMachine(MachinePtr machine) override;
+    virtual bool deleteMachine(MachinePtr machine) override;
 
     virtual MachineTaskTypePtrVtr getMachineTaskTypes() override;
     virtual std::vector<unsigned> getTasTypesIdsForMachine(MachinePtr machine) override;
     virtual std::vector<unsigned> getMachineIdsForTaskType(unsigned taskTypeId) override;
+    virtual bool createMachineTaskType(MachinePtr machine, unsigned taskTypeId) override;
+    virtual bool deleteMahineTaskType(MachinePtr machine, unsigned taskTypeId) override;
 
 protected:
     EmployeePtrVtr createEmployeesFromQuery(QSqlQuery& query);

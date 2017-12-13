@@ -20,11 +20,13 @@ public:
     ~MachinesView();
 
     virtual void refresh();
+
 private slots:
     void on_NewMachine_clicked();
     void on_refresh_clicked();
     void details();
     void edit();
+    void deleteMachine();
 
 private:
     void fillMachinesTable();
@@ -33,6 +35,7 @@ private:
     //void insertType(MachinePtr machine, unsigned i, unsigned j);
     void insertDetailsButton(unsigned i, unsigned j);
     void insertEditButton(unsigned i, unsigned j);
+    void insertDeleteButton(unsigned i, unsigned j);
 
     Ui::MachinesView *ui;
     DBConnectionPtr m_db;
@@ -41,4 +44,5 @@ private:
 
     std::vector<QPushButton*> m_detailsButtons;
     std::vector<QPushButton*> m_editButtons;
+    std::vector<QPushButton*> m_deleteButtons;
 };
