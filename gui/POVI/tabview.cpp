@@ -6,6 +6,7 @@
 #include "commandsviewwaitingontask.h"
 #include "dbconnection.h"
 #include "commandsonwhichiamworkingon.h"
+#include "tasktypesview.h"
 
 TabView::TabView(MainWindow *mainWindow, DBConnectionPtr db) :
     QWidget(mainWindow),
@@ -27,9 +28,10 @@ void TabView::setUpTabViewByWorkPosition()
     MachinesView* machinesview;
     CommandsViewIsInState * commandsviewInProgress;
     CommandsViewIsInState * commandsviewWaitingOnProduction;
-
     CommandsViewWaitingOnTask * commandsViewWaitingOnTask;
     CommandsOnWhichIAmWorkingOn* commandsOnWhichIAmWorkingOn;
+    TaskTypesView* tasktypesview;
+
     auto type = m_db->getTaskTypes()->getTypeIdByString("Narucivanje materijalia");
     switch (MainWindow::getLogedUser()->getWorkPosition()) {
     case Employee::WorkPosition::SefProizvodnje:
@@ -48,6 +50,9 @@ void TabView::setUpTabViewByWorkPosition()
 
         machinesview = new MachinesView(this, m_db);
         ui->tabWidget->addTab(machinesview, "Masine:");
+
+        tasktypesview = new TaskTypesView(this, m_db);
+        ui->tabWidget->addTab(tasktypesview, "Tipovi zadataka");
 
         break;
     case Employee::WorkPosition::Narucilac:

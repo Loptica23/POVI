@@ -160,6 +160,7 @@ QString Machine::statemantForUpdating() const
         stm.chop(2);
         stm += " where idMasina = " + QString::number(m_id) + ";";
     }
+    qDebug() << stm;
     return stm;
 }
 

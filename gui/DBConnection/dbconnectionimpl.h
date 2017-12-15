@@ -75,6 +75,9 @@ public:
     virtual bool deleteInvoice(InvoicePtr invoice) override;
 
     virtual TaskTypesPtr getTaskTypes() override;
+    virtual bool createTaskType(TaskTypePtr taskType) override;
+    virtual bool updateTaskType(TaskTypePtr taskType) override;
+    virtual bool deleteTaskType(TaskTypePtr taskType) override;
 
     virtual MachinePtrVtr getMachines() override;
     virtual MachinePtrVtr getMachines(unsigned taskTypeId) override;

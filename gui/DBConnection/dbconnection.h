@@ -88,6 +88,9 @@ public:
     virtual bool deleteInvoice(InvoicePtr invoice) = 0;
 
     virtual TaskTypesPtr getTaskTypes() = 0;
+    virtual bool createTaskType(TaskTypePtr taskType) = 0;
+    virtual bool updateTaskType(TaskTypePtr taskType) = 0;
+    virtual bool deleteTaskType(TaskTypePtr taskType) = 0;
 
     virtual MachinePtrVtr getMachines() = 0;
     virtual MachinePtrVtr getMachines(unsigned taskTypeId) = 0;

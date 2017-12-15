@@ -1094,6 +1094,42 @@ TaskTypesPtr DBConnectionImpl::getTaskTypes()
     return tasktypes;
 }
 
+bool DBConnectionImpl::createTaskType(TaskTypePtr taskType)
+{
+    QSqlQuery query;
+    query.prepare(taskType->statemantForCreating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::updateTaskType(TaskTypePtr taskType)
+{
+    QSqlQuery query;
+    query.prepare(taskType->statemantForUpdating());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+bool DBConnectionImpl::deleteTaskType(TaskTypePtr taskType)
+{
+    QSqlQuery query;
+    query.prepare(taskType->statemantForDeleting());
+    if (!query.exec())
+    {
+        m_lastError = query.lastError().text();
+        return false;
+    }
+    return true;
+}
+
 MachinePtrVtr DBConnectionImpl::getMachines()
 {
     MachinePtrVtr machines = nullptr;

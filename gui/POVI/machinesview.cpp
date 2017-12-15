@@ -52,7 +52,7 @@ void MachinesView::fillMachinesTable()
         MachinePtr machine = *iter;
         ui->tableWidget->insertRow(i);
         insertName(machine, i, j++);
-        //insertType(machine, i, 1);
+        //insertType(machine, i, j++);
         insertDetailsButton(i, j++);
         insertEditButton(i, j++);
         insertDeleteButton(i, j++);

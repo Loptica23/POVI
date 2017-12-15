@@ -7,6 +7,7 @@
 
 #define TASK_BUTTON_FONT_SIZE 25
 
+//ovo ovde nije dobro, mora da se prebaci u bazu..
 std::vector<unsigned> WorkerView::TaskTypeIDs = {2, 3, 4, 5, 6, 10, 12, 13, 14, 15, 16, 17, 19, 20, 21, 23, 24};
 
 WorkerView::WorkerView(QWidget *parent, DBConnectionPtr db, EmployeePtr employee) :

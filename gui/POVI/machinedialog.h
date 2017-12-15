@@ -29,8 +29,6 @@ private slots:
     void on_listWidget_clicked(const QModelIndex &index);
     void on_comboBox_currentIndexChanged(const QString &tasTypeName);
     void on_addTaskType_clicked();
-
-
     void on_deleteTaskType_clicked();
 
 private:

@@ -24,11 +24,25 @@ public:
     bool isVirtual() const;
     unsigned getWorkersNumber() const;
 
+    void setName(const QString& name);
+    void setInvoice(bool invoice);
+    void setWorkersNumber(unsigned workersNumber);
+
+    QString statemantForCreating() const;
+    QString statemantForUpdating() const;
+    QString statemantForDeleting() const;
+
+    bool isModified() const;
+    void resetChangeTracking();
+
 private:
     unsigned        m_id;
     QString         m_name;
+    bool            m_nameChanged;
     bool            m_isVirtual;
+    bool            m_isVirtualChanged;
     unsigned        m_workersNumber;
+    bool            m_workersNumberChanged;
 };
 
 class DBCONNECTIONSHARED_EXPORT TaskTypes

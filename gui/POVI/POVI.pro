@@ -56,7 +56,9 @@ SOURCES +=  main.cpp\
     dialogsetprediction.cpp \
     refreshable.cpp \
     refresher.cpp \
-    commandsonwhichiamworkingon.cpp
+    commandsonwhichiamworkingon.cpp \
+    tasktypesview.cpp \
+    tasktypedialog.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -88,7 +90,9 @@ HEADERS +=  mainwindow.h\
     dialogsetprediction.h \
     refreshable.h \
     refresher.h \
-    commandsonwhichiamworkingon.h
+    commandsonwhichiamworkingon.h \
+    tasktypesview.h \
+    tasktypedialog.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -112,7 +116,9 @@ FORMS   +=  mainwindow.ui \
     tasksinproductionview.ui \
     workerview.ui \
     dialogsetprediction.ui \
-    commandsonwhichiamworkingon.ui
+    commandsonwhichiamworkingon.ui \
+    tasktypesview.ui \
+    tasktypedialog.ui
 
 RESOURCES += resource.qrc
 
