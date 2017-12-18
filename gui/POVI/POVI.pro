@@ -58,7 +58,8 @@ SOURCES +=  main.cpp\
     refresher.cpp \
     commandsonwhichiamworkingon.cpp \
     tasktypesview.cpp \
-    tasktypedialog.cpp
+    tasktypedialog.cpp \
+    wherecommandswaiting.cpp
 
 HEADERS +=  mainwindow.h\
     logintab.h \
@@ -92,7 +93,8 @@ HEADERS +=  mainwindow.h\
     refresher.h \
     commandsonwhichiamworkingon.h \
     tasktypesview.h \
-    tasktypedialog.h
+    tasktypedialog.h \
+    wherecommandswaiting.h
 
 FORMS   +=  mainwindow.ui \
     logintab.ui \
@@ -118,7 +120,8 @@ FORMS   +=  mainwindow.ui \
     dialogsetprediction.ui \
     commandsonwhichiamworkingon.ui \
     tasktypesview.ui \
-    tasktypedialog.ui
+    tasktypedialog.ui \
+    wherecommandswaiting.ui
 
 RESOURCES += resource.qrc
 

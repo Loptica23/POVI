@@ -122,7 +122,7 @@ void MachinesView::details()
     {
         auto index = std::find(m_detailsButtons.begin(), m_detailsButtons.end(), buttonSender) - m_detailsButtons.begin();
         qDebug() << index;
-        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), false, this);
+        auto machinesdialog = new MachineDialog(this, m_db, m_machines->at(index), false, nullptr);
         machinesdialog->show();
     }
 }

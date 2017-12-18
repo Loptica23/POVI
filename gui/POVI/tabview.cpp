@@ -7,6 +7,7 @@
 #include "dbconnection.h"
 #include "commandsonwhichiamworkingon.h"
 #include "tasktypesview.h"
+#include "wherecommandswaiting.h"
 
 TabView::TabView(MainWindow *mainWindow, DBConnectionPtr db) :
     QWidget(mainWindow),
@@ -31,6 +32,7 @@ void TabView::setUpTabViewByWorkPosition()
     CommandsViewWaitingOnTask * commandsViewWaitingOnTask;
     CommandsOnWhichIAmWorkingOn* commandsOnWhichIAmWorkingOn;
     TaskTypesView* tasktypesview;
+    WhereCommandsWaiting * wherecommandswaiting;
 
     auto type = m_db->getTaskTypes()->getTypeIdByString("Narucivanje materijalia");
     switch (MainWindow::getLogedUser()->getWorkPosition()) {
@@ -53,6 +55,9 @@ void TabView::setUpTabViewByWorkPosition()
 
         tasktypesview = new TaskTypesView(this, m_db);
         ui->tabWidget->addTab(tasktypesview, "Tipovi zadataka");
+
+        wherecommandswaiting = new WhereCommandsWaiting(this, m_db);
+        ui->tabWidget->addTab(wherecommandswaiting, "Pregled komandi koje cekaju na zadacima:");
 
         break;
     case Employee::WorkPosition::Narucilac:

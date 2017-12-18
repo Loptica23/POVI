@@ -31,7 +31,7 @@ private slots:
 
 private:
     Ui::CommandsView *ui;
-    std::shared_ptr<DBConnection> m_db;
+    DBConnectionPtr m_db;
     OrderPtr m_order;
     CommandPtrVtr m_commands;
 
