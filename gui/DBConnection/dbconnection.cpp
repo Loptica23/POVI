@@ -37,3 +37,13 @@ void DBConnection::setDatabaseName(const QString& databaseName)
 {
     m_databaseName = databaseName;
 }
+
+QString DBConnection::escape(const QString& str)
+{
+    auto result = str;
+    result.replace("\\", "\\\\");
+    result.replace("\"", "\\\"");
+    result.replace("'", "\\'");
+    result.replace("`", "\\`");
+    return result;
+}

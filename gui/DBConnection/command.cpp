@@ -1,7 +1,7 @@
 #include <QDebug>
 #include <QVariant>
 #include "command.h"
-
+#include "dbconnection.h"
 #define sM "metara"
 #define sKG "kilograma"
 #define sKOM "komada"
@@ -70,7 +70,7 @@ const QString& Command::getComercialistDescription() const
     return m_comercialistDescription;
 }
 
-const QString& Command::getDesignerDescription() const
+QString Command::getDesignerDescription() const
 {
     return m_designerDescription;
 }
@@ -283,13 +283,13 @@ QString Command::statemantForCreating() const
     stm += QString::number(m_idOrder) + ", ";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_idKomercialist) + ", ";
-    stm += "'" + m_comercialistDescription + "', ";
+    stm += "'" + DBConnection::escape(m_comercialistDescription) + "', ";
     stm += QString::number(m_commandNumber) + ", ";
     stm += QString::number(m_priority) + ", ";
-    stm += "'" + m_designerDescription + "', ";
-    stm += "'" + m_storeKeeperDescription + "', ";
+    stm += "'" + DBConnection::escape(m_designerDescription) + "', ";
+    stm += "'" + DBConnection::escape(m_storeKeeperDescription) + "', ";
     stm += "'nov', ";
-    stm += "'" + m_specification + "', ";
+    stm += "'" + DBConnection::escape(m_specification) + "', ";
     stm += QString::number(m_quantity) + ", ";
     stm += "NOW(), ";
     stm += "NOW(), ";
@@ -307,7 +307,7 @@ QString Command::statemantForUpdating(bool noteModifiedTime) const
         stm = "update nalog set ";
         if (m_specificationChanged)
         {
-            stm += "Specifikacija = '" + getSpecification() + "', ";
+            stm += "Specifikacija = '" + DBConnection::escape(getSpecification()) + "', ";
         }
         if (m_quantityChanged)
         {
@@ -315,7 +315,7 @@ QString Command::statemantForUpdating(bool noteModifiedTime) const
         }
         if (m_comercialistDescriptionChanged)
         {
-            stm += "OpisKomercijaliste = '" + getComercialistDescription() + "', ";
+            stm += "OpisKomercijaliste = '" + DBConnection::escape(getComercialistDescription()) + "', ";
         }
         if (m_commandNumberChanged)
         {
@@ -327,11 +327,11 @@ QString Command::statemantForUpdating(bool noteModifiedTime) const
         }
         if (m_designerDescriptionChanged)
         {
-            stm += "OpisDizajnera = '" + getDesignerDescription() + "', ";
+            stm += "OpisDizajnera = '" + DBConnection::escape(getDesignerDescription()) + "', ";
         }
         if (m_storeKeeperDescriptionChanged)
         {
-            stm += "OpisMagacionera ='" + getStoreKeeperDescription() + "', ";
+            stm += "OpisMagacionera ='" + DBConnection::escape(getStoreKeeperDescription()) + "', ";
         }
         if (m_stateChanged)
         {

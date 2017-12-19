@@ -1,4 +1,5 @@
 #include "order.h"
+#include "dbconnection.h"
 #include <QDebug>
 
 #define dateTimeFormat "dd-MM-yyyy hh:mm:ss"
@@ -185,8 +186,8 @@ QString Order::statemantForCreating() const
     stm = "insert into narudzbina (idKlijent, Cena, Opis, Naslov, Rok) values (";
     stm += QString::number(m_idCustomer) + ", ";
     stm += QString::number(m_price) + ", ";
-    stm += "'" + m_description + "', ";
-    stm += "'" + m_header + "', ";
+    stm += "'" + DBConnection::escape(m_description) + "', ";
+    stm += "'" + DBConnection::escape(m_header) + "', ";
     //stm += "'" + getStateQString() + "', ";
     stm += "'" + m_timeLimit.toString(dateTimeFormatForDB) + "')";
     qDebug() << stm;
@@ -205,11 +206,11 @@ QString Order::statemantForUpdating() const
         }
         if(m_headerChanged)
         {
-            stm += "Naslov = '" + getHeader() + "', ";
+            stm += "Naslov = '" + DBConnection::escape(getHeader()) + "', ";
         }
         if(m_descriptionChanged)
         {
-            stm += "Opis = '" + getDescription() + "', ";
+            stm += "Opis = '" + DBConnection::escape(getDescription()) + "', ";
         }
         if(m_timeLimitChanged)
         {

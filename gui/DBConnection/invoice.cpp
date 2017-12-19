@@ -1,4 +1,5 @@
 #include "invoice.h"
+#include "dbconnection.h"
 #include <QDebug>
 
 Invoice::Invoice(TaskPtr task, QString text):
@@ -65,7 +66,7 @@ QString Invoice::statemantForCreating() const
     stm += QString::number(m_task->getCommand()->getIdCustomer()) + ", ";
     stm += QString::number(m_task->getTaskTypeId())+ ", ";
     stm += QString::number(m_task->getWorkerId()) + ", ";
-    stm += "'" + m_text + "');";
+    stm += "'" + DBConnection::escape(m_text) + "');";
     qDebug() << stm;
     return stm;
 }

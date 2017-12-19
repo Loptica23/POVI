@@ -111,6 +111,8 @@ public:
 
     virtual const QString getLastError() const = 0;
 
+    static QString escape(const QString &str);
+
 protected:
     DBConnection();
 

@@ -31,7 +31,7 @@ public:
     const QString& getSpecification() const;
     unsigned getQuantity() const;
     const QString& getComercialistDescription() const;
-    const QString& getDesignerDescription() const;
+    QString getDesignerDescription() const;
     const QString& getStoreKeeperDescription() const;
     State getState() const;
     unsigned getStateInt() const;
