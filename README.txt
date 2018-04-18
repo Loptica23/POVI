@@ -32,3 +32,5 @@ Startujes linuxqtdeploy i kao parametar prosledis samo exe (glavni binary) i sac
 Sada sve svoje .so fajlove prebacis u lib direktorijum i mozes da startujes aplikaciju.
 
 --mala izmena (new_feature); 
+
+-- jos jedna izmena
