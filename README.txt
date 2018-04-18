@@ -30,3 +30,5 @@ Deployment ubuntu64
 Prebacis sve binary fajlove u jedan dir. Tu stavis i linuxdeployqt fajl, koji skines sa gita.
 Startujes linuxqtdeploy i kao parametar prosledis samo exe (glavni binary) i sacekas da on prikupi sve zavisnosti.
 Sada sve svoje .so fajlove prebacis u lib direktorijum i mozes da startujes aplikaciju.
+
+--mala izmena (new_feature); 
